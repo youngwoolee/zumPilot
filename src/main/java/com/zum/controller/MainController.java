@@ -13,22 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @Controller
-public class HelloController {
+public class MainController {
 
-//    @RequestMapping("/")
-//    public String hello() {
-//
-//        return "index";
-//    }
     @RequestMapping("/")
-    public String hello(Model model, @RequestParam(required = false) String msg) {
-        model.addAttribute("message", msg);
+    public String hello() {
+
         return "index";
     }
 
-    @RequestMapping("/intro")
-    public String intro() {
-        return "pages/intro";
+    @RequestMapping("/board")
+    public String board() {
+        return "pages/board";
     }
+
+    @RequestMapping("/join")
+    public String join() {
+        return "pages/join";
+    }
+
+
 
 }

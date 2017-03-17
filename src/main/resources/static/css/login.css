@@ -1,0 +1,12 @@
+/* CSS used here will be applied after bootstrap.css */
+.navbar {
+    background:#FFFFFF;
+}
+
+.navbar .navbar-center {
+    display: inline-block;
+    float: none;
+    vertical-align: top;
+    text-align: center;
+}
+
