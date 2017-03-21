@@ -28,7 +28,7 @@
     </c:if>
 
     <c:if test="${pageContext.request.userPrincipal.name != null}" >
-        <p>게시판</p>
+        <jsp:include page="/inc/common.jsp" flush="true" />
     </c:if>
 
 </body>
