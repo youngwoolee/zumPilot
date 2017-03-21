@@ -28,7 +28,11 @@
     </c:if>
 
     <c:if test="${pageContext.request.userPrincipal.name != null}" >
+<<<<<<< HEAD
         <p>게시판</p>
+=======
+        <jsp:include page="/inc/common.jsp" flush="true" />
+>>>>>>> 1435acc497e4c0c97a996cfb9051debca566c958
     </c:if>
 
 </body>
