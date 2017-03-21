@@ -1,48 +1,67 @@
 package com.zum.domain;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by joeylee on 2017-03-17.
  */
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
-    @Column(name = "no")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long no;
+    @Column(name="userid")
+    private Long userId;
 
-    @Column(name = "user_id")
-    private String userId;
+    @Column(name="username", nullable = false)
+    private String userName;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(name = "email", nullable = false)
     private String email;
 
-    public User(String userId, String password, String email) {
-        this.userId = userId;
+    @Column(name = "enabled", nullable = false)
+    private int enabled;
+
+    public User() {
+    }
+
+    public User(String userName, String password, Role role, String email, int enabled) {
+        this.userName = userName;
         this.password = password;
+        this.role = role;
         this.email = email;
+        this.enabled = enabled;
     }
 
-    public Long getNo() {
-        return no;
-    }
-
-    public void setNo(Long no) {
-        this.no = no;
-    }
-
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -53,11 +72,27 @@ public class User {
         this.password = password;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 }
