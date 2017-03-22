@@ -27,4 +27,6 @@ public class SecurityUserService implements UserDetailsService{
         //만든 유저를 유저디테일로 만든다
         return new SecurityUser(user);
     }
+
+
 }

@@ -1,13 +1,8 @@
 package com.zum.domain;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
+import javax.validation.constraints.Size;
+
 
 /**
  * Created by joeylee on 2017-03-17.
@@ -24,6 +19,7 @@ public class User {
     @Column(name="username", nullable = false)
     private String userName;
 
+//    @Size(min = 1, max = 10, message = "비밀번호는 1~10자로 제한됨.")
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -37,7 +33,12 @@ public class User {
     @Column(name = "enabled", nullable = false)
     private int enabled;
 
+
     public User() {
+
+        this.enabled = 1;
+        this.role = Role.ROLE_USER;
+
     }
 
     public User(String userName, String password, Role role, String email, int enabled) {
@@ -94,5 +95,17 @@ public class User {
 
     public void setEnabled(int enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                '}';
     }
 }
