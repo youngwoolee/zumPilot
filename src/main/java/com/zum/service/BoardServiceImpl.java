@@ -1,6 +1,7 @@
 package com.zum.service;
 
 import com.zum.domain.Board;
+import com.zum.domain.User;
 import com.zum.repository.BoardRepository;
 import com.zum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,17 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findAll();
     }
 
+    @Override
+    public void create(Board board, User user) {
+        board.setUserId(user);
+        boardRepository.save(board);
+    }
 
-//
-//    @Override
-//    public void create(Board board) {
-//
-//    }
+    @Override
+    public Board getBoard(Long id) {
+        return boardRepository.findOne(id);
+    }
+
 //
 //    @Override
 //    public void delete(Integer id) {

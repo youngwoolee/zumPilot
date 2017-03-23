@@ -55,6 +55,9 @@ public class SecurityTestController {
 
     }
 
+    @RequestMapping("/updateForm")
+    public void updateForm() {}
+
 
 
 }

@@ -17,7 +17,7 @@
 
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default content-main">
-            <form name="question" method="post" action="/register">
+            <form name="question" method="post" action="/update">
                 <div class="form-group">
                     <label for="userName">사용자 아이디</label>
                     <input class="form-control" id="userName" name="userName" placeholder="User ID">
@@ -30,7 +30,7 @@
                     <label for="email">이메일</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email">
                 </div>
-                <button type="submit" class="btn btn-success clearfix pull-right">회원가입</button>
+                <button type="submit" class="btn btn-success clearfix pull-right">개인정보 수정</button>
                 <div class="clearfix" />
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </form>

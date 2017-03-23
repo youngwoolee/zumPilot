@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri ="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri ="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page session="false" %>
 
 <!DOCTYPE html>
@@ -10,6 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+
+<c:import url="include/navigation.jsp"/>
+
 <div class = "container">
     <table class="table table-hover">
         <thead>
@@ -23,36 +27,25 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>3</td>
-            <td>제목입니다.</td>
-            <td>홍길동</td>
-            <td>2017.03.17</td>
-            <td>1</td>
+        <c:forEach items="${boardList }" var="board" varStatus="status">
 
-        </tr>
         <tr>
-            <td>2</td>
-            <td>줌인터넷</td>
-            <td>둘리</td>
-            <td>2017.03.17</td>
-            <td>2</td>
-
+            <td>${status.count }</td>
+            <td><a href="/board/${board.boardId}" >${board.title } </a></td>
+            <td>${board.userId.userName }</td>
+            <td><fmt:formatDate value="${board.regDate}" pattern="MM/ dd" />
+            </td>
+            <td>${board.hit }</td>
         </tr>
-        <tr>
-            <td>1</td>
-            <td>이스트소프트</td>
-            <td>또치</td>
-            <td>2017.03.17</td>
-            <td>1</td>
 
-        </tr>
+        </c:forEach>
+
         </tbody>
 
     </table>
 
     <hr/>
-    <a class="btn btn-default pull-right">글쓰기</a>
+    <a class="btn btn-default pull-right" href="/board/writeForm">글쓰기</a>
 
     <div class="text-center">
         <ul class="pagination">
