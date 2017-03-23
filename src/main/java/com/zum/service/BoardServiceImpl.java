@@ -23,11 +23,12 @@ public class BoardServiceImpl implements BoardService {
         this.boardRepository = boardRepository;
     }
 
-
     @Override
     public List<Board> getBoardList() {
-        return boardRepository.findByBoard();
+        return boardRepository.findAll();
     }
+
+
 //
 //    @Override
 //    public void create(Board board) {
