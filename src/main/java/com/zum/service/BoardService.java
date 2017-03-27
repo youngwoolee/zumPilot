@@ -2,7 +2,8 @@ package com.zum.service;
 
 import com.zum.domain.Board;
 import com.zum.domain.User;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,6 +18,10 @@ public interface BoardService {
     public Board getBoard(Long id);
 
     public void create(Board board, User user);
+
+    public void increaseHit(Long id);
+
+    public Page<Board> getBoardList(Pageable pageable);
 
 //    public void delete(Integer id);
 //

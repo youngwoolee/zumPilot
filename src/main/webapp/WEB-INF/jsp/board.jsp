@@ -27,7 +27,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${boardList }" var="board" varStatus="status">
+        <c:forEach items="${boardList.content}" var="board" varStatus="status">
 
         <tr>
             <td>${status.count }</td>
@@ -49,11 +49,9 @@
 
     <div class="text-center">
         <ul class="pagination">
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
+            <c:forEach begin="1" end="${totalPage}" var="i" step="1">
+            <li><a href="/board/list?pNo=${i}">${i}</a></li>
+            </c:forEach>
         </ul>
     </div>
 </div>

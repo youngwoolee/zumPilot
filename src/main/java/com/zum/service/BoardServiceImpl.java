@@ -3,9 +3,11 @@ package com.zum.service;
 import com.zum.domain.Board;
 import com.zum.domain.User;
 import com.zum.repository.BoardRepository;
-import com.zum.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 @Service
 public class BoardServiceImpl implements BoardService {
 
+
+   Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
 
     private final BoardRepository boardRepository;
 
@@ -40,7 +44,20 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findOne(id);
     }
 
-//
+    @Override
+    public void increaseHit(Long id) {
+        Board board = boardRepository.findOne(id);
+        board.setHit(board.getHit()+1);
+
+        boardRepository.save(board);
+    }
+
+    @Override
+    public Page<Board> getBoardList(Pageable pageable) {
+        return boardRepository.findAll(pageable);
+    }
+
+    //
 //    @Override
 //    public void delete(Integer id) {
 //

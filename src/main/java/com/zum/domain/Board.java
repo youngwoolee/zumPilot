@@ -117,5 +117,17 @@ public class Board {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "Board{" +
+                "boardId=" + boardId +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", image='" + image + '\'' +
+                ", regDate=" + regDate +
+                ", hit=" + hit +
+                ", status=" + status +
+                ", userId=" + userId +
+                '}';
+    }
 }

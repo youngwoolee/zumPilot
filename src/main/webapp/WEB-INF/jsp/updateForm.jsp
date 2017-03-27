@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri ="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE HTML>
 <html>
 
@@ -20,7 +21,7 @@
             <form name="question" method="post" action="/update">
                 <div class="form-group">
                     <label for="userName">사용자 아이디</label>
-                    <input class="form-control" id="userName" name="userName" placeholder="User ID">
+                    <input class="form-control" id="userName" name="userName" placeholder="User ID" value="${user.userName}" readonly>
                 </div>
                 <div class="form-group">
                     <label for="password">비밀번호</label>
@@ -28,8 +29,9 @@
                 </div>
                 <div class="form-group">
                     <label for="email">이메일</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="${user.email}">
                 </div>
+                <a type="button" href="/leave/${user.userId}">회원 탈퇴</a>
                 <button type="submit" class="btn btn-success clearfix pull-right">개인정보 수정</button>
                 <div class="clearfix" />
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

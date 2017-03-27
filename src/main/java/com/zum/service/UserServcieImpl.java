@@ -26,6 +26,11 @@ public class UserServcieImpl implements UserService {
         return userRepository.findByUserName(username);
     }
 
+    @Override
+    public User getUserByUserId(Long userId) {
+        return userRepository.findByUserId(userId);
+    }
+
     @Transactional
     public boolean create(User user) {
 
@@ -42,6 +47,42 @@ public class UserServcieImpl implements UserService {
 
         return true;
     }
+
+    @Transactional
+    public boolean update(User user) {
+
+        User updateUser = userRepository.findByUserName(user.getUserName());
+
+        updateUser.setUserName(user.getUserName());
+        updateUser.setEmail(user.getEmail());
+
+        if(user.getPassword() != null) {
+            //비밀번호 바꿈
+            updateUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        }
+
+        userRepository.save(updateUser);
+
+        return true;
+    }
+
+    @Transactional
+    public void leave(Long userId) {
+
+
+        User user = userRepository.findByUserId(userId);
+
+
+        user.setEnabled(0);
+
+
+        userRepository.save(user);
+
+    }
+
+
+
+
 
 
 

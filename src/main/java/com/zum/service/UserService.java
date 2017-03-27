@@ -1,7 +1,6 @@
 package com.zum.service;
 
 import com.zum.domain.User;
-import org.springframework.stereotype.Service;
 
 /**
  * Created by joeylee on 2017-03-21.
@@ -10,7 +9,10 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     public User getUserByUsername(String username);
+    public User getUserByUserId(Long userId);
     public boolean create(User user);
+    public boolean update(User user);
+    public void leave(Long userId);
 
 
 

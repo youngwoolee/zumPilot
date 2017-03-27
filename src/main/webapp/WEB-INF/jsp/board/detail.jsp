@@ -1,7 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri ="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri ="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri ="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page session="false" %>
+
+<%
+    pageContext.setAttribute("br", "<br/>");
+    pageContext.setAttribute("cn", "\n");
+%>
 
 <!DOCTYPE html>
 <html>
@@ -34,8 +40,15 @@
             </div>
             <div class="form-group">
                 <label> 내용 </label>
-                <span>${board.content}</span>
+                <span>${fn:replace(board.content, cn ,br)}</span>
             </div>
+
+            <c:if test = "${board.userId.userName == auth}">
+                <a type="button" href="#">글 수정</a>
+                <a type="button" href="#">글 삭제</a>
+            </c:if>
+
+
 
         </div>
     </div>

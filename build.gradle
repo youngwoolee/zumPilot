@@ -34,6 +34,9 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-jdbc")
 	compile("mysql:mysql-connector-java")
 
+//	compile("org.slf4j:slf4j-api:1.7.24")
+//	compile("ch.qos.logback:logback-classic:1.2.1")
+
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile("org.springframework.security:spring-security-taglibs")
