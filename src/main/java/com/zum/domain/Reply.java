@@ -16,21 +16,38 @@ public class Reply {
     @Column(name="reply_id")
     private Long replyId;
 
-    @ManyToOne
+
+
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_writer"))
     private User writer;
 
-    @ManyToOne
+
+
+    @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_board"))
     private Board board;
 
-    @Lob
+
     @Column(name="content")
     private String content;
 
     @Column(name = "reg_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
+
+    @Column(name="reply_group")
+    private int group;
+
+    //들여쓰기
+    @Column(name="reply_depth")
+    private int depth;
+
+    //글 순서
+    @Column(name="reply_thread")
+    private int thread;
+
+
 
     public Reply() {
     }
@@ -72,6 +89,32 @@ public class Reply {
         this.regDate = regDate;
     }
 
+
+
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
+    public int getThread() {
+        return thread;
+    }
+
+    public void setThread(int thread) {
+        this.thread = thread;
+    }
+
     @Override
     public String toString() {
         return "Reply{" +
@@ -79,6 +122,9 @@ public class Reply {
                 ", writer=" + writer +
                 ", content='" + content + '\'' +
                 ", regDate=" + regDate +
+                ", group=" + group +
+                ", depth=" + depth +
+                ", thread=" + thread +
                 '}';
     }
 }
