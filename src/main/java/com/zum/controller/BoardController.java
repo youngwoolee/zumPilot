@@ -50,17 +50,24 @@ public class BoardController {
         model.addAttribute("pNo", pNo);
         model.addAttribute("pageSize", PAGE_SIZE);
         model.addAttribute("maxPager", MAX_PAGER);
-        
+
+        /*TO DO
+        페이지 예외처리 pNo 임의의 파라미터*/
 
         int totalBlock = (boardList.getTotalPages()-1)/MAX_PAGER+1;
         int currentBlock = (int) Math.ceil(pNo/(double) MAX_PAGER);
-        int begin = 1;
-        int end =boardList.getTotalPages();
-        if(totalBlock > 1) {
-            logger.error("begin: "+begin + "end : " + end + "pNo : " + pNo);
+
+        int begin = 0;
+        int end = 0;
+
+        if(currentBlock == 1 && totalBlock > 1) {
+            begin =1;
+            end = MAX_PAGER;
+        }
+
+        else if(totalBlock > 1) {
             begin = ( currentBlock * MAX_PAGER) - (MAX_PAGER-1);
-            end = ( currentBlock * MAX_PAGER) - (pNo/MAX_PAGER+1);
-            logger.error("begin: "+begin + "end : " + end + "pNo : " + pNo);
+            end = ( currentBlock * MAX_PAGER) - (currentBlock * MAX_PAGER - boardList.getTotalPages());
         }
         model.addAttribute("begin",begin);
         model.addAttribute("end",end);

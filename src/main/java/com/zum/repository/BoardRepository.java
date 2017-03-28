@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 
-public interface BoardRepository extends JpaRepository<Board, Long>, QueryDslPredicateExecutor<Board>{
+public interface BoardRepository extends JpaRepository<Board, Long>{
 
     @Override
     Page<Board> findAll(Pageable pageable);
