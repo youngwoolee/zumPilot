@@ -51,6 +51,17 @@
 
 
         </div>
+
+        <div class="submit-write" method="post" action="#">
+            <div class="form-group" style="padding:14px;">
+                <textarea class="form-control" name="content"></textarea>
+            </div>
+
+            <input type="submit" class = "btn btn-success pull-right" value="답글쓰기"/>
+
+            <div class="clearfix" />
+        </div>
+
     </div>
 
 </body>

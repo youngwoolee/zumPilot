@@ -49,9 +49,28 @@
 
     <div class="text-center">
         <ul class="pagination">
-            <c:forEach begin="1" end="${totalPage}" var="i" step="1">
-            <li><a href="/board/list?pNo=${i}">${i}</a></li>
+            <c:if test="${!boardList.first}">
+                <li class="previous">
+                    <a href="/board/list?pNo=${pNo-1}">&larr; </a>
+                </li>
+            </c:if>
+            <c:forEach begin="${begin}" end="${end}" var="i" step="1">
+                <c:choose>
+                    <c:when test="${pNo == i}">
+                        <li class="active"><a href="/board/list?pNo=${i}">${i}</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a href="/board/list?pNo=${i}">${i}</a></li>
+                    </c:otherwise>
+                </c:choose>
             </c:forEach>
+
+            <c:if test="${!boardList.last}">
+                <li class="next">
+                    <a href="/board/list?pNo=${pNo+1}">&rarr; </a>
+                </li>
+            </c:if>
+
         </ul>
     </div>
 </div>

@@ -11,12 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
 import java.util.List;
 
 /**
@@ -33,7 +35,8 @@ public class BoardController {
     @Autowired
     UserService userService;
 
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 3;
+    private static final int MAX_PAGER = 4;
 
     @RequestMapping("/list")
     public String board(Model model, @RequestParam(value="pNo", defaultValue = "1") int pNo) {
@@ -46,8 +49,21 @@ public class BoardController {
         model.addAttribute("totalElement", boardList.getTotalElements());
         model.addAttribute("pNo", pNo);
         model.addAttribute("pageSize", PAGE_SIZE);
+        model.addAttribute("maxPager", MAX_PAGER);
+        
 
-        logger.error("totalElement : " + boardList.getTotalElements());
+        int totalBlock = (boardList.getTotalPages()-1)/MAX_PAGER+1;
+        int currentBlock = (int) Math.ceil(pNo/(double) MAX_PAGER);
+        int begin = 1;
+        int end =boardList.getTotalPages();
+        if(totalBlock > 1) {
+            logger.error("begin: "+begin + "end : " + end + "pNo : " + pNo);
+            begin = ( currentBlock * MAX_PAGER) - (MAX_PAGER-1);
+            end = ( currentBlock * MAX_PAGER) - (pNo/MAX_PAGER+1);
+            logger.error("begin: "+begin + "end : " + end + "pNo : " + pNo);
+        }
+        model.addAttribute("begin",begin);
+        model.addAttribute("end",end);
 
         return "board";
     }
