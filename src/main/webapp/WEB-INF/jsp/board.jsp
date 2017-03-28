@@ -30,7 +30,7 @@
         <c:forEach items="${boardList.content}" var="board" varStatus="status">
 
         <tr>
-            <td>${status.count }</td>
+            <td>${totalElement - pageSize * (pNo-1) - status.index}</td>
             <td><a href="/board/${board.boardId}" >${board.title } </a></td>
             <td>${board.userId.userName }</td>
             <td><fmt:formatDate value="${board.regDate}" pattern="MM/ dd" />

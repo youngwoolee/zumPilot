@@ -57,6 +57,22 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findAll(pageable);
     }
 
+    @Override
+    public boolean update(Board board) {
+
+
+        Board updateBoard = boardRepository.findOne(board.getBoardId());
+
+        logger.error(updateBoard.toString());
+
+        updateBoard.setTitle(board.getTitle());
+        updateBoard.setContent(board.getContent());
+
+        boardRepository.save(updateBoard);
+
+        return true;
+    }
+
     //
 //    @Override
 //    public void delete(Integer id) {

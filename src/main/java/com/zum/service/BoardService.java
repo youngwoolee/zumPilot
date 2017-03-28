@@ -25,6 +25,6 @@ public interface BoardService {
 
 //    public void delete(Integer id);
 //
-//    public void update(Board board, Integer id);
+    public boolean update(Board board);
 
 }

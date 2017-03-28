@@ -39,12 +39,15 @@ public class BoardController {
     public String board(Model model, @RequestParam(value="pNo", defaultValue = "1") int pNo) {
 
 
-        PageRequest request = new PageRequest(pNo -1, 5, Sort.Direction.DESC, "regDate");
+        PageRequest request = new PageRequest(pNo -1, PAGE_SIZE, Sort.Direction.DESC, "regDate");
         Page<Board> boardList = boardService.getBoardList(request);
         model.addAttribute("boardList", boardList);
         model.addAttribute("totalPage" , boardList.getTotalPages());
+        model.addAttribute("totalElement", boardList.getTotalElements());
+        model.addAttribute("pNo", pNo);
+        model.addAttribute("pageSize", PAGE_SIZE);
 
-        logger.error("totalPage : " + boardList.getTotalPages());
+        logger.error("totalElement : " + boardList.getTotalElements());
 
         return "board";
     }
@@ -80,6 +83,36 @@ public class BoardController {
         return "board/detail";
     }
 
+
+    @RequestMapping(value ="/modifyForm/{id}")
+    public String modifyForm(@PathVariable("id") Long id, Model model) {
+
+
+        Board board = boardService.getBoard(id);
+
+        model.addAttribute("board", board);
+
+
+        return "board/boardModify";
+    }
+
+    @RequestMapping(value ="/modify", method = RequestMethod.POST)
+    public String modify(Board board) {
+        logger.error(board.toString());
+
+        if(boardService.update(board)) {
+
+            return "redirect:/board/list";
+        }
+        else {
+            //수정해야함
+            logger.error("error");
+            return "redirect:/";
+        }
+
+    }
+
+
     @RequestMapping(value = "/test")
     @ResponseBody
     public String test(Model model) {
@@ -88,8 +121,6 @@ public class BoardController {
 
         return "aaa";
     }
-
-
 
 
 
