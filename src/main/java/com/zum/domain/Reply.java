@@ -1,6 +1,12 @@
 package com.zum.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.omg.CORBA.ServerRequest;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,8 +14,9 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "reply")
-public class Reply {
+public class Reply implements Serializable{
 
+    private static final long serialVersionUID = 4278014816235716721L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,13 +25,14 @@ public class Reply {
 
 
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_writer"))
     private User writer;
 
 
-
-    @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(targetEntity = Board.class, fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_board"))
     private Board board;
 
@@ -35,9 +43,6 @@ public class Reply {
     @Column(name = "reg_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
-
-    @Column(name="reply_group")
-    private int group;
 
     //들여쓰기
     @Column(name="reply_depth")
@@ -89,16 +94,6 @@ public class Reply {
         this.regDate = regDate;
     }
 
-
-
-    public int getGroup() {
-        return group;
-    }
-
-    public void setGroup(int group) {
-        this.group = group;
-    }
-
     public int getDepth() {
         return depth;
     }
@@ -122,7 +117,6 @@ public class Reply {
                 ", writer=" + writer +
                 ", content='" + content + '\'' +
                 ", regDate=" + regDate +
-                ", group=" + group +
                 ", depth=" + depth +
                 ", thread=" + thread +
                 '}';

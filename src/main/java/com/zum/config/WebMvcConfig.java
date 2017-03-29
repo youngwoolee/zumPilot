@@ -3,6 +3,7 @@ package com.zum.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -14,6 +15,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
+import javax.sql.DataSource;
+
 /**
  * Created by joeylee on 2017-03-16.
  */
@@ -22,6 +25,8 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 @EnableWebMvc
 @EnableJpaRepositories(basePackages = "com.zum.repository")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

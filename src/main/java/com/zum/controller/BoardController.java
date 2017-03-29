@@ -1,7 +1,9 @@
 package com.zum.controller;
 
 import com.zum.domain.Board;
+import com.zum.domain.Reply;
 import com.zum.domain.User;
+import com.zum.repository.ReplyRepository;
 import com.zum.service.BoardService;
 import com.zum.service.UserService;
 import org.slf4j.Logger;
@@ -30,10 +32,13 @@ public class BoardController {
 
     Logger logger = LoggerFactory.getLogger(BoardController.class);
 
+
+
     @Autowired
     BoardService boardService;
     @Autowired
     UserService userService;
+
 
     private static final int PAGE_SIZE = 3;
     private static final int MAX_PAGER = 4;
@@ -54,21 +59,37 @@ public class BoardController {
         /*TO DO
         페이지 예외처리 pNo 임의의 파라미터*/
 
+
         int totalBlock = (boardList.getTotalPages()-1)/MAX_PAGER+1;
         int currentBlock = (int) Math.ceil(pNo/(double) MAX_PAGER);
 
-        int begin = 0;
-        int end = 0;
+        int begin = 1;
+        int end = boardList.getTotalPages();
 
+        //게시글이 없을때
+        if(boardList.getTotalElements() == 0) {
+            end = 0;
+        }
+
+        //페이지가 많을때
         if(currentBlock == 1 && totalBlock > 1) {
+            //첫 페이지
             begin =1;
             end = MAX_PAGER;
         }
 
-        else if(totalBlock > 1) {
+        if(totalBlock == currentBlock && totalBlock > 1) {
+            //마지막 페이지
             begin = ( currentBlock * MAX_PAGER) - (MAX_PAGER-1);
-            end = ( currentBlock * MAX_PAGER) - (currentBlock * MAX_PAGER - boardList.getTotalPages());
+            end = boardList.getTotalPages();
         }
+
+        if(totalBlock > currentBlock && totalBlock > 1) {
+            //중간 페이지
+            begin = ( currentBlock * MAX_PAGER) - (MAX_PAGER-1);
+            end = MAX_PAGER + (currentBlock-1) * MAX_PAGER;
+        }
+
         model.addAttribute("begin",begin);
         model.addAttribute("end",end);
 

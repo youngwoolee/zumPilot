@@ -45,6 +45,8 @@ dependencies {
 	compile('org.apache.tomcat.embed:tomcat-embed-jasper')
 	compile('javax.servlet:jstl:1.2')
 
+
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.7'
 //	compile("org.springframework:spring-orm")
 //	compile("org.hibernate:hibernate-core:5.2.1.Final")
 //	compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '4.1.7.Final'

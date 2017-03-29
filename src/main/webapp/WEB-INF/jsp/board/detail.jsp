@@ -52,6 +52,56 @@
 
         </div>
 
+        <div id="reply">
+
+        </div>
+
+        <script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
+        <script type="text/javascript" >
+            var fetchList = function() {
+                var data={}
+                $.ajax({
+                    url : "/board/${board.boardId}/reply",
+                    type : "post",
+                    contentType : "application/json",
+                    data : JSON.stringify(data),
+                    dataType : "json",
+
+                    success: function (data, vo) {
+                        console.log("success: " + data);
+                        $.each(data, function (index, vo) {
+
+                            $("#reply").append(renderHtml(vo));
+
+                        })
+
+
+                    },
+                    error: function (e) {
+                        console.log("error : " + e);
+                    }
+
+                });
+
+            }
+
+            var renderHtml = function( vo ) {
+                var html =
+                    "<li id='li-" + vo.replyId + "'><table><tr>" +
+                    "<td>" + vo.writer + "</td>" +
+                    "<td>" + vo.regDate  + "</td>" +
+                    "<td><a href='#' class='a-del' data-no='"  +  vo.replyId + "'>삭제</a></td>" +
+                    "</tr><tr>" +
+                    "<td colspan='3'>" + vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") + "</td>" +
+                    "</tr></table></li>";
+                return html;
+            }
+
+            fetchList();
+
+        </script>
+
+
         <div class="submit-write" method="post" action="#">
             <div class="form-group" style="padding:14px;">
                 <textarea class="form-control" name="content"></textarea>
@@ -61,6 +111,7 @@
 
             <div class="clearfix" />
         </div>
+
 
     </div>
 
