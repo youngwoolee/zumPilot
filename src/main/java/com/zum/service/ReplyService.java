@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface ReplyService {
 
-//    List<Reply> replyListByBoardId(Long boardId);
+    List<Reply> replyListByBoardId(Long boardId);
 
 }

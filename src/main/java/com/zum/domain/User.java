@@ -97,6 +97,10 @@ public class User {
         this.enabled = enabled;
     }
 
+//    public void update(User user){
+//        this.userId = user.userId;
+//    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -108,4 +112,6 @@ public class User {
                 ", enabled=" + enabled +
                 '}';
     }
+
+
 }

@@ -13,13 +13,10 @@ import java.util.List;
  */
 public interface ReplyRepository extends JpaRepository<Reply, Long>{
 
-//    @Query("select r from Reply r WHERE r.BOARD_BOARD_ID = ?1 ORDER BY r.REPLY_THREAD DESC")
-    List<Reply> findAllByBoardBoardId(Long boardId);
+    List<Reply> findByBoardBoardId(Long boardId);
 
-//    List<Reply> findAllByBoardBoardId(Long boardId);
-//    List<Reply> findAllOrderByReplyIdDesc();
-
-//    List<Reply> findByBoardBoardIdOrderByReplyThreadDesc(Long boardId);
+    // 주의. 컬럼명에 맞춰야함
+    List<Reply> findByBoardBoardIdOrderByThreadDesc(Long boardId);
 
 
 }

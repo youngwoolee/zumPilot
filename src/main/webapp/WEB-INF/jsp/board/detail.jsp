@@ -13,7 +13,11 @@
 <html>
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
 </head>
 <body>
 
@@ -52,12 +56,44 @@
 
         </div>
 
-        <div id="reply">
+        <h4>Leave a Comment:</h4>
+        <form role="form">
+            <div class="form-group">
+                <textarea class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        <br><br>
+
+        <p><span class="badge">99</span> Comments:</p><br>
+
+        <div id ="reply" class="row">
+
+                    <%--<div class="col-xs-10">--%>
+                        <%--<h4>Nested Bro <small>Sep 25, 2015, 8:28 PM</small></h4>--%>
+                        <%--<p>Me too! WOW!</p>--%>
+                        <%--<br>--%>
+                    <%--</div>--%>
 
         </div>
 
+
+
         <script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
         <script type="text/javascript" >
+
+            var formatTime = function( timestamp ) {
+                var date = new Date(timestamp);
+                var year = date.getFullYear();
+                var month = date.getMonth()+1;
+                var day = date.getDay();
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                var seconds = date.getSeconds();
+                var formattedTime = year+'.'+month+'.'+day+' '+hour + ':' + minute + ':' + seconds;
+                return formattedTime;
+            }
+
             var fetchList = function() {
                 var data={}
                 $.ajax({
@@ -70,6 +106,7 @@
                     success: function (data, vo) {
                         console.log("success: " + data);
                         $.each(data, function (index, vo) {
+
 
                             $("#reply").append(renderHtml(vo));
 
@@ -87,13 +124,12 @@
 
             var renderHtml = function( vo ) {
                 var html =
-                    "<li id='li-" + vo.replyId + "'><table><tr>" +
-                    "<td>" + vo.writer + "</td>" +
-                    "<td>" + vo.regDate  + "</td>" +
-                    "<td><a href='#' class='a-del' data-no='"  +  vo.replyId + "'>삭제</a></td>" +
-                    "</tr><tr>" +
-                    "<td colspan='3'>" + vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") + "</td>" +
-                    "</tr></table></li>";
+                    "<div class='col-sm-10'><h4>" + vo.writer.userName +
+                    "<small> " + formatTime(vo.regDate) +
+                    "</small></h4>" +
+                    "<p> " + vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
+                    "</p><br></div>";
+
                 return html;
             }
 
@@ -101,16 +137,6 @@
 
         </script>
 
-
-        <div class="submit-write" method="post" action="#">
-            <div class="form-group" style="padding:14px;">
-                <textarea class="form-control" name="content"></textarea>
-            </div>
-
-            <input type="submit" class = "btn btn-success pull-right" value="답글쓰기"/>
-
-            <div class="clearfix" />
-        </div>
 
 
     </div>

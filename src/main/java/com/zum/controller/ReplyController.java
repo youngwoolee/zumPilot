@@ -32,13 +32,15 @@ public class ReplyController {
 //    ReplyService replyService;
 
     @Autowired
-    ReplyRepository replyRepository;
+    ReplyService replyService;
+
+
 
     @PostMapping("")
     @ResponseBody
     public List<Reply> replyList(@PathVariable("boardId") Long boardId){
 
-        List<Reply> replyList = replyRepository.findAllByBoardBoardId(boardId);
+        List<Reply> replyList = replyService.replyListByBoardId(boardId);
 
 
         logger.error("replyLIst : " + replyList.toString());
