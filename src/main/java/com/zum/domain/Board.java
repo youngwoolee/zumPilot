@@ -1,5 +1,6 @@
 package com.zum.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -47,7 +48,8 @@ public class Board {
     @Column(name = "status", nullable = false, insertable = false, columnDefinition = "int default 1")
     private int status;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     private User userId;
 

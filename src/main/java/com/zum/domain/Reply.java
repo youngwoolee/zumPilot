@@ -14,9 +14,9 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "reply")
-public class Reply implements Serializable{
+public class Reply{
 
-    private static final long serialVersionUID = 4278014816235716721L;
+//    private static final long serialVersionUID = 4278014816235716721L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,8 +53,10 @@ public class Reply implements Serializable{
     private int thread;
 
 
-
     public Reply() {
+
+        this.regDate = new Date();
+
     }
 
     public Reply(User writer, String content) {
@@ -110,11 +112,20 @@ public class Reply implements Serializable{
         this.thread = thread;
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     @Override
     public String toString() {
         return "Reply{" +
                 "replyId=" + replyId +
                 ", writer=" + writer +
+                ", board=" + board +
                 ", content='" + content + '\'' +
                 ", regDate=" + regDate +
                 ", depth=" + depth +

@@ -57,9 +57,9 @@
         </div>
 
         <h4>Leave a Comment:</h4>
-        <form role="form">
+        <form id="reply-insert" method="POST" role="form" onsubmit="return false;">
             <div class="form-group">
-                <textarea class="form-control" rows="3" required></textarea>
+                <textarea id="content" name= "content" class="form-control" rows="3" required></textarea>
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
@@ -79,7 +79,7 @@
 
 
 
-        <script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
+        <%--<script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>--%>
         <script type="text/javascript" >
 
             var formatTime = function( timestamp ) {
@@ -95,18 +95,17 @@
             }
 
             var fetchList = function() {
-                var data={}
                 $.ajax({
                     url : "/board/${board.boardId}/reply",
                     type : "post",
                     contentType : "application/json",
-                    data : JSON.stringify(data),
+//                    data : JSON.stringify(data),
                     dataType : "json",
 
                     success: function (data, vo) {
                         console.log("success: " + data);
-                        $.each(data, function (index, vo) {
 
+                        $.each(data, function (index, vo) {
 
                             $("#reply").append(renderHtml(vo));
 
@@ -114,8 +113,8 @@
 
 
                     },
-                    error: function (e) {
-                        console.log("error : " + e);
+                    error: function (jqXHR, status, err) {
+                        console.log(jqXHR.responseText);
                     }
 
                 });
@@ -124,14 +123,46 @@
 
             var renderHtml = function( vo ) {
                 var html =
-                    "<div class='col-sm-10'><h4>" + vo.writer.userName +
+                    "<div class='col-sm-10' style = 'padding-left:" +
+                    20 * vo.depth + "px'><h4>" + vo.writer.userName +
                     "<small> " + formatTime(vo.regDate) +
-                    "</small></h4>" +
+                    "</small><a type='button' href='#'><small> 답글</small></a>" +
+                    "<a type='button' href='#'><small> 수정</small></a>" +
+                    "<a type='button' href='#'><small> 삭제</small></a></h4>" +
                     "<p> " + vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
-                    "</p><br></div>";
+                    "</p></div>";
+
 
                 return html;
             }
+
+            $("#reply-insert").submit(function(event) {
+
+                event.preventDefault();
+                var content =$("#content").val();
+
+                this.reset();
+                $.ajax({
+
+                    url: "/board/${board.boardId}/replyWrite",
+                    type : "post",
+                    data : "content=" + content,
+                    dataType : "json",
+
+
+                    success: function (data) {
+                        console.log("success: " + data);
+                        $("#reply").prepend(renderHtml(data));
+
+                    },
+                    error: function (jqXHR, status, err) {
+                        console.log(jqXHR.responseText);
+                    }
+
+                });
+
+            });
+
 
             fetchList();
 
