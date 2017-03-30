@@ -4,6 +4,8 @@ import com.zum.domain.Board;
 import com.zum.domain.Reply;
 import com.zum.domain.User;
 import com.zum.repository.ReplyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import java.util.List;
 public class ReplyServiceImpl implements ReplyService {
 
     private static final int LIMIT_REPLY = 1000;
+
+    Logger logger = LoggerFactory.getLogger(ReplyServiceImpl.class);
 
     @Autowired
     ReplyRepository replyRepository;
@@ -44,10 +48,46 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    public Reply createAnswer(Reply reply, Board board, int depth, int thread, User user) {
+        reply.setWriter(user);
+        reply.setThread(thread);
+        reply.setBoard(board);
+        reply.setDepth(depth);
+
+        replyRepository.save(reply);
+
+        return reply;
+    }
+
+    @Override
     public int getMaxThreadNext(Board board) {
         int maxThreadNextValue = replyRepository.getMaxThread(board) + LIMIT_REPLY;
 
         return maxThreadNextValue;
     }
 
+
+    @Override
+    public Reply getParentReply(Long replyId) {
+
+        Reply parentReply = replyRepository.findByReplyId(replyId);
+
+
+
+        return parentReply;
+    }
+
+//    @Override
+//    public void updateReply(int parentThread, Long replyId) {
+//
+//        Reply reply = replyRepository.findByReplyId(replyId);
+//        int prevReplyThread = 0;
+//
+//        //이전 reply 의 스레드
+//        if(reply.getThread() != 0 ) {
+//            prevReplyThread = reply.
+//        }
+//
+//        replyRepository.updateReply(parentThread, );
+//    }
 }

@@ -24,5 +24,14 @@ public interface ReplyRepository extends JpaRepository<Reply, Long>{
     @Query("select coalesce(max(r.thread),0) from Reply r where r.board = ?1")
     int getMaxThread(Board board);
 
+    Reply findByReplyId(Long replyId);
+
+
+    //부모글의 스레드 값보다 작고 이전 답변 글의 스레드 값보다 큰 범위만 스레드를 1씩 감소
+//    @Query("update Reply r set r.thread = r.thread - 1 where r.thread < ?1 and r.thread > ?2")
+//    void updateReply(int thread, int prevThread);
+
+
+
 
 }

@@ -42,6 +42,9 @@ public class ReplyController {
     @Autowired
     BoardService boardService;
 
+    @Autowired
+    ReplyRepository replyRepository;
+
 
 
     @PostMapping("/reply")
@@ -70,6 +73,34 @@ public class ReplyController {
 
 
         logger.error(newReply.toString());
+        return newReply;
+    }
+
+    @PostMapping("/answerWrite")
+    @ResponseBody
+    public Reply answerWrite(@PathVariable("boardId") Long boardId, @ModelAttribute Reply reply, @RequestParam("parentId") Long replyId, Authentication auth){
+
+        logger.error("reply : " + reply.toString());
+        //부모글 아이디
+        logger.error("parentId : " + replyId);
+        User user = uesrService.getUserByUsername(auth.getName());
+        Board board = boardService.getBoard(boardId);
+        Reply parentReply = replyService.getParentReply(replyId);
+
+
+        //자식들 업데이트
+//        replyService.updateReply(parentReply.getThread(), replyId);
+
+
+        //댓글 삽입
+        Reply newReply = replyService.createAnswer(reply, board,parentReply.getDepth()+1, parentReply.getThread()-1, user);
+
+
+
+
+        logger.error("thread : " + parentReply.getThread());
+        logger.error("depth : " + parentReply.getDepth());
+
         return newReply;
     }
 

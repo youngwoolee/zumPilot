@@ -123,10 +123,10 @@
 
             var renderHtml = function( vo ) {
                 var html =
-                    "<div class='col-sm-10' style = 'padding-left:" +
-                    20 * vo.depth + "px'><h4>" + vo.writer.userName +
+                    "<div id='reply" + vo.replyId + "' class='col-sm-10' style = 'padding-left:" +
+                    20 * vo.depth + "px' isopen = 'false' value = " + vo.replyId + "><h4>" + vo.writer.userName +
                     "<small> " + formatTime(vo.regDate) +
-                    "</small><a type='button' href='#'><small> 답글</small></a>" +
+                    "</small><a id = '" + vo.replyId + "' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a>" +
                     "<a type='button' href='#'><small> 수정</small></a>" +
                     "<a type='button' href='#'><small> 삭제</small></a></h4>" +
                     "<p> " + vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
@@ -163,6 +163,66 @@
 
             });
 
+
+
+            $(document).on("click", ".reply-write-form", function (event) {
+
+                event.preventDefault();
+
+
+                var id = $(this).attr('id');
+
+
+                var replyForm = "<form id = 'answer-insert' method='POST' role='form' onsubmit='return false;'>" +
+                    "<div class='form-group'><textarea id='content-answer' name= 'content' class='form-control' rows='2' required>" +
+                    "</textarea></div><button type='submit' class='btn btn-success'>Submit</button></form>";
+                console.log(id);
+
+
+                if($("#reply"+id).attr("isopen") == "false") {
+
+                    $("#reply"+id).append(replyForm);
+                    $("#reply"+id).attr("isopen",'true');
+                }
+                else {
+                    $("#reply"+id).children("#answer-insert").remove();
+                    $("#reply"+id).attr("isopen",'false');
+                }
+
+            });
+
+            $(document).on("submit", "#answer-insert", function (event) {
+
+                var content = $("#content-answer").val();
+                var parentId = $(this).parent().attr("value");
+
+                this.reset();
+
+                console.log(content);
+                console.log(parentId);
+
+                $.ajax({
+
+                    url: "/board/${board.boardId}/answerWrite",
+                    type : "post",
+                    data : "content=" + content +
+                            "&parentId=" + parentId,
+                    dataType : "json",
+
+
+
+                    success: function (data) {
+                        console.log("success: " + data);
+
+
+                    },
+                    error: function (jqXHR, status, err) {
+                        console.log(jqXHR.responseText);
+                    }
+
+                });
+
+            });
 
             fetchList();
 
