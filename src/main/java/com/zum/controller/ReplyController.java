@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
@@ -102,6 +103,22 @@ public class ReplyController {
         logger.error("depth : " + parentReply.getDepth());
 
         return newReply;
+    }
+
+    @PostMapping("/answerModify")
+    @ResponseBody
+    public Reply answerModify(@PathVariable("boardId") Long boardId, @RequestParam("content") String content, @RequestParam("replyId") Long replyId, Authentication auth){
+
+//        logger.error("answerModify() : " + content + ", " + replyId);
+        Reply reply = replyService.getParentReply(replyId);
+        logger.error("answerModify() : " + reply.toString());
+        reply.setContent(content);
+
+        replyRepository.save(reply);
+
+        logger.error("answerModify() : " + reply.toString());
+
+        return reply;
     }
 
 
