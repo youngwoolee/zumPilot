@@ -95,6 +95,7 @@
             }
 
             var fetchList = function() {
+
                 $.ajax({
                     url : "/board/${board.boardId}/reply",
                     type : "post",
@@ -124,16 +125,30 @@
             var renderHtml = function( vo ) {
                 var html =
                     "<div id='reply" + vo.replyId + "' class='col-sm-10' style = 'padding-left:" +
-                    20 * vo.depth + "px' isopen = 'false' value = " + vo.replyId + "><h4>" + vo.writer.userName +
+                    20 * vo.depth + "px' isopen = 'false' value = " + vo.replyId + "><h4 class='info' value = '" + vo.writer.userName +"'>" + vo.writer.userName +
+                    "<small> " + formatTime(vo.regDate) +
+                    "</small><a id = '" + vo.replyId + "' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a></h4>" +
+                    "<p> " + vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
+                    "</p></div>";
+
+                var authHtml =
+                    "<div id='reply" + vo.replyId + "' class='col-sm-10' style = 'padding-left:" +
+                    20 * vo.depth + "px' isopen = 'false' value = " + vo.replyId + "><h4 class='info' value = '" + vo.writer.userName +"'>" + vo.writer.userName +
                     "<small> " + formatTime(vo.regDate) +
                     "</small><a id = '" + vo.replyId + "' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a>" +
-                    "<a type='button' href='#'><small> 수정</small></a>" +
+                    "<a id = 'modify" + vo.replyId + "' class= 'reply-modify-form' type='button' href='#'><small> 수정</small></a>" +
                     "<a type='button' href='#'><small> 삭제</small></a></h4>" +
                     "<p> " + vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
                     "</p></div>";
 
 
-                return html;
+                if('${auth}' != vo.writer.userName) {
+                    return html;
+                }
+                else {
+                    return authHtml;
+                }
+
             }
 
             $("#reply-insert").submit(function(event) {
@@ -174,7 +189,7 @@
 
 
                 var replyForm = "<form id = 'answer-insert' method='POST' role='form' onsubmit='return false;'>" +
-                    "<div class='form-group'><textarea id='content-answer' name= 'content' class='form-control' rows='2' required>" +
+                    "<div class='form-group'><textarea id='content-answer"+id+"' name= 'content' class='form-control' rows='2' required>" +
                     "</textarea></div><button type='submit' class='btn btn-success'>Submit</button></form>";
                 console.log(id);
 
@@ -193,8 +208,8 @@
 
             $(document).on("submit", "#answer-insert", function (event) {
 
-                var content = $("#content-answer").val();
                 var parentId = $(this).parent().attr("value");
+                var content = $("#content-answer"+parentId).val();
 
                 this.reset();
 
@@ -212,8 +227,9 @@
 
 
                     success: function (data) {
-                        console.log("success: " + data);
-
+                        $("#reply"+parentId).children("#answer-insert").remove();
+                        $("#reply"+parentId).attr("isopen",'false');
+                        $("#reply"+parentId).after(renderHtml(data));
 
                     },
                     error: function (jqXHR, status, err) {
@@ -224,8 +240,9 @@
 
             });
 
-            fetchList();
 
+
+            fetchList();
         </script>
 
 

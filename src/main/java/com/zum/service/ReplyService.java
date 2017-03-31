@@ -18,5 +18,5 @@ public interface ReplyService {
 
     Reply getParentReply(Long replyId);
 
-//    void updateReply(int parentThread, Long replyId);
+    void updateReply(int parentThread, Long replyId, Board board);
 }

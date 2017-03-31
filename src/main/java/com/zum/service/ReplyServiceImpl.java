@@ -77,17 +77,28 @@ public class ReplyServiceImpl implements ReplyService {
         return parentReply;
     }
 
-//    @Override
-//    public void updateReply(int parentThread, Long replyId) {
-//
-//        Reply reply = replyRepository.findByReplyId(replyId);
-//        int prevReplyThread = 0;
-//
-//        //이전 reply 의 스레드
-//        if(reply.getThread() != 0 ) {
-//            prevReplyThread = reply.
-//        }
-//
-//        replyRepository.updateReply(parentThread, );
-//    }
+    @Override
+    public void updateReply(int parentThread, Long replyId, Board board) {
+
+        Reply reply = replyRepository.findByReplyId(replyId);
+        int prevReplyThread = 0;
+
+        //이전 reply 의 스레드
+        if(reply.getThread() != 0 ) {
+            prevReplyThread = replyRepository.getPrevReplyThread(replyId);
+        }
+
+        logger.error("real : " + parentThread +"," + prevReplyThread);
+        List<Reply> updateReplyList = replyRepository.getReplyIdBetweenPrevCurrent(parentThread, prevReplyThread, board);
+
+        for(int i=0; i < updateReplyList.size(); i++) {
+            logger.error("update replyId : " + updateReplyList.get(i).getReplyId());
+        }
+
+        //updateReplyThread
+        for(int i=0; i < updateReplyList.size(); i++) {
+            replyRepository.updateReplyThread(updateReplyList.get(i).getReplyId());
+        }
+
+    }
 }

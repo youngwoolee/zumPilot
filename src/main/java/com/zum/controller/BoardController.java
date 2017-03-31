@@ -93,6 +93,7 @@ public class BoardController {
         model.addAttribute("begin",begin);
         model.addAttribute("end",end);
 
+
         return "board";
     }
 

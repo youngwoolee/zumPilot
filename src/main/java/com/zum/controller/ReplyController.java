@@ -89,7 +89,7 @@ public class ReplyController {
 
 
         //자식들 업데이트
-//        replyService.updateReply(parentReply.getThread(), replyId);
+        replyService.updateReply(parentReply.getThread(), replyId, board);
 
 
         //댓글 삽입
