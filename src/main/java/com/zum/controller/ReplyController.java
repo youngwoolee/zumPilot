@@ -33,9 +33,6 @@ public class ReplyController {
 
     Logger logger = LoggerFactory.getLogger(ReplyController.class);
 
-//    @Autowired
-//    ReplyService replyService;
-
     @Autowired
     ReplyService replyService;
     @Autowired
@@ -73,7 +70,7 @@ public class ReplyController {
         Reply newReply = replyService.create(reply, board, thread, user);
 
 
-        logger.error(newReply.toString());
+        logger.error("replyWrite () : " + newReply.toString());
         return newReply;
     }
 
@@ -107,20 +104,29 @@ public class ReplyController {
 
     @PostMapping("/answerModify")
     @ResponseBody
-    public Reply answerModify(@PathVariable("boardId") Long boardId, @RequestParam("content") String content, @RequestParam("replyId") Long replyId, Authentication auth){
+    public Reply answerModify(@PathVariable("boardId") Long boardId, @RequestParam("content") String content, @RequestParam("replyId") Long replyId){
 
 //        logger.error("answerModify() : " + content + ", " + replyId);
         Reply reply = replyService.getParentReply(replyId);
-        logger.error("answerModify() : " + reply.toString());
         reply.setContent(content);
 
         replyRepository.save(reply);
 
-        logger.error("answerModify() : " + reply.toString());
 
         return reply;
     }
 
+    @PostMapping("/answerDelete")
+    @ResponseBody
+    public Reply answerDelete(@PathVariable("boardId") Long boardId, @RequestParam("replyId") Long replyId){
+
+//        logger.error("answerModify() : " + content + ", " + replyId);
+        replyRepository.deleteReply(replyId);
+        Reply deleteReply = replyRepository.findOne(replyId);
+
+
+        return deleteReply;
+    }
 
 
 }

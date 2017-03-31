@@ -52,10 +52,14 @@ public class Reply{
     @Column(name="reply_thread")
     private int thread;
 
+    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "int default 1")
+    private int status;
+
 
     public Reply() {
 
         this.regDate = new Date();
+        this.status = 1;
 
     }
 
@@ -120,6 +124,14 @@ public class Reply{
         this.board = board;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Reply{" +
@@ -130,6 +142,7 @@ public class Reply{
                 ", regDate=" + regDate +
                 ", depth=" + depth +
                 ", thread=" + thread +
+                ", status=" + status +
                 '}';
     }
 }

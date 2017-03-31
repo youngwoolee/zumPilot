@@ -137,9 +137,19 @@
                     "<small> " + formatTime(vo.regDate) +
                     "</small><a id = '" + vo.replyId + "' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a>" +
                     "<a id = 'modify" + vo.replyId + "' class= 'reply-modify-form' type='button' href='#' value = '"+ vo.replyId +"'><small> 수정</small></a>" +
-                    "<a type='button' href='#'><small> 삭제</small></a></h4>" +
+                    "<a id = 'delete" + vo.replyId + "' class= 'reply-delete' type='button' href='#' value = '"+ vo.replyId +"'><small> 삭제</small></a></h4>" +
                     "<p id = 'reply-content-"+ vo.replyId + "'>" +vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
                     "</p></div>";
+
+                var deleteHtml =
+                    "<div id='reply" + vo.replyId + "' class='col-sm-10' style = 'padding-left:" +
+                    20 * vo.depth + "px' isopen = 'false' ismodify = 'false' value = " + vo.replyId + "><h4 class='info' value = '" + vo.writer.userName +"'>" + vo.writer.userName +
+                    "<small> " + formatTime(vo.regDate) +
+                    "<p id = 'reply-content-"+ vo.replyId + "'>삭제된 댓글입니다.</p></div>";
+
+                if(vo.status == 0) {
+                    return deleteHtml;
+                }
 
 
                 if('${auth}' != vo.writer.userName) {
@@ -307,7 +317,6 @@
                        $("#reply"+replyId).children("#answer-modify").remove();
                        $("#reply"+replyId).attr("ismodify",'false');
                        $("#reply"+replyId).replaceWith(renderHtml(data));
-//                       $("#reply"+replyId).remove();
 
                    },
 
@@ -318,6 +327,42 @@
                 });
 
            });
+
+
+           //댓글 삭제
+            $(document).on("click", ".reply-delete", function (event) {
+
+                event.preventDefault();
+                var replyId = $(this).attr("value");
+
+                console.log("삭제");
+                console.log(replyId);
+
+                $.ajax({
+
+                    url: "/board/${board.boardId}/answerDelete",
+                    type : "post",
+                    data : "replyId=" + replyId,
+                    dataType : "json",
+
+                    success: function (data) {
+
+                        console.log(data);
+                        $("#reply"+replyId).replaceWith(renderHtml(data));
+
+
+                    },
+
+                    error: function (jqXHR, status, err) {
+                        console.log(jqXHR.responseText);
+                    }
+
+                });
+
+
+
+
+            });
 
            fetchList();
 

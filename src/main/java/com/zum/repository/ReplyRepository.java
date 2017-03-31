@@ -44,6 +44,11 @@ public interface ReplyRepository extends JpaRepository<Reply, Long>{
     @Query("update Reply r set r.thread = r.thread - 1 where r.replyId = ?1")
     void updateReplyThread(Long replyId);
 
+    @Modifying
+    @Transactional
+    @Query("update Reply r set r.status = 0 where r.replyId = ?1")
+    void deleteReply(Long replyId);
+
 
 
 
