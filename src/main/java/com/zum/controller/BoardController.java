@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Max;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -47,15 +49,16 @@ public class BoardController {
     BoardService boardService;
     @Autowired
     UserService userService;
-
     @Autowired
     ImageRepository imageRepository;
 
 
     private static final int PAGE_SIZE = 3;
     private static final int MAX_PAGER = 4;
+    private static final String ATTACH_PATH = "/upload/";
 
     @RequestMapping("/list")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String board(Model model, @RequestParam(value = "pNo", defaultValue = "1") int pNo) {
 
 
@@ -163,8 +166,47 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
-    public String modify(Board board) {
+    public String modify(MultipartHttpServletRequest multipartRequest, Board board) {
         logger.error(board.toString());
+
+
+        MultipartFile mpf = multipartRequest.getFile("upload");
+
+        if(mpf != null) {
+
+            HttpSession session = multipartRequest.getSession();
+
+            String root = session.getServletContext().getRealPath("/");
+
+            String filePath = root + ATTACH_PATH;
+
+            String genId = UUID.randomUUID().toString();
+
+            String originalFilename = mpf.getOriginalFilename(); //파일명
+
+            String exc = originalFilename.substring(originalFilename.lastIndexOf(".") + 1, originalFilename.length());
+
+            String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
+
+            long fileSize = mpf.getSize();
+
+            try {
+                mpf.transferTo(new File(fileFullPath)); //파일저장
+
+                Image image = new Image();
+
+                image.setOriginName(originalFilename);
+                image.setFileName(ATTACH_PATH + genId + "." + exc);
+                image.setFileSize(fileSize);
+                image.setBoard(board);
+
+                boardService.fileUpdate(image);
+            }
+            catch (IOException e ) {
+                e.printStackTrace();
+            }
+
+        }
 
         if (boardService.update(board)) {
 
@@ -175,6 +217,9 @@ public class BoardController {
             return "redirect:/";
         }
 
+
+
+
     }
 
 
@@ -184,12 +229,9 @@ public class BoardController {
 
         HttpSession session = multipartRequest.getSession();
 
-        String attach_path = "/upload/";
-
         String root = session.getServletContext().getRealPath("/");
 
-//        String filePath = root + "upload";
-        String filePath = root + attach_path;
+        String filePath = root + ATTACH_PATH;
 
 
         File dir = new File(filePath);
@@ -232,7 +274,7 @@ public class BoardController {
                     Image image = new Image();
 
                     image.setOriginName(originalFilename);
-                    image.setFileName(attach_path + genId + "." + exc);
+                    image.setFileName(ATTACH_PATH + genId + "." + exc);
                     image.setFileSize(fileSize);
                     image.setBoard(board);
 
@@ -264,6 +306,12 @@ public class BoardController {
 
 
         return "redirect:/board/list";
+    }
+
+    @RequestMapping("/403")
+    public String accessdeniedPage() {
+
+        return "/error/403";
     }
 
 

@@ -87,7 +87,17 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    @Override
+    public void fileUpdate(Image image) {
 
+        Image updateImage = imageRepository.findByBoardBoardId(image.getBoard().getBoardId());
+
+        updateImage.setOriginName(image.getOriginName());
+        updateImage.setFileSize(image.getFileSize());
+        updateImage.setFileName(image.getFileName());
+
+        imageRepository.save(updateImage);
+    }
 
     @Override
     public void delete(Long boardId) {

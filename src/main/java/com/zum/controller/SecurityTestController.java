@@ -55,6 +55,7 @@ public class SecurityTestController {
 
         if(userService.create(user)) {
 
+
             return "redirect:/";
         }
         else {

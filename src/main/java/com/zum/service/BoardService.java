@@ -30,4 +30,7 @@ public interface BoardService {
 
     public void fileUpload(Image image);
 
+    public void fileUpdate(Image image);
+
+
 }

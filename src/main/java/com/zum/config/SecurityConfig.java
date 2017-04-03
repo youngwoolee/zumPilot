@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/","/registerForm","/login","/register").permitAll()
-                .antMatchers("/board/**").hasRole("USER")
+//                .antMatchers("/board/**").hasRole("USER")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .and()
                 .formLogin()
@@ -53,6 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/");
+
+        http.exceptionHandling().accessDeniedPage("/board/403");
 
 
     }
