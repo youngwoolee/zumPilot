@@ -2,6 +2,8 @@ package com.zum.controller;
 
 import com.zum.domain.User;
 import com.zum.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +23,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class SecurityTestController {
 
-
+    Logger logger = LoggerFactory.getLogger(SecurityTestController.class);
 
     @Autowired
     UserService userService;
@@ -39,8 +41,11 @@ public class SecurityTestController {
         model.setViewName("home");
         return model;
     }
+
+
     @RequestMapping("/login")
     public void login() {
+
 
     }
 
@@ -73,6 +78,7 @@ public class SecurityTestController {
 
     @RequestMapping(value = "/update" , method = RequestMethod.POST)
     public String update(User user) {
+
 
         if(userService.update(user)) {
 

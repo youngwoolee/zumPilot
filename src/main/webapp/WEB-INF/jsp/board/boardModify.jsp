@@ -39,17 +39,21 @@
                 </div>
                 <div class="form-group">
                     <label>내용</label>
-                    <%--<div id = "content" name="content" contenteditable="true">--%>
-                        <%--<img src="http://lego.zumst.com/resources/current/images/img_zum_logo_20161201.png">--%>
-                            <%--<div id="image_preview">--%>
-                                <%--<img src="#" />--%>
-                            <%--</div>--%>
                     <textarea name="content" class="form-control" rows="5" id ="content">${board.content}</textarea>
-                    <%--</div>--%>
 
                 </div>
-                <input type="file" name="test4" />
-                <input type="button" id="btn" value="전송" />
+
+
+                <c:if test = "${image != null}">
+                    <div class="form-group">
+                        <label>사진</label>
+                        <img src="${image.fileName}"/>
+                        <input type="text" value="${image.originName}">
+
+                    </div>
+                </c:if>
+                <input type="file" name="upload">
+
 
                 <button type="submit" class="btn btn-success clearfix pull-right">글 수정</button>
 

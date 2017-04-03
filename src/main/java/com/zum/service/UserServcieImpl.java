@@ -1,7 +1,10 @@
 package com.zum.service;
 
+import com.zum.domain.Role;
 import com.zum.domain.User;
 import com.zum.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class UserServcieImpl implements UserService {
+
+
+    Logger logger = LoggerFactory.getLogger(UserServcieImpl.class);
 
     private final UserRepository userRepository;
 
@@ -56,7 +62,9 @@ public class UserServcieImpl implements UserService {
         updateUser.setUserName(user.getUserName());
         updateUser.setEmail(user.getEmail());
 
-        if(user.getPassword() != null) {
+
+        if(user.getPassword() != null && !"".equals(user.getPassword())) {
+
             //비밀번호 바꿈
             updateUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         }
@@ -74,6 +82,7 @@ public class UserServcieImpl implements UserService {
 
 
         user.setEnabled(0);
+        user.setRole(Role.ROLE_LEAVE);
 
 
         userRepository.save(user);

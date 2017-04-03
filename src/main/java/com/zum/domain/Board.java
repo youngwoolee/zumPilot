@@ -35,9 +35,6 @@ public class Board {
     @NotEmpty(message = "내용을 입력하세요.")
     private String content;
 
-    @Column(name = "image")
-    private String image;
-
     @Column(name = "reg_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
@@ -86,14 +83,6 @@ public class Board {
         this.content = content;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public Date getRegDate() {
         return regDate;
     }
@@ -125,7 +114,6 @@ public class Board {
                 "boardId=" + boardId +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", image='" + image + '\'' +
                 ", regDate=" + regDate +
                 ", hit=" + hit +
                 ", status=" + status +

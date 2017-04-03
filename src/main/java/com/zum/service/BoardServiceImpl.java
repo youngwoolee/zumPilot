@@ -1,8 +1,10 @@
 package com.zum.service;
 
 import com.zum.domain.Board;
+import com.zum.domain.Image;
 import com.zum.domain.User;
 import com.zum.repository.BoardRepository;
+import com.zum.repository.ImageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,11 +25,15 @@ public class BoardServiceImpl implements BoardService {
    Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
 
     private final BoardRepository boardRepository;
+    private final ImageRepository imageRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository, ImageRepository imageRepository) {
         this.boardRepository = boardRepository;
+        this.imageRepository = imageRepository;
     }
+
+
 
     @Override
     public List<Board> getBoardList() {
@@ -54,7 +61,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Page<Board> getBoardList(Pageable pageable) {
-        return boardRepository.findAll(pageable);
+        return boardRepository.findByStatus(1, pageable);
     }
 
     @Override
@@ -73,11 +80,26 @@ public class BoardServiceImpl implements BoardService {
         return true;
     }
 
-    //
-//    @Override
-//    public void delete(Integer id) {
-//
-//    }
+    @Override
+    public void fileUpload(Image image) {
+
+        imageRepository.save(image);
+
+    }
+
+
+
+    @Override
+    public void delete(Long boardId) {
+        Board board = boardRepository.findOne(boardId);
+
+        board.setStatus(0);
+
+        boardRepository.save(board);
+
+
+
+    }
 //
 //    @Override
 //    public void update(Board board, Integer id) {

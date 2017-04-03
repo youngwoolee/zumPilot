@@ -46,10 +46,18 @@
                 <label> 내용 </label>
                 <span>${fn:replace(board.content, cn ,br)}</span>
             </div>
+            <c:if test = "${image != null}">
+                <div class="form-group">
+                    <label> 사진 </label>
+                    <img src="${image.fileName}"/>
+                </div>
+            </c:if>
+
+
 
             <c:if test = "${board.userId.userName == auth}">
                 <a type="button" href="/board/modifyForm/${board.boardId}">글 수정</a>
-                <a type="button" href="#">글 삭제</a>
+                <a type="button" href="/board/delete/${board.boardId}">글 삭제</a>
             </c:if>
 
 
@@ -65,7 +73,7 @@
         </form>
         <br><br>
 
-        <p><span class="badge">99</span> Comments:</p><br>
+        <p>Comments:</p><br>
 
         <div id ="reply" class="row">
 

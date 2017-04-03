@@ -1,5 +1,7 @@
 package com.zum.config;
 
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -32,6 +34,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        registry.setOrder(1);
         registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/").setCachePeriod(86400);
+        registry.addResourceHandler("/upload/**").addResourceLocations("/upload/");
     }
 
 
