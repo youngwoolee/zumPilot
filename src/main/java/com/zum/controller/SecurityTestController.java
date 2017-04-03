@@ -34,9 +34,7 @@ public class SecurityTestController {
         if(auth != null && auth.getName() != null) {
             model.addObject("message", auth.getName() + " 입니다.");
         }
-        else  {
-            model.addObject("message", "please login");
-        }
+
 
         model.setViewName("home");
         return model;

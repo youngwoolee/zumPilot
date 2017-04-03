@@ -10,15 +10,6 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-        div[contenteditable] {
-            padding:10px;
-            border:1px solid #555555;
-            background-color: #ffffff;
-            min-height: 50px;
-        }
-    </style>
-
 </head>
 <body>
 
@@ -40,7 +31,7 @@
                 <div class="form-group">
                     <label>내용</label>
                     <textarea name="content" class="form-control" rows="5" id ="content">${board.content}</textarea>
-
+                    <div class=remaining>남은 글자수: <span class="count">10000</span></div>
                 </div>
 
 
@@ -52,7 +43,7 @@
 
                     </div>
                 </c:if>
-                <input type="file" name="upload">
+                <input type="file" name="upload" accept=".gif, .jpg, .png">
 
 
                 <button type="submit" class="btn btn-success clearfix pull-right">글 수정</button>
@@ -60,39 +51,8 @@
             </form>
 
 
-            <script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
-
-            <%--<script type="text/javascript">--%>
-
-                <%--$(function(){ $("#btn").click(function(e){--%>
-                    <%--e.preventDefault();--%>
-                    <%--var formData = new FormData();--%>
-                    <%--formData.append("test2", $("input[name=test2]").val());--%>
-                    <%--formData.append("test3", $("textarea[name=test3]").text());--%>
-                    <%--formData.append("test4", $("input[name=test4]")[0].files[0]);--%>
-
-                    <%--$.ajax({--%>
-                        <%--url: '/board/test',--%>
-                        <%--data: formData,--%>
-                        <%--processData: false,--%>
-                        <%--contentType: false,--%>
-                        <%--type: 'POST',--%>
-                        <%--success: function(data){--%>
-                            <%--alert($("input[name=test4]")[0].files[0]);--%>
-<%--//                            $("input[name=test2]").val("aaa");--%>
-<%--//                            var content = document.getElementById('content');--%>
-<%--//                            content.value = content.value + "<img src = http://lego.zumst.com/resources/current/images/img_zum_logo_20161201.png />"--%>
-                            <%--$("#content").html('<img id="newImg" src="" alt="your file"/>');--%>
-                            <%--$("#newImg").attr("src","http://lego.zumst.com/resources/current/images/img_zum_logo_20161201.png");--%>
-
-
-
-                        <%--}--%>
-                    <%--});--%>
-                <%--});--%>
-                <%--});--%>
-
-            <%--</script>--%>
+            <script src="/assets/js/jquery-3.2.0.min.js"></script>
+            <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
 
         </div>
     </div>

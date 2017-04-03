@@ -13,10 +13,7 @@
 <html>
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
 
 </head>
 <body>
@@ -28,7 +25,7 @@
         <div style="padding : 30px;">
             <div class="form-group">
                 <label> 제목 </label>
-                <span>${board.title}</span>
+                <span><c:out escapeXml="true" value="${board.title}" /></span>
             </div>
             <div class="form-group">
                 <label> 작성자 </label>
@@ -44,7 +41,7 @@
             </div>
             <div class="form-group">
                 <label> 내용 </label>
-                <span>${fn:replace(board.content, cn ,br)}</span>
+                <span><c:out escapeXml="true" value="${fn:replace(board.content, cn ,br)}" /></span>
             </div>
             <c:if test = "${image != null}">
                 <div class="form-group">
@@ -61,13 +58,13 @@
             </c:if>
 
 
-
         </div>
 
         <h4>Leave a Comment:</h4>
         <form id="reply-insert" method="POST" role="form" onsubmit="return false;">
             <div class="form-group">
                 <textarea id="content" name= "content" class="form-control" rows="3" required></textarea>
+                <div class=remaining>남은 글자수: <span class="count">140</span></div>
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
@@ -77,19 +74,11 @@
 
         <div id ="reply" class="row">
 
-                    <%--<div class="col-xs-10">--%>
-                        <%--<h4>Nested Bro <small>Sep 25, 2015, 8:28 PM</small></h4>--%>
-                        <%--<p>Me too! WOW!</p>--%>
-                        <%--<br>--%>
-                    <%--</div>--%>
-
         </div>
 
-
-
-        <%--<script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>--%>
-        <script type="text/javascript" >
-
+        <script src="/assets/js/jquery-3.2.0.min.js"></script>
+        <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
+        <script type="text/javascript">
             var formatTime = function( timestamp ) {
                 var date = new Date(timestamp);
                 var year = date.getFullYear();
@@ -245,9 +234,6 @@
 
                 console.log(content);
 
-
-
-
                 if($("#reply"+id).attr("ismodify") == "false") {
 
                     $("#reply"+id).append(modifyForm);
@@ -282,7 +268,7 @@
                     url: "/board/${board.boardId}/answerWrite",
                     type : "post",
                     data : "content=" + content +
-                            "&parentId=" + parentId,
+                    "&parentId=" + parentId,
                     dataType : "json",
 
 
@@ -302,42 +288,42 @@
             });
 
             //답글 수정
-           $(document).on("submit", "#answer-modify", function (event) {
+            $(document).on("submit", "#answer-modify", function (event) {
 
-               console.log("수정");
-               var replyId = $(this).parent().attr("value");
-               var content = $("#content-answer-modify"+replyId).val();
-               this.reset();
+                console.log("수정");
+                var replyId = $(this).parent().attr("value");
+                var content = $("#content-answer-modify"+replyId).val();
+                this.reset();
 
-               console.log(content);
-               console.log(replyId);
+                console.log(content);
+                console.log(replyId);
 
-               $.ajax({
+                $.ajax({
 
-                   url: "/board/${board.boardId}/answerModify",
-                   type : "post",
-                   data : "content=" + content +
-                   "&replyId=" + replyId,
-                   dataType : "json",
+                    url: "/board/${board.boardId}/answerModify",
+                    type : "post",
+                    data : "content=" + content +
+                    "&replyId=" + replyId,
+                    dataType : "json",
 
-                   success: function (data) {
+                    success: function (data) {
 
-                       $("#reply"+replyId).children("#answer-modify").remove();
-                       $("#reply"+replyId).attr("ismodify",'false');
-                       $("#reply"+replyId).replaceWith(renderHtml(data));
+                        $("#reply"+replyId).children("#answer-modify").remove();
+                        $("#reply"+replyId).attr("ismodify",'false');
+                        $("#reply"+replyId).replaceWith(renderHtml(data));
 
-                   },
+                    },
 
-                   error: function (jqXHR, status, err) {
-                       console.log(jqXHR.responseText);
-                   }
+                    error: function (jqXHR, status, err) {
+                        console.log(jqXHR.responseText);
+                    }
 
                 });
 
-           });
+            });
 
 
-           //댓글 삭제
+            //댓글 삭제
             $(document).on("click", ".reply-delete", function (event) {
 
                 event.preventDefault();
@@ -358,7 +344,6 @@
                         console.log(data);
                         $("#reply"+replyId).replaceWith(renderHtml(data));
 
-
                     },
 
                     error: function (jqXHR, status, err) {
@@ -367,15 +352,11 @@
 
                 });
 
-
-
-
             });
 
-           fetchList();
+            fetchList();
 
         </script>
-
 
 
     </div>
