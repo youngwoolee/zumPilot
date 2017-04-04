@@ -101,10 +101,10 @@ public class SecurityTestController {
     }
 
     @RequestMapping("/leave/{id}")
-    public String leave(@PathVariable("id") Long id, HttpServletRequest request) {
+    public String leave(@PathVariable("id") Long id, HttpSession session) {
 
         userService.leave(id);
-        HttpSession session = request.getSession(false);
+
         SecurityContextHolder.clearContext();
         if(session != null) {
             session.invalidate();

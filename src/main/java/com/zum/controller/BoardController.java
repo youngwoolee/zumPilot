@@ -258,7 +258,8 @@ public class BoardController {
 
                 String originalFilename = mpf.getOriginalFilename(); //파일명
 
-                String exc = originalFilename.substring(originalFilename.lastIndexOf(".") + 1, originalFilename.length());
+                String exc = originalFilename.substring(
+                        originalFilename.lastIndexOf(".") + 1, originalFilename.length());
 
                 String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
 
@@ -292,9 +293,7 @@ public class BoardController {
 
             }
 
-
         }
-
 
         return "redirect:/board/list";
     }

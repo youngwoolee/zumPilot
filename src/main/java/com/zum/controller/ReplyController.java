@@ -58,7 +58,7 @@ public class ReplyController {
     }
 
     @PostMapping("/replyWrite")
-    @ResponseBody
+    @ResponseBody //자바 객체를 HTTP 요청의 body 내용으로 매핑하는 역할을 합니다.
     public Reply replyWrite(@PathVariable("boardId") Long boardId,@ModelAttribute Reply reply, Authentication auth){
 
 
@@ -92,8 +92,6 @@ public class ReplyController {
 
         //댓글 삽입
         Reply newReply = replyService.createAnswer(reply, board,parentReply.getDepth()+1, parentReply.getThread()-1, user);
-
-
 
 
         logger.error("thread : " + parentReply.getThread());
