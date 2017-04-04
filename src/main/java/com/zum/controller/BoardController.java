@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import java.io.File;
 import java.io.IOException;
@@ -62,8 +64,10 @@ public class BoardController {
     public String board(Model model, @RequestParam(value = "pNo", defaultValue = "1") int pNo) {
 
 
+
         PageRequest request = new PageRequest(pNo - 1, PAGE_SIZE, Sort.Direction.DESC, "regDate");
         Page<Board> boardList = boardService.getBoardList(request);
+
         model.addAttribute("boardList", boardList);
         model.addAttribute("totalPage", boardList.getTotalPages());
         model.addAttribute("totalElement", boardList.getTotalElements());
@@ -71,9 +75,6 @@ public class BoardController {
         model.addAttribute("pageSize", PAGE_SIZE);
         model.addAttribute("maxPager", MAX_PAGER);
 
-
-        /*TO DO
-        페이지 예외처리 pNo 임의의 파라미터*/
 
 
         int totalBlock = (boardList.getTotalPages() - 1) / MAX_PAGER + 1;
@@ -225,7 +226,6 @@ public class BoardController {
 
     @PostMapping(value = "/write")
     public String write(Board board, MultipartHttpServletRequest multipartRequest, Authentication auth) {
-
 
         HttpSession session = multipartRequest.getSession();
 

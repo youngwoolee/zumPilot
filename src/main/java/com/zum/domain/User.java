@@ -1,6 +1,11 @@
 package com.zum.domain;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -16,17 +21,24 @@ public class User {
     @Column(name="userid")
     private Long userId;
 
+    @NotBlank(message = "이름을 작성해주세요.")
     @Column(name="username", nullable = false)
     private String userName;
 
-//    @Size(min = 1, max = 10, message = "비밀번호는 1~10자로 제한됨.")
+
+    @NotBlank(message = "비밀번호를 작성해주세요.")
+//    @Pattern(regexp = "{4,12}", message = "4~12 자리로 입력해주세요")
     @Column(name = "password", nullable = false)
     private String password;
+
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
+    @NotBlank(message = "메일을 작성해주세요.")
+    @Email(message = "메일의 양식을 지켜주세요.")
     @Column(name = "email", nullable = false)
     private String email;
 

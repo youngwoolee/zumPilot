@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by joeylee on 2017-03-21.
@@ -51,8 +55,12 @@ public class SecurityTestController {
     public void registerForm() {}
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(User user) {
+    public String register(@Valid User user, BindingResult bindingResult) {
 
+        if(bindingResult.hasErrors()) {
+
+            return "registerForm";
+        }
         if(userService.create(user)) {
 
 
@@ -63,6 +71,7 @@ public class SecurityTestController {
             System.out.println("error");
             return "redirect:/";
         }
+
 
     }
 
