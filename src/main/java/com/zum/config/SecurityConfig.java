@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * Created by joeylee on 2017-03-20.
  */
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true) // 메소드별 권한 설정에 필요  ex) @PreAuthorize()
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -45,7 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/","/registerForm","/login","/register").permitAll()
-//                .antMatchers("/board/**").hasRole("USER")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .and()
                 .formLogin()

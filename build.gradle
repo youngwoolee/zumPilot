@@ -33,7 +33,6 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-jdbc")
 	compile("mysql:mysql-connector-java")
 
-
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile("org.springframework.security:spring-security-taglibs")

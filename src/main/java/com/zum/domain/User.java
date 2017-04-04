@@ -27,7 +27,6 @@ public class User {
 
 
     @NotBlank(message = "비밀번호를 작성해주세요.")
-//    @Pattern(regexp = "{4,12}", message = "4~12 자리로 입력해주세요")
     @Column(name = "password", nullable = false)
     private String password;
 
