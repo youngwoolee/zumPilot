@@ -23,7 +23,7 @@
                 <li><a href="/board/list">게시판</a></li>
                 <li><a href="/updateForm" role="button">개인정보수정</a></li>
                 <li>${message}</li>
-                <li><form:form action="${pageContext.request.contextPath}/logout" method="POST">
+                <li><form:form action="/logout" method="POST">
                     <input type="submit" value="logout"/>
                 </form:form>
                 </li>

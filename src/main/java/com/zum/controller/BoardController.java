@@ -4,6 +4,7 @@ import com.zum.domain.Board;
 import com.zum.domain.Image;
 import com.zum.domain.Reply;
 import com.zum.domain.User;
+import com.zum.repository.BoardRepository;
 import com.zum.repository.ImageRepository;
 import com.zum.repository.ReplyRepository;
 import com.zum.service.BoardService;
@@ -19,13 +20,17 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
+import sun.plugin.liveconnect.SecurityContextHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -50,6 +55,8 @@ public class BoardController {
     @Autowired
     BoardService boardService;
     @Autowired
+    BoardRepository boardRepository;
+    @Autowired
     UserService userService;
     @Autowired
     ImageRepository imageRepository;
@@ -63,10 +70,9 @@ public class BoardController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public String board(Model model, @RequestParam(value = "pNo", defaultValue = "1") int pNo) {
 
-
-
         PageRequest request = new PageRequest(pNo - 1, PAGE_SIZE, Sort.Direction.DESC, "regDate");
         Page<Board> boardList = boardService.getBoardList(request);
+        Page<Board> result = boardRepository.findByStatus(1, request);
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("totalPage", boardList.getTotalPages());
@@ -74,8 +80,6 @@ public class BoardController {
         model.addAttribute("pNo", pNo);
         model.addAttribute("pageSize", PAGE_SIZE);
         model.addAttribute("maxPager", MAX_PAGER);
-
-
 
         int totalBlock = (boardList.getTotalPages() - 1) / MAX_PAGER + 1;
         int currentBlock = (int) Math.ceil(pNo / (double) MAX_PAGER);
@@ -109,7 +113,6 @@ public class BoardController {
 
         model.addAttribute("begin", begin);
         model.addAttribute("end", end);
-
 
         return "board";
     }
@@ -147,7 +150,6 @@ public class BoardController {
 
     @RequestMapping(value = "/modifyForm/{id}")
     public String modifyForm(@PathVariable("id") Long id, Model model) {
-
 
         Board board = boardService.getBoard(id);
 
@@ -225,75 +227,92 @@ public class BoardController {
 
 
     @PostMapping(value = "/write")
-    public String write(Board board, MultipartHttpServletRequest multipartRequest, Authentication auth) {
+    public String write(@Valid Board board, BindingResult bindingResult, MultipartHttpServletRequest multipartRequest, Authentication auth) {
 
-        HttpSession session = multipartRequest.getSession();
+        if(bindingResult.hasErrors()) {
+            logger.info(" 유효성 에러 ");
+            List<ObjectError> list = bindingResult.getAllErrors();
+            for (ObjectError error : list) {
+                logger.error("error:{}",error.getDefaultMessage());
+            }
 
-        String root = session.getServletContext().getRealPath("/");
-
-        String filePath = root + ATTACH_PATH;
-
-
-        File dir = new File(filePath);
-        if (!dir.isDirectory()) {
-            dir.mkdirs();
+            return "/board/boardWrite";
         }
 
-        Iterator<String> itr = multipartRequest.getFileNames();
 
 
         User user = userService.getUserByUsername(auth.getName());
-
         boardService.create(board, user);
 
 
-        while (itr.hasNext()) {
 
-            MultipartFile mpf = multipartRequest.getFile(itr.next());
-
-            if (!mpf.isEmpty()) {
-
-
-                String genId = UUID.randomUUID().toString();
-
-                String originalFilename = mpf.getOriginalFilename(); //파일명
-
-                String exc = originalFilename.substring(
-                        originalFilename.lastIndexOf(".") + 1, originalFilename.length());
-
-                String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
-
-                long fileSize = mpf.getSize();
-
-
-                logger.error(fileFullPath);
-
-
-                try {
-                    mpf.transferTo(new File(fileFullPath)); //파일저장
-
-                    Image image = new Image();
-
-                    image.setOriginName(originalFilename);
-                    image.setFileName(ATTACH_PATH + genId + "." + exc);
-                    image.setFileSize(fileSize);
-                    image.setBoard(board);
-
-                    boardService.fileUpload(image);
-
-                    System.out.println("originalFilename => " + originalFilename);
-                    System.out.println("fileFullPath => " + fileFullPath);
-
-
-                } catch (Exception e) {
-                    System.out.println("postTempFile_ERROR======>" + fileFullPath);
-                    e.printStackTrace();
-
-                }
-
-            }
-
-        }
+//        HttpSession session = multipartRequest.getSession();
+//
+//        String root = session.getServletContext().getRealPath("/");
+//
+//        String filePath = root + ATTACH_PATH;
+//
+//
+//        File dir = new File(filePath);
+//        if (!dir.isDirectory()) {
+//            dir.mkdirs();
+//        }
+//
+//        Iterator<String> itr = multipartRequest.getFileNames();
+//
+//
+//        User user = userService.getUserByUsername(auth.getName());
+//
+//        boardService.create(board, user);
+//
+//
+//        while (itr.hasNext()) {
+//
+//            MultipartFile mpf = multipartRequest.getFile(itr.next());
+//
+//            if (!mpf.isEmpty()) {
+//
+//
+//                String genId = UUID.randomUUID().toString();
+//
+//                String originalFilename = mpf.getOriginalFilename(); //파일명
+//
+//                String exc = originalFilename.substring(
+//                        originalFilename.lastIndexOf(".") + 1, originalFilename.length());
+//
+//                String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
+//
+//                long fileSize = mpf.getSize();
+//
+//
+//                logger.error(fileFullPath);
+//
+//
+//                try {
+//                    mpf.transferTo(new File(fileFullPath)); //파일저장
+//
+//                    Image image = new Image();
+//
+//                    image.setOriginName(originalFilename);
+//                    image.setFileName(ATTACH_PATH + genId + "." + exc);
+//                    image.setFileSize(fileSize);
+//                    image.setBoard(board);
+//
+//                    boardService.fileUpload(image);
+//
+//                    System.out.println("originalFilename => " + originalFilename);
+//                    System.out.println("fileFullPath => " + fileFullPath);
+//
+//
+//                } catch (Exception e) {
+//                    System.out.println("postTempFile_ERROR======>" + fileFullPath);
+//                    e.printStackTrace();
+//
+//                }
+//
+//            }
+//
+//        }
 
         return "redirect:/board/list";
     }
@@ -312,6 +331,5 @@ public class BoardController {
 
         return "/error/403";
     }
-
 
 }

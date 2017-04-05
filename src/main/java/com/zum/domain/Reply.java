@@ -1,12 +1,9 @@
 package com.zum.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.omg.CORBA.ServerRequest;
+import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,6 +11,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "reply")
+@Data
 public class Reply{
 
 //    private static final long serialVersionUID = 4278014816235716721L;
@@ -23,8 +21,7 @@ public class Reply{
     @Column(name="reply_id")
     private Long replyId;
 
-
-
+    // 객체가 완전히 로드되기 전에 직렬화하려고하기 때문에 방지
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_writer"))
@@ -37,7 +34,7 @@ public class Reply{
     private Board board;
 
 
-    @Column(name="content")
+    @Column(name="content", columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "reg_date", nullable = false)
@@ -52,7 +49,7 @@ public class Reply{
     @Column(name="reply_thread")
     private int thread;
 
-    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "int default 1")
+    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "BIT default 1")
     private int status;
 
 
@@ -68,81 +65,5 @@ public class Reply{
         this.content = content;
     }
 
-    public Long getReplyId() {
-        return replyId;
-    }
 
-    public void setReplyId(Long replyId) {
-        this.replyId = replyId;
-    }
-
-    public User getWriter() {
-        return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getRegDate() {
-        return regDate;
-    }
-
-    public void setRegDate(Date regDate) {
-        this.regDate = regDate;
-    }
-
-    public int getDepth() {
-        return depth;
-    }
-
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
-
-    public int getThread() {
-        return thread;
-    }
-
-    public void setThread(int thread) {
-        this.thread = thread;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "Reply{" +
-                "replyId=" + replyId +
-                ", writer=" + writer +
-                ", board=" + board +
-                ", content='" + content + '\'' +
-                ", regDate=" + regDate +
-                ", depth=" + depth +
-                ", thread=" + thread +
-                ", status=" + status +
-                '}';
-    }
 }

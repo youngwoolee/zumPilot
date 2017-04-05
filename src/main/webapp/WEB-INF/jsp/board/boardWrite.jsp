@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri ="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri ="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri ="http://java.sun.com/jsp/jstl/core" %>
 <%@ page session="false" %>
 
 <!DOCTYPE html>
@@ -19,21 +19,22 @@
     <div class="container">
 
         <div style="padding : 30px;">
-
+            <spring:hasBindErrors name="board"/>
             <form id="board-write" method="POST" action="/board/write" enctype="multipart/form-data" >
                 <div class="form-group">
                     <label>제목</label>
                     <input type="text" name="title" class="form-control" id = "title">
+                    <form:errors path="board.title" cssClass="error" />
 
                 </div>
                 <div class="form-group">
-                    <label>작성자</label>
-                    <input type="text" name="writer" class="form-control" value="${auth}" readonly >
+                    <label>작성자</label> ${auth}
                 </div>
                 <div class="form-group">
                     <label>내용</label>
 
                     <textarea name="content" class="form-control" rows="5" id ="content" ></textarea>
+                    <form:errors path="board.content" cssClass="error" />
                     <div class=remaining>남은 글자수: <span class="count">10000</span></div>
 
                 </div>

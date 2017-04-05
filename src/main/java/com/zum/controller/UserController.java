@@ -6,18 +6,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -25,9 +23,9 @@ import java.util.List;
  * Created by joeylee on 2017-03-21.
  */
 @Controller
-public class SecurityTestController {
+public class UserController {
 
-    Logger logger = LoggerFactory.getLogger(SecurityTestController.class);
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     UserService userService;
@@ -47,28 +45,26 @@ public class SecurityTestController {
 
     @RequestMapping("/login")
     public void login() {
-
-
     }
 
     @RequestMapping("/registerForm")
     public void registerForm() {}
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @PostMapping("/register")
     public String register(@Valid User user, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
-
+            logger.info(" 유효성 에러 ");
+            List<ObjectError> list = bindingResult.getAllErrors();
+            for (ObjectError error : list) {
+                logger.debug("error:{}",error.getDefaultMessage());
+            }
             return "registerForm";
         }
-        if(userService.create(user)) {
 
-
-            return "redirect:/";
-        }
         else {
-            //수정해야함
-            System.out.println("error");
+
+            userService.create(user);
             return "redirect:/";
         }
 
@@ -101,15 +97,9 @@ public class SecurityTestController {
     }
 
     @RequestMapping("/leave/{id}")
-    public String leave(@PathVariable("id") Long id, HttpSession session) {
+    public String leave(@PathVariable("id") Long id) {
 
         userService.leave(id);
-
-        SecurityContextHolder.clearContext();
-        if(session != null) {
-            session.invalidate();
-        }
-
 
         return "redirect:/";
     }

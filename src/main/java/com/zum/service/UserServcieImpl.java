@@ -8,23 +8,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.transaction.Transactional;
 
 /**
  * Created by joeylee on 2017-03-21.
  */
 @Service
+@Transactional
 public class UserServcieImpl implements UserService {
 
 
     Logger logger = LoggerFactory.getLogger(UserServcieImpl.class);
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserServcieImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
+
+
 
 
     @Override
@@ -37,7 +37,7 @@ public class UserServcieImpl implements UserService {
         return userRepository.findByUserId(userId);
     }
 
-    @Transactional
+
     public boolean create(User user) {
 
         if(userRepository.findOneByUserName(user.getUserName()) != null) {
@@ -54,7 +54,7 @@ public class UserServcieImpl implements UserService {
         return true;
     }
 
-    @Transactional
+
     public boolean update(User user) {
 
         User updateUser = userRepository.findByUserName(user.getUserName());
@@ -74,14 +74,12 @@ public class UserServcieImpl implements UserService {
         return true;
     }
 
-    @Transactional
+
     public void leave(Long userId) {
 
 
         User user = userRepository.findByUserId(userId);
 
-
-        user.setEnabled(0);
         user.setRole(Role.ROLE_LEAVE);
 
 

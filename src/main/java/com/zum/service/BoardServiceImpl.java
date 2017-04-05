@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,19 +20,17 @@ import java.util.List;
  * Created by joeylee on 2017-03-22.
  */
 @Service
+@Transactional
 public class BoardServiceImpl implements BoardService {
 
 
    Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
 
-    private final BoardRepository boardRepository;
-    private final ImageRepository imageRepository;
+   @Autowired
+   private BoardRepository boardRepository;
+   @Autowired
+   private ImageRepository imageRepository;
 
-    @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository, ImageRepository imageRepository) {
-        this.boardRepository = boardRepository;
-        this.imageRepository = imageRepository;
-    }
 
 
 
@@ -71,7 +70,7 @@ public class BoardServiceImpl implements BoardService {
         Board updateBoard = boardRepository.findOne(board.getBoardId());
 
         logger.error(updateBoard.toString());
-
+        updateBoard.update(board);
         updateBoard.setTitle(board.getTitle());
         updateBoard.setContent(board.getContent());
 

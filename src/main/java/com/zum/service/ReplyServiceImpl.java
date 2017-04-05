@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
  * Created by joeylee on 2017-03-29.
  */
 @Service
+@Transactional
 public class ReplyServiceImpl implements ReplyService {
 
     private static final int LIMIT_REPLY = 1000;
@@ -32,7 +34,6 @@ public class ReplyServiceImpl implements ReplyService {
 
         return replyList;
     }
-
 
 
     @Override
@@ -61,20 +62,16 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public int getMaxThreadNext(Board board) {
-        int maxThreadNextValue = replyRepository.getMaxThread(board) + LIMIT_REPLY;
 
-        return maxThreadNextValue;
+        return replyRepository.getMaxThread(board) + LIMIT_REPLY;
     }
 
 
     @Override
     public Reply getParentReply(Long replyId) {
 
-        Reply parentReply = replyRepository.findByReplyId(replyId);
 
-
-
-        return parentReply;
+        return replyRepository.findByReplyId(replyId);
     }
 
     @Override
@@ -84,20 +81,20 @@ public class ReplyServiceImpl implements ReplyService {
         int prevReplyThread = 0;
 
         //이전 reply 의 스레드
-        if(reply.getThread() != 0 ) {
+        if (reply.getThread() != 0) {
             prevReplyThread = replyRepository.getPrevReplyThread(replyId);
         }
 
-        logger.error("real : " + parentThread +"," + prevReplyThread);
+        logger.error("real : " + parentThread + "," + prevReplyThread);
         List<Reply> updateReplyList = replyRepository.getReplyIdBetweenPrevCurrent(parentThread, prevReplyThread, board);
 
-        for(int i=0; i < updateReplyList.size(); i++) {
+        for (int i = 0; i < updateReplyList.size(); i++) {
             logger.error("update replyId : " + updateReplyList.get(i).getReplyId());
         }
 
         //updateReplyThread
-        for(int i=0; i < updateReplyList.size(); i++) {
-            replyRepository.updateReplyThread(updateReplyList.get(i).getReplyId());
+        for (Reply anUpdateReplyList : updateReplyList) {
+            replyRepository.updateReplyThread(anUpdateReplyList.getReplyId());
         }
 
     }

@@ -1,17 +1,21 @@
 package com.zum.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Created by joeylee on 2017-03-22.
  */
 @Entity
 @Table(name = "board")
+@Data
 public class Board {
 
     public Board() {
@@ -27,12 +31,12 @@ public class Board {
     @Column(name="board_id")
     private Long boardId;
 
-    @Length(min=2, message = "제목은 2자 이상 입력하세요.")
+    @Length(min=2)
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content")
-    @NotEmpty(message = "내용을 입력하세요.")
+    @Column(name = "content", columnDefinition = "TEXT")
+    @NotEmpty
     private String content;
 
     @Column(name = "reg_date", nullable = false)
@@ -42,7 +46,7 @@ public class Board {
     @Column(name = "hit", nullable = false)
     private int hit;
 
-    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "int default 1")
+    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "BIT default 1")
     private int status;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -50,74 +54,12 @@ public class Board {
     @JoinColumn(name = "userid")
     private User userId;
 
-    public User getUserId() {
-        return userId;
+    public void hit() {
+        this.hit++;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
-
-    public Long getBoardId() {
-        return boardId;
-    }
-
-    public void setBoardId(Long boardId) {
-        this.boardId = boardId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getRegDate() {
-        return regDate;
-    }
-
-    public void setRegDate(Date regDate) {
-        this.regDate = regDate;
-    }
-
-    public int getHit() {
-        return hit;
-    }
-
-    public void setHit(int hit) {
-        this.hit = hit;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Board{" +
-                "boardId=" + boardId +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", regDate=" + regDate +
-                ", hit=" + hit +
-                ", status=" + status +
-                ", userId=" + userId +
-                '}';
+    public void update(Board board) {
+        this.title = board.title;
+        this.content = board.content;
     }
 }

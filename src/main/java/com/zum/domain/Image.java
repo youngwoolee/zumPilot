@@ -1,6 +1,7 @@
 package com.zum.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "image")
+@Data
 public class Image {
 
     @Id
@@ -23,70 +25,21 @@ public class Image {
     @Column(name = "file_name", nullable = false)
     private String fileName;
 
-    @Column(name = "file_size", nullable = false)
-    private long fileSize;
+    @Column(name = "file_size", nullable = false, columnDefinition = "int(50)")
+    private Long fileSize;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //즉시로딩 : 엔티티를 조회 할 때 연관된 엔티티도 함께 조회한다.
     @ManyToOne(targetEntity = Board.class, fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_image_to_board"))
     private Board board;
-
-
-    public Long getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(Long fileId) {
-        this.fileId = fileId;
-    }
-
-    public String getOriginName() {
-        return originName;
-    }
-
-    public void setOriginName(String originName) {
-        this.originName = originName;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
 
 
     public Image() {
     }
 
 
-    @Override
-    public String toString() {
-        return "Image{" +
-                "fileId=" + fileId +
-                ", originName='" + originName + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", fileSize=" + fileSize +
-                ", board=" + board +
-                '}';
-    }
+
 
 
 }

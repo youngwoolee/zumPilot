@@ -29,7 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
-        webSecurity.ignoring().antMatchers("/resources/**", "/css/**",
+        webSecurity.ignoring()
+                .antMatchers("/resources/**", "/css/**",
                 "/fonts/**", "/js/**", "/images/**", "/webjars/**");
     }
 
@@ -45,8 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/","/registerForm","/login","/register").permitAll()
+                .antMatchers("/board/**").access("hasRole('ROLE_USER')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/","/registerForm","/login","/register").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
