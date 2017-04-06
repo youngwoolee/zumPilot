@@ -18,7 +18,7 @@
 
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default content-main">
-            <form name="question" method="post" action="/update">
+            <form name="question" method="POST" action="/user/update/${user.userId}">
                 <div class="form-group">
                     <label for="userName">사용자 아이디</label>
                     <input class="form-control" id="userName" name="userName" placeholder="User ID" value="${user.userName}" readonly>
@@ -31,10 +31,9 @@
                     <label for="email">이메일</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="${user.email}">
                 </div>
-                <a type="button" href="/leave/${user.userId}">회원 탈퇴</a>
+                <a type="button" href="/user/${user.userId}">회원 탈퇴</a>
                 <button type="submit" class="btn btn-success clearfix pull-right">개인정보 수정</button>
-                <div class="clearfix" />
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
             </form>
         </div>
     </div>

@@ -2,6 +2,8 @@ package com.zum.domain;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,26 +24,26 @@ public class User {
 
 
 
-    @NotNull
+    @NotEmpty
     @Column(name="username")
     @Size(min=2, max=30)
     private String userName;
 
 
-    @NotNull(message="패스워드를 입력해주세요")
+    @NotEmpty
     @Column(name = "password", columnDefinition = "varchar(60)", nullable = false)
-    @Size(min=4, max=60, message = "비밀번호는 최소 4자이상 60자이하로 입력해주세요")
+    @Size(min=4, max=60)
     private String password;
 
 
-    @NotNull
+
     @Column(name = "role", columnDefinition = "varchar(30) default 'ROLE_USER'")
     @Enumerated(EnumType.STRING)
     private Role role;
 
 
-    @NotNull(message="메일을 입력해주세요")
-    @Email(message = "메일의 양식을 지켜주세요.")
+    @NotEmpty
+    @Email
     @Column(name = "email", columnDefinition = "varchar(30)")
     @Size(min=2, max=30)
     private String email;

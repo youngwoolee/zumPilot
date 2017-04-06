@@ -2,10 +2,14 @@
 <html>
 <body>
 
-<h1>Error handling Page</h1>
-${name}
+<h1>에러 페이지</h1>
+
+요청 : ${url}
 <br>
-${message}
+<b>${name}</b>:  ${message}
+
+
+
 
 </body>
 </html>

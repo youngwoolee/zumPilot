@@ -21,7 +21,7 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default content-main">
             <spring:hasBindErrors name="user"/>
-            <form name="question" method="post" action="/register">
+            <form name="question" method="post" action="/user/">
                 <div class="form-group">
                     <label for="userName">사용자 아이디</label>
                     <input class="form-control" id="userName" name="userName" placeholder="User ID">

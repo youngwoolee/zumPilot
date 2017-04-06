@@ -6,14 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -23,6 +21,7 @@ import java.util.List;
  * Created by joeylee on 2017-03-21.
  */
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -30,27 +29,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView welcomePage(Authentication auth) {
-        ModelAndView model = new ModelAndView();
-        if(auth != null && auth.getName() != null) {
-            model.addObject("message", auth.getName() + " 입니다.");
-        }
-
-
-        model.setViewName("home");
-        return model;
+    @GetMapping("/new")
+    public String registerForm() {
+        return "registerForm";
     }
 
-
-    @RequestMapping("/login")
-    public void login() {
-    }
-
-    @RequestMapping("/registerForm")
-    public void registerForm() {}
-
-    @PostMapping("/register")
+    @PostMapping("/")
     public String register(@Valid User user, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
@@ -62,8 +46,8 @@ public class UserController {
             return "registerForm";
         }
 
-        else {
 
+        else {
             userService.create(user);
             return "redirect:/";
         }
@@ -71,35 +55,40 @@ public class UserController {
 
     }
 
-    @RequestMapping("/updateForm")
-    public void updateForm(Model model, Authentication auth) {
+    @GetMapping("/edit")
+    public String updateForm(Model model, Authentication auth) {
 
         String userId = auth.getName();
         User user = userService.getUserByUsername(userId);
         model.addAttribute("user", user);
 
-    }
-
-    @RequestMapping(value = "/update" , method = RequestMethod.POST)
-    public String update(User user) {
-
-
-        if(userService.update(user)) {
-
-            return "redirect:/";
-        }
-        else {
-            //수정해야함
-            System.out.println("error");
-            return "redirect:/";
-        }
+        return "updateForm";
 
     }
 
-    @RequestMapping("/leave/{id}")
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable("id") Long userId,
+                         @RequestParam String password, @RequestParam String email) {
+
+        logger.debug("User : " + password + email);
+//        if(userService.update(user)) {
+//
+//            return "redirect:/";
+//        }
+//        else {
+//            //수정해야함
+//            System.out.println("error");
+//            return "redirect:/";
+//        }
+        return "redirect:/";
+
+    }
+
+    @GetMapping("/{id}")
     public String leave(@PathVariable("id") Long id) {
 
         userService.leave(id);
+        SecurityContextHolder.clearContext();
 
         return "redirect:/";
     }

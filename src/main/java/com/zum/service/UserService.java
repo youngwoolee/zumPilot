@@ -11,8 +11,10 @@ public interface UserService {
     public User getUserByUsername(String username);
     public User getUserByUserId(Long userId);
     public boolean create(User user);
-    public boolean update(User user);
+    void update(Long userId);
     public void leave(Long userId);
+
+
 
 
 

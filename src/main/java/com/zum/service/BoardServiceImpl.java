@@ -3,14 +3,17 @@ package com.zum.service;
 import com.zum.domain.Board;
 import com.zum.domain.Image;
 import com.zum.domain.User;
+import com.zum.exception.NotFoundExceptionRest;
 import com.zum.repository.BoardRepository;
 import com.zum.repository.ImageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
@@ -51,8 +54,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void increaseHit(Long id) {
+    public void increaseHit(Long id) throws NotFoundExceptionRest {
         Board board = boardRepository.findOne(id);
+
+        if(board == null) {
+            throw new NotFoundExceptionRest();
+        }
+
         board.setHit(board.getHit()+1);
 
         boardRepository.save(board);

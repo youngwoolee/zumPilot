@@ -3,8 +3,11 @@ package com.zum.service;
 import com.zum.domain.Board;
 import com.zum.domain.Image;
 import com.zum.domain.User;
+import com.zum.exception.NotFoundExceptionRest;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 import java.util.List;
 
@@ -20,7 +23,7 @@ public interface BoardService {
 
     public void create(Board board, User user);
 
-    public void increaseHit(Long id);
+    public void increaseHit(Long id) throws NotFoundExceptionRest;
 
     public Page<Board> getBoardList(Pageable pageable);
 

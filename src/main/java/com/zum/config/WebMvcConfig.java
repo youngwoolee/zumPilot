@@ -62,6 +62,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         exceptionMappings.setProperty(".NoSuchRequestHandlingMethodException", "resourceNotFound");
         exceptionMappings.setProperty(".TypeMismatchException", "resourceNotFound");
         exceptionMappings.setProperty(".MissingServletRequestParameterException", "resourceNotFound");
+        exceptionMappings.setProperty(".NotFoundExceptionRest", "exceptionHandler");
         exceptionResolver.setExceptionMappings(exceptionMappings);
         return exceptionResolver;
     }

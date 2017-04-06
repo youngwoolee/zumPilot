@@ -54,25 +54,30 @@ public class UserServcieImpl implements UserService {
         return true;
     }
 
+    @Override
+    public void update(Long userId) {
+        User user = userRepository.findByUserId(userId);
 
-    public boolean update(User user) {
-
-        User updateUser = userRepository.findByUserName(user.getUserName());
-
-        updateUser.setUserName(user.getUserName());
-        updateUser.setEmail(user.getEmail());
-
-
-        if(user.getPassword() != null && !"".equals(user.getPassword())) {
-
-            //비밀번호 바꿈
-            updateUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        }
-
-        userRepository.save(updateUser);
-
-        return true;
     }
+
+//    public boolean update(User user) {
+//
+//        User updateUser = userRepository.findByUserName(user.getUserName());
+//
+//        updateUser.setUserName(user.getUserName());
+//        updateUser.setEmail(user.getEmail());
+//
+//
+//        if(user.getPassword() != null && !"".equals(user.getPassword())) {
+//
+//            //비밀번호 바꿈
+//            updateUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+//        }
+//
+//        userRepository.save(updateUser);
+//
+//        return true;
+//    }
 
 
     public void leave(Long userId) {

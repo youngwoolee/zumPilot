@@ -4,6 +4,7 @@ import com.zum.domain.Board;
 import com.zum.domain.Image;
 import com.zum.domain.Reply;
 import com.zum.domain.User;
+import com.zum.exception.NotFoundExceptionRest;
 import com.zum.repository.BoardRepository;
 import com.zum.repository.ImageRepository;
 import com.zum.repository.ReplyRepository;
@@ -12,10 +13,12 @@ import com.zum.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -125,11 +128,12 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String board(@PathVariable("id") Long id, Model model, Authentication auth) {
+    public String board(@PathVariable("id") Long id, Model model, Authentication auth) throws NotFoundExceptionRest {
 
         boardService.increaseHit(id);
 
         Board board = boardService.getBoard(id);
+
 
         Image image;
         if (imageRepository.findByBoardBoardId(id) != null) {

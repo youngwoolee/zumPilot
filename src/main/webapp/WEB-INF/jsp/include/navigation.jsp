@@ -15,15 +15,15 @@
         <ul class="nav navbar-nav navbar-right">
             <sec:authorize access="isAnonymous()">
                 <li><a href="/login" role="button">로그인</a></li>
-                <li><a href="/registerForm" role="button">회원가입</a></li>
+                <li><a href="/user/new" role="button">회원가입</a></li>
             </sec:authorize>
 
             <sec:authorize access="isAuthenticated()">
 
                 <li><a href="/board/list">게시판</a></li>
-                <li><a href="/updateForm" role="button">개인정보수정</a></li>
+                <li><a href="/user/edit" role="button">개인정보수정</a></li>
                 <li>${message}</li>
-                <li><form:form action="/logout" method="POST">
+                <li><form:form action="/logout" method="post">
                     <input type="submit" value="logout"/>
                 </form:form>
                 </li>
