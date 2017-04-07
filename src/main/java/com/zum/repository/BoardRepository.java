@@ -1,6 +1,7 @@
 package com.zum.repository;
 
 import com.zum.domain.Board;
+import com.zum.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,10 +18,9 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long>{
 
-
     Page<Board> findByStatus(int status, Pageable pageable);
-
     Page<Board> findAll(Pageable pageable);
 
+//    Board findByUserUserName(String username);
 
 }

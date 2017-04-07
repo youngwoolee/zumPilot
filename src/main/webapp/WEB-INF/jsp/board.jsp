@@ -47,29 +47,29 @@
     </table>
 
     <hr/>
-    <a class="btn btn-default pull-right" href="/board/writeForm">글쓰기</a>
+    <a class="btn btn-default pull-right" href="/board/new">글쓰기</a>
 
     <div class="text-center">
         <ul class="pagination">
             <c:if test="${!boardList.first}">
                 <li class="previous">
-                    <a href="/board/list?pNo=${pNo-1}">&larr; </a>
+                    <a href="/board/?pNo=${pNo-1}">&larr; </a>
                 </li>
             </c:if>
             <c:forEach begin="${begin}" end="${end}" var="i" step="1">
                 <c:choose>
                     <c:when test="${pNo == i}">
-                        <li class="active"><a href="/board/list?pNo=${i}">${i}</a></li>
+                        <li class="active"><a href="/board/?pNo=${i}">${i}</a></li>
                     </c:when>
                     <c:otherwise>
-                        <li><a href="/board/list?pNo=${i}">${i}</a></li>
+                        <li><a href="/board/?pNo=${i}">${i}</a></li>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
 
             <c:if test="${!boardList.last}">
                 <li class="next">
-                    <a href="/board/list?pNo=${pNo+1}">&rarr; </a>
+                    <a href="/board/?pNo=${pNo+1}">&rarr; </a>
                 </li>
             </c:if>
 

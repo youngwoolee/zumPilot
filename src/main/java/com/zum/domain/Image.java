@@ -38,6 +38,15 @@ public class Image {
     public Image() {
     }
 
+    public void insertImage(String originalFilename, String fileName, Long fileSize, Board board) {
+
+        this.originName = originalFilename;
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.board = board;
+
+    }
+
 
 
 

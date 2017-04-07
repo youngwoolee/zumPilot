@@ -47,8 +47,7 @@ public class UserController {
     @GetMapping("/edit")
     public String updateForm(Model model, Authentication auth) {
 
-        String userId = auth.getName();
-        User user = userService.getUserByUsername(userId);
+        User user = userService.getUserByUsername(auth.getName());
         model.addAttribute("user", user);
 
         return "updateForm";

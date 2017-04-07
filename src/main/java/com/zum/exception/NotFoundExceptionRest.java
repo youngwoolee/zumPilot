@@ -7,7 +7,7 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 
 
-public class NotFoundExceptionRest extends NotFoundException {
+public class NotFoundExceptionRest extends RuntimeException {
 
     private String msg;
     private final String defaultMessage = "페이지를 찾을 수 없습니다.";

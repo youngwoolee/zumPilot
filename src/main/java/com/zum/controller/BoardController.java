@@ -67,9 +67,9 @@ public class BoardController {
 
     private static final int PAGE_SIZE = 3;
     private static final int MAX_PAGER = 4;
-    private static final String ATTACH_PATH = "/upload/";
 
-    @RequestMapping("/list")
+
+    @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String board(Model model, @RequestParam(value = "pNo", defaultValue = "1") int pNo) {
 
@@ -121,39 +121,55 @@ public class BoardController {
     }
 
 
-    @RequestMapping("/writeForm")
+    @GetMapping("/new")
     public String boardWriteForm(Model model, Authentication auth) {
         model.addAttribute("auth", auth.getName());
         return "board/boardWrite";
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String board(@PathVariable("id") Long id, Model model, Authentication auth) throws NotFoundExceptionRest {
+    @PostMapping(value = "/")
+    public String write(@Valid Board board,
+                        BindingResult bindingResult,
+                        MultipartHttpServletRequest multipartRequest,
+                        Authentication auth) throws IOException{
 
-        boardService.increaseHit(id);
-
-        Board board = boardService.getBoard(id);
-
-
-        Image image;
-        if (imageRepository.findByBoardBoardId(id) != null) {
-            logger.error("boardId : " + id);
-            image = imageRepository.findByBoardBoardId(id);
-            model.addAttribute("image", image);
-
+        if(bindingResult.hasErrors()) {
+            return "/board/boardWrite";
         }
 
+        User user = userService.getUserByUsername(auth.getName());
+        boardService.create(board, user, multipartRequest);
+
+        return "redirect:/board/";
+    }
+
+
+    @GetMapping("/{id}")
+    public String board(@PathVariable("id") Long id,
+                        Model model,
+                        Authentication auth) {
+
+        Board board = boardService.getBoard(id);
+        Image image = boardService.getImage(id);
 
         model.addAttribute("board", board);
+        model.addAttribute("image", image);
         model.addAttribute("auth", auth.getName());
-
 
         return "board/detail";
     }
 
 
-    @RequestMapping(value = "/modifyForm/{id}")
-    public String modifyForm(@PathVariable("id") Long id, Model model) {
+
+
+    @GetMapping(value = "/{id}/edit")
+    public String modifyForm(@PathVariable("id") Long id,
+                             Model model,
+                             Authentication auth) {
+
+        //권한 제어
+//        Long userId = boardService.getUserId(auth.getName());
+//        userService.isAuthenticated(auth.getName(), userId);
 
         Board board = boardService.getBoard(id);
 
@@ -177,43 +193,43 @@ public class BoardController {
         logger.error(board.toString());
 
 
-        MultipartFile mpf = multipartRequest.getFile("upload");
-
-        if(mpf != null) {
-
-            HttpSession session = multipartRequest.getSession();
-
-            String root = session.getServletContext().getRealPath("/");
-
-            String filePath = root + ATTACH_PATH;
-
-            String genId = UUID.randomUUID().toString();
-
-            String originalFilename = mpf.getOriginalFilename(); //파일명
-
-            String exc = originalFilename.substring(originalFilename.lastIndexOf(".") + 1, originalFilename.length());
-
-            String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
-
-            long fileSize = mpf.getSize();
-
-            try {
-                mpf.transferTo(new File(fileFullPath)); //파일저장
-
-                Image image = new Image();
-
-                image.setOriginName(originalFilename);
-                image.setFileName(ATTACH_PATH + genId + "." + exc);
-                image.setFileSize(fileSize);
-                image.setBoard(board);
-
-                boardService.fileUpdate(image);
-            }
-            catch (IOException e ) {
-                e.printStackTrace();
-            }
-
-        }
+//        MultipartFile mpf = multipartRequest.getFile("upload");
+//
+//        if(mpf != null) {
+//
+//            HttpSession session = multipartRequest.getSession();
+//
+//            String root = session.getServletContext().getRealPath("/");
+//
+//            String filePath = root + ATTACH_PATH;
+//
+//            String genId = UUID.randomUUID().toString();
+//
+//            String originalFilename = mpf.getOriginalFilename(); //파일명
+//
+//            String exc = originalFilename.substring(originalFilename.lastIndexOf(".") + 1, originalFilename.length());
+//
+//            String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
+//
+//            long fileSize = mpf.getSize();
+//
+//            try {
+//                mpf.transferTo(new File(fileFullPath)); //파일저장
+//
+//                Image image = new Image();
+//
+//                image.setOriginName(originalFilename);
+//                image.setFileName(ATTACH_PATH + genId + "." + exc);
+//                image.setFileSize(fileSize);
+//                image.setBoard(board);
+//
+//                boardService.fileUpdate(image);
+//            }
+//            catch (IOException e ) {
+//                e.printStackTrace();
+//            }
+//
+//        }
 
         if (boardService.update(board)) {
 
@@ -229,105 +245,13 @@ public class BoardController {
 
     }
 
-
-    @PostMapping(value = "/write")
-    public String write(@Valid Board board, BindingResult bindingResult, MultipartHttpServletRequest multipartRequest, Authentication auth) {
-
-        if(bindingResult.hasErrors()) {
-            logger.info(" 유효성 에러 ");
-            List<ObjectError> list = bindingResult.getAllErrors();
-            for (ObjectError error : list) {
-                logger.error("error:{}",error.getDefaultMessage());
-            }
-
-            return "/board/boardWrite";
-        }
-
-
-
-        User user = userService.getUserByUsername(auth.getName());
-        boardService.create(board, user);
-
-
-
-//        HttpSession session = multipartRequest.getSession();
-//
-//        String root = session.getServletContext().getRealPath("/");
-//
-//        String filePath = root + ATTACH_PATH;
-//
-//
-//        File dir = new File(filePath);
-//        if (!dir.isDirectory()) {
-//            dir.mkdirs();
-//        }
-//
-//        Iterator<String> itr = multipartRequest.getFileNames();
-//
-//
-//        User user = userService.getUserByUsername(auth.getName());
-//
-//        boardService.create(board, user);
-//
-//
-//        while (itr.hasNext()) {
-//
-//            MultipartFile mpf = multipartRequest.getFile(itr.next());
-//
-//            if (!mpf.isEmpty()) {
-//
-//
-//                String genId = UUID.randomUUID().toString();
-//
-//                String originalFilename = mpf.getOriginalFilename(); //파일명
-//
-//                String exc = originalFilename.substring(
-//                        originalFilename.lastIndexOf(".") + 1, originalFilename.length());
-//
-//                String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
-//
-//                long fileSize = mpf.getSize();
-//
-//
-//                logger.error(fileFullPath);
-//
-//
-//                try {
-//                    mpf.transferTo(new File(fileFullPath)); //파일저장
-//
-//                    Image image = new Image();
-//
-//                    image.setOriginName(originalFilename);
-//                    image.setFileName(ATTACH_PATH + genId + "." + exc);
-//                    image.setFileSize(fileSize);
-//                    image.setBoard(board);
-//
-//                    boardService.fileUpload(image);
-//
-//                    System.out.println("originalFilename => " + originalFilename);
-//                    System.out.println("fileFullPath => " + fileFullPath);
-//
-//
-//                } catch (Exception e) {
-//                    System.out.println("postTempFile_ERROR======>" + fileFullPath);
-//                    e.printStackTrace();
-//
-//                }
-//
-//            }
-//
-//        }
-
-        return "redirect:/board/list";
-    }
-
     @RequestMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
 
         boardService.delete(id);
 
 
-        return "redirect:/board/list";
+        return "redirect:/board/";
     }
 
     @RequestMapping("/403")

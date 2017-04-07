@@ -20,7 +20,7 @@
 
         <div style="padding : 30px;">
             <spring:hasBindErrors name="board"/>
-            <form id="board-write" method="POST" action="/board/write" enctype="multipart/form-data" >
+            <form id="board-write" method="POST" action="/board/" enctype="multipart/form-data" >
                 <div class="form-group">
                     <label>제목</label>
                     <input type="text" name="title" class="form-control" id = "title">

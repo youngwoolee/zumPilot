@@ -54,7 +54,7 @@ public class Board {
     @JoinColumn(name = "userid")
     private User userId;
 
-    public void hit() {
+    public void updateHit() {
         this.hit++;
     }
 
@@ -62,4 +62,7 @@ public class Board {
         this.title = board.title;
         this.content = board.content;
     }
+
+
+
 }

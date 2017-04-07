@@ -8,7 +8,10 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -17,23 +20,27 @@ import java.util.List;
 
 public interface BoardService {
 
-    public List<Board> getBoardList();
+    List<Board> getBoardList();
 
-    public Board getBoard(Long id);
+    Board getBoard(Long id);
 
-    public void create(Board board, User user);
+    void create(Board board, User user, MultipartHttpServletRequest multipartRequest) throws IOException;
 
-    public void increaseHit(Long id) throws NotFoundExceptionRest;
+    void increaseHit(Long id);
 
-    public Page<Board> getBoardList(Pageable pageable);
+    Page<Board> getBoardList(Pageable pageable);
 
-    public void delete(Long boardId);
-//
-    public boolean update(Board board);
+    void delete(Long boardId);
 
-    public void fileUpload(Image image);
+    boolean update(Board board);
 
-    public void fileUpdate(Image image);
+    void fileUpload(Image image);
+
+    void fileUpdate(Image image);
+
+    Image getImage(Long boardId);
+
+//    Long getUserId(String username);
 
 
 }

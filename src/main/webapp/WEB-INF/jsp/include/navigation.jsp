@@ -20,7 +20,7 @@
 
             <sec:authorize access="isAuthenticated()">
 
-                <li><a href="/board/list">게시판</a></li>
+                <li><a href="/board/">게시판</a></li>
                 <li><a href="/user/edit" role="button">개인정보수정</a></li>
                 <li>${message}</li>
                 <li><form:form action="/logout" method="post">

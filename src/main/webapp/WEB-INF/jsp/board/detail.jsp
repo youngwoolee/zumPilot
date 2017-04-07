@@ -53,7 +53,7 @@
 
 
             <c:if test = "${board.userId.userName == auth}">
-                <a type="button" href="/board/modifyForm/${board.boardId}">글 수정</a>
+                <a type="button" href="/board/${board.boardId}/edit">글 수정</a>
                 <a type="button" href="/board/delete/${board.boardId}">글 삭제</a>
             </c:if>
 
