@@ -8,11 +8,11 @@ import com.zum.domain.User;
 
 public interface UserService {
 
-    public User getUserByUsername(String username);
-    public User getUserByUserId(Long userId);
-    public boolean create(User user);
-    void update(Long userId);
-    public void leave(Long userId);
+    User getUserByUsername(String username);
+    void create(User user);
+    void update(Long userId, String password, String email);
+    void leave(Long userId);
+    void isAuthenticated(String username, Long userId);
 
 
 

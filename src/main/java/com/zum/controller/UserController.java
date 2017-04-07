@@ -10,12 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * Created by joeylee on 2017-03-21.
@@ -39,20 +36,12 @@ public class UserController {
 
         if(bindingResult.hasErrors()) {
             logger.info(" 유효성 에러 ");
-            List<ObjectError> list = bindingResult.getAllErrors();
-            for (ObjectError error : list) {
-                logger.debug("error:{}",error.getDefaultMessage());
-            }
             return "registerForm";
         }
-
-
         else {
             userService.create(user);
             return "redirect:/";
         }
-
-
     }
 
     @GetMapping("/edit")
@@ -68,26 +57,22 @@ public class UserController {
 
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") Long userId,
-                         @RequestParam String password, @RequestParam String email) {
+                         @RequestParam String password,
+                         @RequestParam String email,
+                         Authentication auth) {
 
-        logger.debug("User : " + password + email);
-//        if(userService.update(user)) {
-//
-//            return "redirect:/";
-//        }
-//        else {
-//            //수정해야함
-//            System.out.println("error");
-//            return "redirect:/";
-//        }
+        //진짜 사용자인지 권한 체크
+        userService.isAuthenticated(auth.getName(), userId);
+        userService.update(userId, password, email);
+
         return "redirect:/";
-
     }
 
     @GetMapping("/{id}")
-    public String leave(@PathVariable("id") Long id) {
+    public String leave(@PathVariable("id") Long userId, Authentication auth) {
 
-        userService.leave(id);
+        userService.isAuthenticated(auth.getName(), userId);
+        userService.leave(userId);
         SecurityContextHolder.clearContext();
 
         return "redirect:/";

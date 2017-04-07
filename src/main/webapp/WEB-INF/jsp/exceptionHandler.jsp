@@ -2,11 +2,11 @@
 <html>
 <body>
 
-<h1>에러 페이지</h1>
+<h1>${message}</h1>
 
 요청 : ${url}
 <br>
-<b>${name}</b>:  ${message}
+<b>${name}</b>
 
 
 

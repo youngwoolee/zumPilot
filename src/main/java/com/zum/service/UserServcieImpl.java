@@ -2,6 +2,8 @@ package com.zum.service;
 
 import com.zum.domain.Role;
 import com.zum.domain.User;
+import com.zum.exception.AuthenticationException;
+import com.zum.exception.UserDuplicationException;
 import com.zum.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,72 +26,39 @@ public class UserServcieImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-
-
-
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUserName(username);
     }
+    
+    public void create(User regiUser) {
 
-    @Override
-    public User getUserByUserId(Long userId) {
-        return userRepository.findByUserId(userId);
-    }
-
-
-    public boolean create(User user) {
-
-        if(userRepository.findOneByUserName(user.getUserName()) != null) {
-            return false;
+        if(userRepository.findByUserName(regiUser.getUserName()) != null) {
+            throw new UserDuplicationException();
         }
-
-        User regiUser = new User();
-
-        regiUser.setUserName(user.getUserName());
-        regiUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        regiUser.setEmail(user.getEmail());
+        regiUser.passwordEncode();
         userRepository.save(regiUser);
-
-        return true;
     }
 
     @Override
-    public void update(Long userId) {
-        User user = userRepository.findByUserId(userId);
+    public void update(Long userId, String password, String email) {
 
+        User user = userRepository.findByUserId(userId);
+        user.updateUserInfo(password, email);
     }
 
-//    public boolean update(User user) {
-//
-//        User updateUser = userRepository.findByUserName(user.getUserName());
-//
-//        updateUser.setUserName(user.getUserName());
-//        updateUser.setEmail(user.getEmail());
-//
-//
-//        if(user.getPassword() != null && !"".equals(user.getPassword())) {
-//
-//            //비밀번호 바꿈
-//            updateUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-//        }
-//
-//        userRepository.save(updateUser);
-//
-//        return true;
-//    }
-
+    @Override
+    public void isAuthenticated(String username, Long userId) {
+        if(!userRepository.findByUserId(userId).getUserName().equals(username)) {
+            throw new AuthenticationException();
+        }
+    }
 
     public void leave(Long userId) {
 
-
         User user = userRepository.findByUserId(userId);
-
-        user.setRole(Role.ROLE_LEAVE);
-
-
+        user.leaveUser();
         userRepository.save(user);
-
     }
 
 

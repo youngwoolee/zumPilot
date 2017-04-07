@@ -53,19 +53,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-    @Bean
-    public SimpleMappingExceptionResolver exceptionResolver() {
-        SimpleMappingExceptionResolver exceptionResolver = new SimpleMappingExceptionResolver();
-        exceptionResolver.setDefaultErrorView("uncaughtException");
-        Properties exceptionMappings = new Properties();
-        exceptionMappings.setProperty(".DataAccessException", "dataAccessFailure");
-        exceptionMappings.setProperty(".NoSuchRequestHandlingMethodException", "resourceNotFound");
-        exceptionMappings.setProperty(".TypeMismatchException", "resourceNotFound");
-        exceptionMappings.setProperty(".MissingServletRequestParameterException", "resourceNotFound");
-        exceptionMappings.setProperty(".NotFoundExceptionRest", "exceptionHandler");
-        exceptionResolver.setExceptionMappings(exceptionMappings);
-        return exceptionResolver;
-    }
+//    @Bean
+//    public SimpleMappingExceptionResolver exceptionResolver() {
+//        SimpleMappingExceptionResolver exceptionResolver = new SimpleMappingExceptionResolver();
+//        exceptionResolver.setDefaultErrorView("exceptionHandler");
+//        Properties exceptionMappings = new Properties();
+////        exceptionMappings.setProperty(".DataAccessException", "dataAccessFailure");
+////        exceptionMappings.setProperty(".NoSuchRequestHandlingMethodException", "resourceNotFound");
+////        exceptionMappings.setProperty(".TypeMismatchException", "resourceNotFound");
+////        exceptionMappings.setProperty(".MissingServletRequestParameterException", "resourceNotFound");
+//        exceptionMappings.setProperty(".NotFoundExceptionRest", "exceptionHandler");
+//        exceptionMappings.setProperty(".UserDuplicationException", "exceptionHandler");
+//        exceptionResolver.setExceptionMappings(exceptionMappings);
+//        return exceptionResolver;
+//    }
 
     @Bean
     public MessageSource messageSource() {

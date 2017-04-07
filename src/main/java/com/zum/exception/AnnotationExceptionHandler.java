@@ -1,8 +1,11 @@
 package com.zum.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -19,42 +22,72 @@ import java.sql.SQLException;
 @ControllerAdvice
 public class AnnotationExceptionHandler {
 
+    Logger logger = LoggerFactory.getLogger(AnnotationExceptionHandler.class);
 
-    @ExceptionHandler(value = Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
+    @ExceptionHandler(Exception.class)
+    public String defaultErrorHandler(HttpServletRequest req, Exception e, Model model) {
 
-        ModelAndView mnv = new ModelAndView();
+        logger.debug("defaultErrorHandler()");
 
-        mnv.addObject("url", req.getRequestURL());
-        mnv.addObject("name",e.getClass().getSimpleName());
-        mnv.addObject("message",e.getMessage());
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("name",e.getClass().getSimpleName());
+        model.addAttribute("message",e.getMessage());
 
-        return mnv;
+        return "exceptionHandler";
     }
 
     @ExceptionHandler({ SQLException.class, DataAccessException.class })
-    public String databaseError(HttpServletRequest req, Exception e) {
+    public String databaseError(HttpServletRequest req, Exception e, Model model) {
 
-        ModelAndView mnv = new ModelAndView();
+        logger.debug("databaseError()");
 
-        mnv.addObject("url", req.getRequestURL());
-        mnv.addObject("name",e.getClass().getSimpleName());
-        mnv.addObject("message",e.getMessage());
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("name",e.getClass().getSimpleName());
+        model.addAttribute("message",e.getMessage());
 
-        return "databaseError";
+        return "exceptionHandler";
     }
 
 
 
     @ExceptionHandler(NotFoundExceptionRest.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView handleRuntimeException(HttpServletRequest req, NotFoundExceptionRest e) {
-        ModelAndView mnv = new ModelAndView("exceptionHandler");
-        mnv.addObject("url", req.getRequestURL());
-        mnv.addObject("name",e.getClass().getSimpleName());
-        mnv.addObject("message",e.getDefaultMessage());
+    public String notFoundException(HttpServletRequest req, NotFoundExceptionRest e, Model model) {
 
-        return mnv;
+        logger.debug("notFoundException()");
+
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("name",e.getClass().getSimpleName());
+        model.addAttribute("message",e.getDefaultMessage());
+
+        return "exceptionHandler";
+    }
+
+
+    @ExceptionHandler(UserDuplicationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String userDuplicationException(HttpServletRequest req, UserDuplicationException e, Model model) {
+
+        logger.debug("userDuplicationException()");
+
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("name",e.getClass().getSimpleName());
+        model.addAttribute("message",e.getDefaultMessage());
+
+        return "exceptionHandler";
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String authenticationException(HttpServletRequest req, AuthenticationException e, Model model) {
+
+        logger.debug("authenticationException()");
+
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("name",e.getClass().getSimpleName());
+        model.addAttribute("message",e.getDefaultMessage());
+
+        return "exceptionHandler";
     }
 
 

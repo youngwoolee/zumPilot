@@ -3,6 +3,7 @@ package com.zum.domain;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -59,5 +60,23 @@ public class User {
         this.role = role;
         this.email = email;
     }
+
+    public void passwordEncode(){
+        this.password = new BCryptPasswordEncoder().encode(this.password);
+    }
+
+    public void updateUserInfo(String password, String email) {
+
+        if(!password.equals("")) {
+            this.password = new BCryptPasswordEncoder().encode(password);
+        }
+        this.email = email;
+    }
+
+    public void leaveUser() {
+        this.role = Role.ROLE_LEAVE;
+    }
+
+
 
 }
