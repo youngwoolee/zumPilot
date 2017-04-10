@@ -4,6 +4,8 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,8 +24,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="userid")
     private Long userId;
-
-
 
     @NotEmpty
     @Column(name="username")
@@ -66,7 +66,6 @@ public class User {
     }
 
     public void updateUserInfo(String password, String email) {
-
         if(!password.equals("")) {
             this.password = new BCryptPasswordEncoder().encode(password);
         }
@@ -76,7 +75,4 @@ public class User {
     public void leaveUser() {
         this.role = Role.ROLE_LEAVE;
     }
-
-
-
 }

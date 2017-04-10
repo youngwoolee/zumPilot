@@ -32,8 +32,6 @@ import java.util.Properties;
 @EnableJpaRepositories(basePackages = "com.zum.repository")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        registry.setOrder(1);
@@ -41,8 +39,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/upload/**").addResourceLocations("/upload/");
         registry.addResourceHandler("/assets/**").addResourceLocations("/assets/");
     }
-
-
 
     @Bean
     public InternalResourceViewResolver viewResolver() {
@@ -53,7 +49,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-
     @Bean
     public MessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -63,5 +58,4 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         messageSource.setCacheSeconds(5);
         return messageSource;
     }
-
 }

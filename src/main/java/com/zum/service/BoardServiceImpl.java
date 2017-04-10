@@ -6,27 +6,21 @@ import com.zum.domain.User;
 import com.zum.exception.NotFoundExceptionRest;
 import com.zum.repository.BoardRepository;
 import com.zum.repository.ImageRepository;
-import com.zum.util.FileUploadUtil;
+import com.zum.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by joeylee on 2017-03-22.
@@ -36,7 +30,8 @@ import java.util.UUID;
 public class BoardServiceImpl implements BoardService {
 
    Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
-
+    private static final int PAGE_SIZE = 3;
+    private static final int MAX_PAGER = 4;
 
 
    @Autowired
@@ -44,10 +39,6 @@ public class BoardServiceImpl implements BoardService {
    @Autowired
    private ImageRepository imageRepository;
 
-    @Override
-    public List<Board> getBoardList() {
-        return boardRepository.findAll();
-    }
 
     @Override
     public void create(Board board, User user, MultipartHttpServletRequest multipartRequest) throws IOException {
@@ -59,6 +50,19 @@ public class BoardServiceImpl implements BoardService {
         if(image != null) {
             fileUpload(image);
         }
+    }
+
+    @Override
+    public void modify(Long boardId, String title, String content, MultipartHttpServletRequest multipartRequest) throws IOException{
+
+        Board board = boardRepository.findByBoardId(boardId);
+        board.modifyBoard(title, content);
+
+        Image image = FileUploadUtil.saveMultipartFile(multipartRequest, board);
+        if(image != null) {
+            fileUpdate(image);
+        }
+
     }
 
     @Override
@@ -94,8 +98,25 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Long getUserId(Long boardId) {
+        Board board = boardRepository.findByBoardId(boardId);
+
+        return board.getUserId().getUserId();
+    }
+
+
+    @Override
     public Page<Board> getBoardList(Pageable pageable) {
-        return boardRepository.findByStatus(1, pageable);
+
+       return boardRepository.findByStatus(1, pageable);
+    }
+
+
+    @Override
+    public HashMap<String, Object> getPageInfo(Page<Board> boardList, int pNo) {
+
+        return PageCustomUtil.getPageInfo(boardList, PAGE_SIZE, MAX_PAGER, pNo);
+
     }
 
     @Override
@@ -125,34 +146,17 @@ public class BoardServiceImpl implements BoardService {
     public void fileUpdate(Image image) {
 
         Image updateImage = imageRepository.findByBoardBoardId(image.getBoard().getBoardId());
-
-        updateImage.setOriginName(image.getOriginName());
-        updateImage.setFileSize(image.getFileSize());
-        updateImage.setFileName(image.getFileName());
-
+        updateImage.update(image);
         imageRepository.save(updateImage);
     }
 
     @Override
     public void delete(Long boardId) {
         Board board = boardRepository.findOne(boardId);
-
-        board.setStatus(0);
-
+        board.deleteBoard();
         boardRepository.save(board);
-
-
 
     }
 
-//    @Override
-//    public Long getUserId(String username) {
-//        Board board = boardRepository.findByUserUserName(username);
-//        return board.getUserId().getUserId();
-//    }
-//
-//    @Override
-//    public void update(Board board, Integer id) {
-//
-//    }
+
 }

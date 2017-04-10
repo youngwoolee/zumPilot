@@ -47,6 +47,14 @@ public class Image {
 
     }
 
+    public void update(Image image) {
+        this.originName = image.originName;
+        this.fileSize = image.fileSize;
+        this.fileName = image.fileName;
+
+    }
+
+
 
 
 
