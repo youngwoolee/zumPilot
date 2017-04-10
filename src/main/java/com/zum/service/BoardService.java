@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,8 +21,6 @@ import java.util.List;
 
 public interface BoardService {
 
-    List<Board> getBoardList();
-
     Board getBoard(Long id);
 
     void create(Board board, User user, MultipartHttpServletRequest multipartRequest) throws IOException;
@@ -29,6 +28,8 @@ public interface BoardService {
     void increaseHit(Long id);
 
     Page<Board> getBoardList(Pageable pageable);
+
+    HashMap<String, Object> getPageInfo(Page<Board> boardList, int pNo);
 
     void delete(Long boardId);
 
@@ -41,6 +42,10 @@ public interface BoardService {
     Image getImage(Long boardId);
 
 //    Long getUserId(String username);
+
+    Long getUserId(Long boardId);
+
+    void modify(Long boardId, String title, String content, MultipartHttpServletRequest multipartRequest) throws IOException;
 
 
 }

@@ -1,6 +1,5 @@
 package com.zum.service;
 
-import com.zum.domain.Role;
 import com.zum.domain.User;
 import com.zum.exception.AuthenticationException;
 import com.zum.exception.UserDuplicationException;
@@ -8,7 +7,6 @@ import com.zum.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

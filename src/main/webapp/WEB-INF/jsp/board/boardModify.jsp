@@ -18,7 +18,7 @@
     <div class="container">
 
         <div style="padding : 30px;">
-            <form method="POST" action="/board/modify" enctype="multipart/form-data" >
+            <form id="board-modify" action="" enctype="multipart/form-data" >
                 <input type="hidden" name="boardId" value="${board.boardId}">
                 <div class="form-group">
                     <label>제목</label>
@@ -26,7 +26,8 @@
                 </div>
                 <div class="form-group">
                     <label>작성자</label>
-                    <input type="text" name="writer" class="form-control" value="${board.userId.userName}" readonly >
+                    <br>
+                    ${board.userId.userName}
                 </div>
                 <div class="form-group">
                     <label>내용</label>
@@ -43,16 +44,41 @@
 
                     </div>
                 </c:if>
-                <input type="file" name="upload" accept=".gif, .jpg, .png">
+                <input id= "upload" type="file" name="upload" accept=".gif, .jpg, .png">
 
 
-                <button type="submit" class="btn btn-success clearfix pull-right">글 수정</button>
+                <button id="modify-button" type="reset" class="btn btn-success clearfix pull-right" OnClientClick="return false">글 수정</button>
 
             </form>
 
 
             <script src="/assets/js/jquery-3.2.0.min.js"></script>
             <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
+
+            <script type="text/javascript">
+
+                $('#modify-button').on('click', function() {
+
+                    var form = new FormData(document.getElementById('board-modify'));
+
+                    $.ajax({
+                        url: '/board/${board.boardId}',
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        data: form,
+                        type: 'PUT',
+                        success: function(result){
+                            alert("수정 성공!!");
+                            window.location.href = result.url;
+                        }
+                    });
+
+
+                });
+
+
+            </script>
 
         </div>
     </div>

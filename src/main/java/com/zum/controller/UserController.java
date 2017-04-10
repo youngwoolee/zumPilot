@@ -24,7 +24,7 @@ public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/new")
     public String registerForm() {

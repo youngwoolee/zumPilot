@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Map;
+
 /**
  * Created by joeylee on 2017-04-06.
  */
@@ -17,7 +19,7 @@ public class MainController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/")
     public String welcomePage(Model model, Authentication auth) {
