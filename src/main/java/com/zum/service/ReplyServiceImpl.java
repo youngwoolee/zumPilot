@@ -3,11 +3,12 @@ package com.zum.service;
 import com.zum.domain.Board;
 import com.zum.domain.Reply;
 import com.zum.domain.User;
+import com.zum.repository.BoardRepository;
 import com.zum.repository.ReplyRepository;
+import com.zum.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,7 +26,13 @@ public class ReplyServiceImpl implements ReplyService {
     Logger logger = LoggerFactory.getLogger(ReplyServiceImpl.class);
 
     @Autowired
-    ReplyRepository replyRepository;
+    private ReplyRepository replyRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BoardRepository boardRepository;
 
     @Override
     public List<Reply> replyListByBoardId(Long boardId) {
@@ -37,23 +44,26 @@ public class ReplyServiceImpl implements ReplyService {
 
 
     @Override
-    public Reply create(Reply reply, Board board, int thread, User user) {
+    public Reply create(Reply reply, Long boardId, String username) {
 
-        reply.setWriter(user);
-        reply.setThread(thread);
-        reply.setBoard(board);
+        User user = userRepository.findByUserName(username);
+        Board board = boardRepository.findByBoardId(boardId);
+        int thread = replyRepository.getMaxThreadByBoardId(boardId) + LIMIT_REPLY;
 
+        reply.createReply(board,user,thread);
         replyRepository.save(reply);
 
         return reply;
     }
 
     @Override
-    public Reply createAnswer(Reply reply, Board board, int depth, int thread, User user) {
-        reply.setWriter(user);
-        reply.setThread(thread);
-        reply.setBoard(board);
-        reply.setDepth(depth);
+    public Reply createAnswer(Reply reply, Long boardId, Long replyId, String username) {
+
+        User user = userRepository.findByUserName(username);
+        Board board = boardRepository.findByBoardId(boardId);
+        Reply parentReply = getParentReply(replyId);
+
+        reply.createAnswer(user, board, parentReply.getThread()-1, parentReply.getDepth()+1);
 
         replyRepository.save(reply);
 
@@ -75,22 +85,20 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void updateReply(int parentThread, Long replyId, Board board) {
+    public void updateReply(Long replyId, Long boardId) {
 
         Reply reply = replyRepository.findByReplyId(replyId);
+
         int prevReplyThread = 0;
+        int parentThread = getParentReply(replyId).getThread();
 
         //이전 reply 의 스레드
         if (reply.getThread() != 0) {
             prevReplyThread = replyRepository.getPrevReplyThread(replyId);
         }
 
-        logger.error("real : " + parentThread + "," + prevReplyThread);
-        List<Reply> updateReplyList = replyRepository.getReplyIdBetweenPrevCurrent(parentThread, prevReplyThread, board);
-
-        for (int i = 0; i < updateReplyList.size(); i++) {
-            logger.error("update replyId : " + updateReplyList.get(i).getReplyId());
-        }
+        logger.error("real : {}", parentThread, prevReplyThread);
+        List<Reply> updateReplyList = replyRepository.getReplyIdBetweenPrevCurrent(parentThread, prevReplyThread, boardId);
 
         //updateReplyThread
         for (Reply anUpdateReplyList : updateReplyList) {
@@ -98,4 +106,37 @@ public class ReplyServiceImpl implements ReplyService {
         }
 
     }
+
+    @Override
+    public Reply modifyAnswer(String content, Long replyId) {
+
+    Reply reply = getParentReply(replyId);
+    reply.setContent(content);
+
+    replyRepository.save(reply);
+
+    return reply;
+
+}
+
+    @Override
+    public Long getUserId(Long replyId) {
+
+        Reply reply = replyRepository.findByReplyId(replyId);
+
+        return reply.getWriter().getUserId();
+    }
+
+    @Override
+    public Reply deleteReply(Long replyId) {
+
+        Reply deleteReply = replyRepository.findByReplyId(replyId);
+
+        deleteReply.updateStatus();
+
+        replyRepository.save(deleteReply);
+
+        return deleteReply;
+    }
+
 }

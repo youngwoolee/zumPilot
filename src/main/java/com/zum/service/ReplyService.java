@@ -12,11 +12,19 @@ import java.util.List;
 public interface ReplyService {
 
     List<Reply> replyListByBoardId(Long boardId);
-    Reply create(Reply reply, Board board, int thread, User user);
-    Reply createAnswer(Reply reply, Board board, int depth, int thread, User user);
+    Reply create(Reply reply, Long boardId, String username);
+    Reply createAnswer(Reply reply, Long boardId, Long replyId, String username);
     int getMaxThreadNext(Board board);
 
     Reply getParentReply(Long replyId);
 
-    void updateReply(int parentThread, Long replyId, Board board);
+    void updateReply(Long replyId, Long boardId);
+
+    Reply modifyAnswer(String content, Long replyId);
+
+    Long getUserId(Long replyId);
+
+    Reply deleteReply(Long replyId);
+
+
 }

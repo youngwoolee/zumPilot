@@ -67,7 +67,7 @@
                         contentType: false,
                         dataType: 'json',
                         data: form,
-                        type: 'PUT',
+                        type: 'post',
                         success: function(result){
                             alert("수정 성공!!");
                             window.location.href = result.url;

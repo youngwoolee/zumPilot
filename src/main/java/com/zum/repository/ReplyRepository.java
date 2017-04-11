@@ -26,6 +26,9 @@ public interface ReplyRepository extends JpaRepository<Reply, Long>{
     @Query("select coalesce(max(r.thread),0) from Reply r where r.board = ?1")
     int getMaxThread(Board board);
 
+    @Query("select coalesce(max(r.thread),0) from Reply r where r.board.boardId = ?1")
+    int getMaxThreadByBoardId(Long boardId);
+
     Reply findByReplyId(Long replyId);
 
     //이전 답글의 reply_thread
@@ -33,18 +36,15 @@ public interface ReplyRepository extends JpaRepository<Reply, Long>{
     int getPrevReplyThread(Long replyId);
 
 
-    @Query("select r from Reply r where r.thread < ?1 and r.thread > ?2 and r.board = ?3")
-    List<Reply> getReplyIdBetweenPrevCurrent(int thread, int prevThread, Board board);
+    @Query("select r from Reply r where r.thread < ?1 and r.thread > ?2 and r.board.boardId = ?3")
+    List<Reply> getReplyIdBetweenPrevCurrent(int thread, int prevThread, Long boardId);
 
     @Modifying
     @Transactional
     @Query("update Reply r set r.thread = r.thread - 1 where r.replyId = ?1")
     void updateReplyThread(Long replyId);
 
-    @Modifying
-    @Transactional
-    @Query("update Reply r set r.status = 0 where r.replyId = ?1")
-    void deleteReply(Long replyId);
+    Reply findOne(Long replyId);
 
 
 

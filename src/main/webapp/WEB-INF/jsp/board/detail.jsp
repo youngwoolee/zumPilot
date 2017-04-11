@@ -97,7 +97,6 @@
                     url : "/board/${board.boardId}/reply",
                     type : "post",
                     contentType : "application/json",
-//                    data : JSON.stringify(data),
                     dataType : "json",
 
                     success: function (data, vo) {
@@ -144,15 +143,19 @@
                     "<small> " + formatTime(vo.regDate) +
                     "<p id = 'reply-content-"+ vo.replyId + "'>삭제된 댓글입니다.</p></div>";
 
+
                 if(vo.status == 0) {
+
                     return deleteHtml;
                 }
 
 
                 if('${auth}' != vo.writer.userName) {
+
                     return html;
                 }
                 else {
+
                     return authHtml;
                 }
 
@@ -166,7 +169,7 @@
                 this.reset();
                 $.ajax({
 
-                    url: "/board/${board.boardId}/replyWrite",
+                    url: "/board/${board.boardId}/reply/create",
                     type : "post",
                     data : "content=" + content,
                     dataType : "json",
@@ -265,7 +268,7 @@
 
                 $.ajax({
 
-                    url: "/board/${board.boardId}/answerWrite",
+                    url: "/board/${board.boardId}/answer/create",
                     type : "post",
                     data : "content=" + content +
                     "&parentId=" + parentId,
