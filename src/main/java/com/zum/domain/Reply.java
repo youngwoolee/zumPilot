@@ -1,6 +1,7 @@
 package com.zum.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.zum.exception.UserLeaveException;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -49,7 +50,7 @@ public class Reply{
     @Column(name="reply_thread")
     private int thread;
 
-    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "BIT default 1")
+    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "INT(1) default 1")
     private int status;
 
 
@@ -63,6 +64,24 @@ public class Reply{
     public Reply(User writer, String content) {
         this.writer = writer;
         this.content = content;
+    }
+
+    public void createReply(Board board, User user, int thread) {
+      this.board = board;
+      this.writer = user;
+      this.thread = thread;
+
+    }
+
+    public void createAnswer(User user, Board board, int replyThread, int replyDepth ) {
+        this.writer = user;
+        this.board = board;
+        this.thread = replyThread;
+        this.depth = replyDepth;
+    }
+
+    public void updateStatus() {
+        this.status = 0;
     }
 
 

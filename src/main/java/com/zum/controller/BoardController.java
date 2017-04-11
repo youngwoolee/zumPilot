@@ -126,7 +126,7 @@ public class BoardController {
         return "board/boardModify";
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ResponseBody
     public ResponseEntity modify(@PathVariable Long id,
                                           @RequestPart("title") String title,

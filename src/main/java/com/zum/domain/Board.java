@@ -46,7 +46,7 @@ public class Board {
     @Column(name = "hit", nullable = false)
     private int hit;
 
-    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "BIT default 1")
+    @Column(name = "status", nullable = false, insertable = false, columnDefinition = "INT(1) default 1")
     private int status;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
