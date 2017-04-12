@@ -3,6 +3,7 @@ package com.zum.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zum.exception.UserLeaveException;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -36,6 +37,7 @@ public class Reply{
 
 
     @Column(name="content", columnDefinition = "TEXT")
+    @NotEmpty
     private String content;
 
     @Column(name = "reg_date", nullable = false)

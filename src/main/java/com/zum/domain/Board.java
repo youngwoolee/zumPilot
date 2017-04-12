@@ -32,7 +32,7 @@ public class Board {
     private Long boardId;
 
     @Length(min=2)
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, columnDefinition = "varchar(40)")
     private String title;
 
     @Column(name = "content", columnDefinition = "TEXT")
@@ -51,7 +51,7 @@ public class Board {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "userid")
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_board_to_user"))
     private User userId;
 
     public void updateHit() {
