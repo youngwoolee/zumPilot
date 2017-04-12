@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 
@@ -59,10 +60,15 @@ public class UserServcieImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public boolean isExist(String username) {
 
+        User user = userRepository.findByUserName(username);
 
+        if(ObjectUtils.isEmpty(user)) {
+            return false;
+        }
 
-
-
-
+        return true;
+    }
 }

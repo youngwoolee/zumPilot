@@ -14,6 +14,8 @@ public interface UserService {
     void leave(Long userId);
     void isAuthenticated(String username, Long userId);
 
+    boolean isExist(String username);
+
 
 
 
