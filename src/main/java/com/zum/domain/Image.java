@@ -19,10 +19,10 @@ public class Image {
     @Column(name="file_id")
     private Long fileId;
 
-    @Column(name = "origin_name", nullable = false)
+    @Column(name = "origin_name", nullable = false, columnDefinition = "varchar(100)")
     private String originName;
 
-    @Column(name = "file_name", nullable = false)
+    @Column(name = "file_name", nullable = false, columnDefinition = "varchar(100)")
     private String fileName;
 
     @Column(name = "file_size", nullable = false, columnDefinition = "int(50)")
