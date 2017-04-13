@@ -38,8 +38,6 @@ public class ReplyController {
     private ReplyService replyService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private BoardService boardService;
 
     @PostMapping("/reply")
     public List<Reply> replyList(@PathVariable("boardId") Long boardId){
