@@ -11,6 +11,7 @@ $(function() {
             return;
         }
 
+
         $.ajax({
 
             url: "/user/isDuplicate",
@@ -57,7 +58,34 @@ $(function() {
             }
             return false;
         }
+
     });
 
 
 });
+
+function validateForm() {
+
+    var userName = document.forms["uesr-info"]["userName"].value;
+    var password = document.forms["uesr-info"]["password"].value;
+    var email = document.forms["uesr-info"]["email"].value;
+
+    if (userName == '') {
+        alert('아이디를 입력하세요!');
+        $('#userName').focus();
+        return false;
+    }
+
+    if (password == '') {
+        alert('비밀번호를 입력하세요!');
+        $('#password').focus();
+        return false;
+    }
+
+    if (email == '') {
+        alert('이메일을 입력하세요!');
+        $('#email').focus();
+        return false;
+    }
+
+}
