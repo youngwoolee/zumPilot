@@ -20,7 +20,7 @@
 
         <div style="padding : 30px;">
             <spring:hasBindErrors name="board"/>
-            <form id="board-write" method="POST" action="/board/" enctype="multipart/form-data" >
+            <form id="board-write" method="POST" action="/board/" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label>제목</label>
                     <input type="text" name="title" class="form-control" id = "title">
@@ -51,6 +51,28 @@
 
     <script src="/assets/js/jquery-3.2.0.min.js"></script>
     <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
+
+    <script>
+        function validateForm() {
+
+            var title = document.forms["board-write"]["title"].value;
+            var content = document.forms["board-write"]["content"].value;
+            if(title == "") {
+                alert("제목을 입력해주세요");
+                return false;
+            }
+            if(title.length < 2) {
+                alert("제목은 두글자 이상입니다");
+                return false;
+            }
+            if(content == "") {
+                alert("내용을 입력해주세요");
+                return false;
+            }
+
+        }
+
+    </script>
 
 </body>
 
