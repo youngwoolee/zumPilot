@@ -54,7 +54,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new XssEscapeServletFilter());
         registrationBean.setOrder(1);
-        registrationBean.addUrlPatterns("/board/*");    //filter를 거칠 url patterns
+        registrationBean.addUrlPatterns("/board/*","/user/*");    //filter를 거칠 url patterns
         return registrationBean;
     }
 
