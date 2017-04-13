@@ -25,6 +25,8 @@
                 <div class="form-group">
                     <label for="userName">사용자 아이디</label>
                     <input class="form-control" id="userName" name="userName" placeholder="User ID">
+                    <input type="button" id="confirmId" value="중복 체크">
+                    <span id="id_signed"></span>
                     <form:errors path="user.userName" cssClass="error" />
                 </div>
                 <div class="form-group">
@@ -46,6 +48,9 @@
     </div>
 
 </div>
+
+<script src="/assets/js/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="/assets/js/registerForm.js"></script>
 
 </body>
 </html>
