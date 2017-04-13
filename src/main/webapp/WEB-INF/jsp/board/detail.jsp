@@ -26,7 +26,7 @@
                 <input type="hidden" name="boardId" value="${board.boardId}">
                 <input type="hidden" name="auth" value="${auth}">
                 <label> 제목 </label>
-                <span><c:out escapeXml="true" value="${board.title}" /></span>
+                <span><c:out value = "${board.title}" escapeXml="false"/></span>
             </div>
             <div class="form-group">
                 <label> 작성자 </label>
@@ -42,7 +42,7 @@
             </div>
             <div class="form-group">
                 <label> 내용 </label>
-                <span><c:out escapeXml="true" value="${fn:replace(board.content, cn ,br)}" /></span>
+                <span><c:out value = "${fn:replace(board.content, cn ,br)}" escapeXml="false"/></span>
             </div>
             <c:if test = "${image != null}">
                 <div class="form-group">

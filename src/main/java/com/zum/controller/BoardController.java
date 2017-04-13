@@ -3,8 +3,6 @@ package com.zum.controller;
 import com.zum.domain.Board;
 import com.zum.domain.Image;
 import com.zum.domain.User;
-import com.zum.repository.BoardRepository;
-import com.zum.repository.ImageRepository;
 import com.zum.service.BoardService;
 import com.zum.service.UserService;
 import org.slf4j.Logger;
@@ -12,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
@@ -93,6 +88,7 @@ public class BoardController {
                         Model model,
                         Authentication auth) {
 
+
         Board board = boardService.getBoard(id);
         Image image = boardService.getImage(id);
 
@@ -129,8 +125,8 @@ public class BoardController {
     @PostMapping("/{id}")
     @ResponseBody
     public ResponseEntity modify(@PathVariable Long id,
-                                          @RequestPart("title") String title,
-                                          @RequestPart("content") String content,
+                                          @RequestParam("title") String title,
+                                          @RequestParam("content") String content,
                                           MultipartHttpServletRequest multipartRequest,
                                           Authentication auth) throws IOException{
 
