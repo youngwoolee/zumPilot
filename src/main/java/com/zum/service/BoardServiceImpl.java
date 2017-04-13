@@ -1,5 +1,6 @@
 package com.zum.service;
 
+import com.nhncorp.lucy.security.xss.XssSaxFilter;
 import com.zum.domain.Board;
 import com.zum.domain.Image;
 import com.zum.domain.User;
@@ -54,6 +55,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void modify(Long boardId, String title, String content, MultipartHttpServletRequest multipartRequest) throws IOException{
+
 
         Board board = boardRepository.findByBoardId(boardId);
         board.modifyBoard(title, content);
