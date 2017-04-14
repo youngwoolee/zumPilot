@@ -57,7 +57,6 @@ public class UserServcieImpl implements UserService {
 
         User user = userRepository.findByUserId(userId);
         user.leaveUser();
-        userRepository.save(user);
     }
 
     @Override

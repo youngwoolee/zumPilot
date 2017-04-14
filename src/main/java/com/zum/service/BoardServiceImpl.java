@@ -31,8 +31,6 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
    Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
-    private static final int PAGE_SIZE = 3;
-    private static final int MAX_PAGER = 4;
 
 
    @Autowired
@@ -85,7 +83,6 @@ public class BoardServiceImpl implements BoardService {
         }
 
         board.updateHit();
-        boardRepository.save(board);
     }
 
     @Override
@@ -117,22 +114,14 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public HashMap<String, Object> getPageInfo(Page<Board> boardList, int pNo) {
 
-        return PageCustomUtil.getPageInfo(boardList, PAGE_SIZE, MAX_PAGER, pNo);
-
+        return PageCustomUtil.getPageInfo(boardList, 3, 4, pNo);
     }
 
     @Override
     public boolean update(Board board) {
 
-
         Board updateBoard = boardRepository.findOne(board.getBoardId());
-
-        logger.error(updateBoard.toString());
         updateBoard.update(board);
-        updateBoard.setTitle(board.getTitle());
-        updateBoard.setContent(board.getContent());
-
-        boardRepository.save(updateBoard);
 
         return true;
     }
@@ -149,15 +138,12 @@ public class BoardServiceImpl implements BoardService {
 
         Image updateImage = imageRepository.findByBoardBoardId(image.getBoard().getBoardId());
         updateImage.update(image);
-        imageRepository.save(updateImage);
     }
 
     @Override
     public void delete(Long boardId) {
         Board board = boardRepository.findOne(boardId);
         board.deleteBoard();
-        boardRepository.save(board);
-
     }
 
 
