@@ -20,10 +20,11 @@
 
         <div style="padding : 30px;">
             <spring:hasBindErrors name="board"/>
-            <form id="board-write" method="POST" action="/board/" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <form data-parsley-validate="" id="board-write" method="POST" action="/board/"
+                  enctype="multipart/form-data">
                 <div class="form-group">
                     <label>제목</label>
-                    <input type="text" name="title" class="form-control" id = "title">
+                    <input type="text" name="title" class="form-control" id = "title" required="" data-parsley-minlength="2">
                     <form:errors path="board.title" cssClass="error" />
 
                 </div>
@@ -33,7 +34,9 @@
                 <div class="form-group">
                     <label>내용</label>
 
-                    <textarea name="content" class="form-control" rows="5" id ="content" ></textarea>
+                    <textarea name="content" class="form-control" rows="5" id ="content" required=""
+                              data-parsley-trigger="keyup" data-parsley-minlength="1" data-parsley-maxlength="10000"
+                              data-parsley-validation-threshold="10"></textarea>
                     <form:errors path="board.content" cssClass="error" />
                     <div class=remaining>남은 글자수: <span class="count">10000</span></div>
 
@@ -51,28 +54,7 @@
 
     <script src="/assets/js/jquery-3.2.0.min.js"></script>
     <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
-
-    <script>
-        function validateForm() {
-
-            var title = document.forms["board-write"]["title"].value;
-            var content = document.forms["board-write"]["content"].value;
-            if(title == "") {
-                alert("제목을 입력해주세요");
-                return false;
-            }
-            if(title.length < 2) {
-                alert("제목은 두글자 이상입니다");
-                return false;
-            }
-            if(content == "") {
-                alert("내용을 입력해주세요");
-                return false;
-            }
-
-        }
-
-    </script>
+    <script src="/assets/js/parsley.js"></script>
 
 </body>
 

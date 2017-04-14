@@ -31,7 +31,7 @@ public class Board {
     @Column(name="board_id")
     private Long boardId;
 
-    @Length(min=2)
+    @Length(min=2, max=40)
     @Column(name = "title", nullable = false, columnDefinition = "varchar(40)")
     private String title;
 

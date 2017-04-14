@@ -79,7 +79,7 @@
             </c:if>
 
             <li class="next">
-                <a href="/board/?pNo=${pageInfo.end}">&raquo;</a>
+                <a href="/board/?pNo=${pageInfo.totalPage}">&raquo;</a>
             </li>
 
 
