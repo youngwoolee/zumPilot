@@ -38,7 +38,6 @@ public class ReplyServiceImpl implements ReplyService {
     public List<Reply> replyListByBoardId(Long boardId) {
         List<Reply> replyList = replyRepository.findByBoardBoardIdOrderByThreadDesc(boardId);
 
-
         return replyList;
     }
 

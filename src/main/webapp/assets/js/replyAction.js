@@ -13,7 +13,7 @@ $(function() {
         var seconds = date.getSeconds();
         var formattedTime = year+'.'+month+'.'+day+' '+hour + ':' + minute + ':' + seconds;
         return formattedTime;
-    }
+    };
 
     var fetchList = function() {
 

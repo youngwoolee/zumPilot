@@ -96,9 +96,7 @@ public class ReplyController {
         Long userId = replyService.getUserId(replyId);
         userService.isAuthenticated(auth.getName(), userId);
 
-
-        return replyService.deleteReply(replyId);
+        Reply reply = replyService.deleteReply(replyId);
+        return reply;
     }
-
-
 }
