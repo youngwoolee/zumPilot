@@ -18,15 +18,15 @@ import java.util.List;
  */
 public interface ReplyRepository extends JpaRepository<Reply, Long>{
 
-    List<Reply> findByBoardBoardId(Long boardId);
-
+    List<Reply> findByBoardId(Long boardId);
+//
     // 주의. 컬럼명에 맞춰야함
-    List<Reply> findByBoardBoardIdOrderByThreadDesc(Long boardId);
+    List<Reply> findByBoardIdOrderByThreadDesc(Long boardId);
 
-    @Query("select coalesce(max(r.thread),0) from Reply r where r.board = ?1")
-    int getMaxThread(Board board);
+//    @Query("select coalesce(max(r.thread),0) from Reply r where r.board = ?1")
+//    int getMaxThread(Board board);
 
-    @Query("select coalesce(max(r.thread),0) from Reply r where r.board.boardId = ?1")
+    @Query("select coalesce(max(r.thread),0) from Reply r where r.boardId = ?1")
     int getMaxThreadByBoardId(Long boardId);
 
     Reply findByReplyId(Long replyId);
@@ -36,7 +36,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long>{
     int getPrevReplyThread(Long replyId);
 
 
-    @Query("select r from Reply r where r.thread < ?1 and r.thread > ?2 and r.board.boardId = ?3")
+    @Query("select r from Reply r where r.thread < ?1 and r.thread > ?2 and r.boardId = ?3")
     List<Reply> getReplyIdBetweenPrevCurrent(int thread, int prevThread, Long boardId);
 
     @Modifying

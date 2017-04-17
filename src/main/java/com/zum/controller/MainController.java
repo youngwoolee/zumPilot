@@ -9,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Map;
-
 /**
  * Created by joeylee on 2017-04-06.
  */
@@ -30,15 +28,9 @@ public class MainController {
         return "home";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/loginPage")
     public String login() {
-        return "login";
-    }
-
-    @GetMapping("/test")
-    public String test() {
-
-        return "test";
+        return "loginPage";
     }
 
 }

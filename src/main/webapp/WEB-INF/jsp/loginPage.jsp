@@ -23,6 +23,7 @@
                 Invalid username and password.
             </p>
         </c:if>
+
         <h2 class="form-signin-heading">Please login</h2>
         <input type="text" class="form-control" name="username" placeholder="UserID" required="" autofocus="" />
         <input type="password" class="form-control" name="password" placeholder="Password" required=""/>

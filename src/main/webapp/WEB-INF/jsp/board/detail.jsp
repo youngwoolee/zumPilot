@@ -55,7 +55,7 @@
 
             <c:if test = "${board.userId.userName == auth}">
                 <a type="button" href="/board/${board.boardId}/edit">글 수정</a>
-                <a type="button" href="/board/delete/${board.boardId}">글 삭제</a>
+                <a id="board-delete" type="button" href="/board/delete/${board.boardId}">글 삭제</a>
             </c:if>
 
 
@@ -73,13 +73,49 @@
 
         <p>Comments:</p><br>
 
+
         <div id ="reply" class="row">
+            <c:forEach items="${replyList}" var="reply" varStatus="status">
+                <div id='reply${reply.replyId}' class='col-sm-10' style = 'padding-left: ${reply.depth*20}px'
+                     isopen = 'false' ismodify = 'false' value = ${reply.replyId}>
+                    <h4 class='info' value = ${reply.writer.userName}> ${reply.writer.userName}
+                <small> ${reply.regDate}</small>
+                        <a id = '${reply.replyId}' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a>
+
+                        <c:if test = "${reply.writer.userName == auth}">
+                            <a id = 'modify${reply.replyId}' class= 'reply-modify-form' type='button' href='#' value = ${reply.replyId}><small> 수정</small></a>
+                            <a id = 'delete${reply.replyId}' class= 'reply-delete' type='button' href='#' value = ${reply.replyId}><small> 삭제</small></a>
+                        </c:if>
+                    </h4>
+                <p id = 'reply-content-${reply.replyId}'>${reply.content}</p></div>
+            </c:forEach>
 
         </div>
 
         <script src="/assets/js/jquery-3.2.0.min.js"></script>
         <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
         <script type="text/javascript" src="/assets/js/replyAction.js"></script>
+        <script type="text/javascript">
+
+            $(document).on("click", "#board-delete", function (e) {
+                e.preventDefault();
+
+
+                $.ajax({
+                    url: '/board/delete/${board.boardId}',
+                    dataType: 'json',
+                    type: 'get',
+                    success: function(result){
+                        alert("삭제 성공!!");
+                        window.location.href = result.url;
+                    }
+                });
+
+
+            });
+
+
+        </script>
 
 
 

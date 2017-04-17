@@ -1,27 +1,25 @@
 package com.zum.service;
 
-import com.nhncorp.lucy.security.xss.XssSaxFilter;
 import com.zum.domain.Board;
 import com.zum.domain.Image;
 import com.zum.domain.User;
 import com.zum.exception.NotFoundExceptionRest;
 import com.zum.repository.BoardRepository;
 import com.zum.repository.ImageRepository;
-import com.zum.util.*;
+import com.zum.util.FileUploadUtil;
+import com.zum.util.PageCustomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by joeylee on 2017-03-22.
@@ -68,9 +66,14 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board getBoard(Long id) {
 
+        Board board= boardRepository.findByBoardIdAndStatus(id);
+        if(ObjectUtils.isEmpty(board)) {
+            throw new NotFoundExceptionRest();
+        }
+
         increaseHit(id);
 
-        return boardRepository.findOne(id);
+        return board;
     }
 
 
@@ -78,7 +81,7 @@ public class BoardServiceImpl implements BoardService {
     public void increaseHit(Long id) {
         Board board = boardRepository.findOne(id);
 
-        if(board == null) {
+        if(ObjectUtils.isEmpty(board)) {
             throw new NotFoundExceptionRest();
         }
 
@@ -137,7 +140,12 @@ public class BoardServiceImpl implements BoardService {
     public void fileUpdate(Image image) {
 
         Image updateImage = imageRepository.findByBoardBoardId(image.getBoard().getBoardId());
-        updateImage.update(image);
+        if(ObjectUtils.isEmpty(updateImage)) {
+            imageRepository.save(image);
+        }
+        else{
+            updateImage.update(image);
+        }
     }
 
     @Override

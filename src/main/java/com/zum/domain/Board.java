@@ -6,9 +6,8 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.regex.Pattern;
+import java.util.List;
 
 /**
  * Created by joeylee on 2017-03-22.
@@ -31,7 +30,7 @@ public class Board {
     @Column(name="board_id")
     private Long boardId;
 
-    @Length(min=2, max=40)
+    @Length(min=2, max=30)
     @Column(name = "title", nullable = false, columnDefinition = "varchar(40)")
     private String title;
 
@@ -54,6 +53,10 @@ public class Board {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_board_to_user"))
     private User userId;
 
+    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="board_boardId", foreignKey = @ForeignKey(name = "fk_board_reply"))
+    private List<Reply> reply;
+
     public void updateHit() {
         this.hit++;
     }
@@ -71,4 +74,6 @@ public class Board {
     public void deleteBoard() {
         this.status = 0;
     }
+
+
 }

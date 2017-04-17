@@ -14,7 +14,7 @@
     <div class="collapse navbar-collapse" id="navbar-collapse2">
         <ul class="nav navbar-nav navbar-right">
             <sec:authorize access="isAnonymous()">
-                <li><a href="/login" role="button">로그인</a></li>
+                <li><a href="/loginPage" role="button">로그인</a></li>
                 <li><a href="/user/new" role="button">회원가입</a></li>
             </sec:authorize>
 

@@ -2,15 +2,12 @@ package com.zum.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -89,4 +86,18 @@ public class AnnotationExceptionHandler {
 
         return "exceptionHandler";
     }
+
+    @ExceptionHandler(UserLeaveException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String userLeaveException(HttpServletRequest req, UserLeaveException e, Model model) {
+
+        logger.debug("userLeaveException()");
+
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("name",e.getClass().getSimpleName());
+        model.addAttribute("message",e.getMessage());
+
+        return "exceptionHandler";
+    }
+
 }
