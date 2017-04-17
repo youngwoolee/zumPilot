@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 
 /**
  * Created by joeylee on 2017-03-21.
@@ -70,13 +71,18 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String leave(@PathVariable("id") Long userId, Authentication auth) {
+    public ResponseEntity leave(@PathVariable("id") Long userId, Authentication auth) {
 
         userService.isAuthenticated(auth.getName(), userId);
         userService.leave(userId);
         SecurityContextHolder.clearContext();
 
-        return "redirect:/";
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("url","/");
+
+        return new ResponseEntity<HashMap>(result, HttpStatus.OK);
+
+//        return "redirect:/";
     }
 
     @PostMapping("/isDuplicate")

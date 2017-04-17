@@ -2,9 +2,10 @@ package com.zum.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -31,7 +32,7 @@ public class Reply{
 
 
     @Column(name="content", columnDefinition = "TEXT")
-    @NotEmpty
+    @Size(min=1, max=140)
     private String content;
 
     @Column(name = "reg_date", nullable = false)

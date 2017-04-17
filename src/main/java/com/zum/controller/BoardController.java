@@ -56,7 +56,7 @@ public class BoardController {
 
         HashMap<String, Object> pageInfo = boardService.getPageInfo(boardList, pNo);
 
-        model.addAttribute("boardList",boardList);
+        model.addAttribute("boardList", boardList);
         model.addAttribute("pageInfo", pageInfo);
 
         return "board";
@@ -73,9 +73,9 @@ public class BoardController {
     public String write(@Valid Board board,
                         BindingResult bindingResult,
                         MultipartHttpServletRequest multipartRequest,
-                        Authentication auth) throws IOException{
+                        Authentication auth) throws IOException {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "/board/boardWrite";
         }
 
@@ -99,7 +99,7 @@ public class BoardController {
         model.addAttribute("board", board);
         model.addAttribute("image", image);
         model.addAttribute("auth", auth.getName());
-        model.addAttribute("replyList",replyLIst);
+        model.addAttribute("replyList", replyLIst);
 
         return "board/detail";
     }
@@ -126,10 +126,10 @@ public class BoardController {
     @PostMapping("/{id}")
     @ResponseBody
     public ResponseEntity modify(@PathVariable Long id,
-                         @RequestParam("title") String title,
-                         @RequestParam("content") String content,
-                         MultipartHttpServletRequest multipartRequest,
-                         Authentication auth) throws IOException{
+                                 @RequestParam("title") String title,
+                                 @RequestParam("content") String content,
+                                 MultipartHttpServletRequest multipartRequest,
+                                 Authentication auth) throws IOException {
 
 
         Long userId = boardService.getUserId(id);
@@ -138,15 +138,15 @@ public class BoardController {
         boardService.modify(id, title, content, multipartRequest);
 
         HashMap<String, Object> result = new HashMap<>();
-        result.put("url","/board/");
+        result.put("url", "/board/");
 
 
-        return  new ResponseEntity<HashMap>(result, HttpStatus.OK);
+        return new ResponseEntity<HashMap>(result, HttpStatus.OK);
     }
 
     @GetMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id,
-                         Authentication auth) {
+                                 Authentication auth) {
 
         Long userId = boardService.getUserId(id);
         userService.isAuthenticated(auth.getName(), userId);
@@ -154,11 +154,10 @@ public class BoardController {
         boardService.delete(id);
 
         HashMap<String, Object> result = new HashMap<>();
-        result.put("url","/board/");
+        result.put("url", "/board/");
 
         return new ResponseEntity<HashMap>(result, HttpStatus.OK);
     }
-
 
 
 }

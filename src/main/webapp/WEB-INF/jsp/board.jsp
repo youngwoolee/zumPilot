@@ -25,7 +25,6 @@
             <th>작성자</th>
             <th>날짜</th>
             <th>조회수</th>
-
         </tr>
         </thead>
         <tbody>
@@ -43,7 +42,6 @@
         </c:forEach>
 
         </tbody>
-
     </table>
 
     <hr/>
@@ -81,8 +79,6 @@
             <li class="next">
                 <a href="/board/?pNo=${pageInfo.totalPage}">&raquo;</a>
             </li>
-
-
 
         </ul>
     </div>

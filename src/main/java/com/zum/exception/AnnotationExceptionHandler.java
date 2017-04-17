@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.sql.SQLException;
 
 
@@ -28,10 +29,23 @@ public class AnnotationExceptionHandler {
 
         model.addAttribute("url", req.getRequestURL());
         model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message",e.getMessage());
+        model.addAttribute("message", "잘못된 접근입니다");
 
         return "exceptionHandler";
     }
+
+    @ExceptionHandler(IOException.class)
+    public String iOException(HttpServletRequest req, IOException e, Model model) {
+
+        logger.debug("iOException()");
+
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("name",e.getClass().getSimpleName());
+        model.addAttribute("message", "잘못된 파일 형식입니다");
+
+        return "exceptionHandler";
+    }
+
 
     @ExceptionHandler({ SQLException.class, DataAccessException.class })
     public String databaseError(HttpServletRequest req, Exception e, Model model) {
@@ -40,7 +54,7 @@ public class AnnotationExceptionHandler {
 
         model.addAttribute("url", req.getRequestURL());
         model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message",e.getMessage());
+        model.addAttribute("message","디비 문제입니다");
 
         return "exceptionHandler";
     }

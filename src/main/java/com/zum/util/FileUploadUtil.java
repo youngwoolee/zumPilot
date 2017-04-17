@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sun.awt.image.ImageFormatException;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -47,6 +48,11 @@ public class FileUploadUtil {
             String originalFilename = mpf.getOriginalFilename();
 
             String exc = getFileExtension(mpf);
+
+            if(exc != "jpg" || exc != "png" || exc != "gif"){
+
+                throw new IOException();
+            }
 
             String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
 
