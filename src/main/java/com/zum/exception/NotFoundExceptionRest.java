@@ -1,5 +1,4 @@
 package com.zum.exception;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 /**
  * Created by joeylee on 2017-04-06.

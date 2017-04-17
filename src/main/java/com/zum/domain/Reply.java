@@ -1,7 +1,6 @@
 package com.zum.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zum.exception.UserLeaveException;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -16,8 +15,6 @@ import java.util.Date;
 @Data
 public class Reply{
 
-//    private static final long serialVersionUID = 4278014816235716721L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="reply_id")
@@ -29,11 +26,8 @@ public class Reply{
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_writer"))
     private User writer;
 
-
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(targetEntity = Board.class, fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_board"))
-    private Board board;
+    @Column(name="board_boardId")
+    private Long boardId;
 
 
     @Column(name="content", columnDefinition = "TEXT")
@@ -55,7 +49,6 @@ public class Reply{
     @Column(name = "status", nullable = false, insertable = false, columnDefinition = "INT(1) default 1")
     private int status;
 
-
     public Reply() {
 
         this.regDate = new Date();
@@ -68,16 +61,16 @@ public class Reply{
         this.content = content;
     }
 
-    public void createReply(Board board, User user, int thread) {
-      this.board = board;
+    public void createReply(Long boardId, User user, int thread) {
+      this.boardId = boardId;
       this.writer = user;
       this.thread = thread;
 
     }
 
-    public void createAnswer(User user, Board board, int replyThread, int replyDepth ) {
+    public void createAnswer(User user, Long boardId, int replyThread, int replyDepth ) {
         this.writer = user;
-        this.board = board;
+        this.boardId = boardId;
         this.thread = replyThread;
         this.depth = replyDepth;
     }

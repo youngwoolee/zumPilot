@@ -1,8 +1,10 @@
 package com.zum.service;
 
+import com.zum.domain.Role;
 import com.zum.domain.User;
 import com.zum.exception.AuthenticationException;
 import com.zum.exception.UserDuplicationException;
+import com.zum.exception.UserLeaveException;
 import com.zum.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,15 @@ public class UserServcieImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        return userRepository.findByUserName(username);
+
+        User user = userRepository.findByUserName(username);
+        if(user.getRole() == Role.ROLE_LEAVE) {
+
+            //탈퇴한 사용자입니다.
+            throw new UserLeaveException();
+        }
+
+        return user;
     }
     
     public void create(User regiUser) {

@@ -4,11 +4,8 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -48,6 +45,8 @@ public class User {
     @Column(name = "email", columnDefinition = "varchar(30)")
     @Size(min=2, max=30)
     private String email;
+
+
 
     public User() {
 

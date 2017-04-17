@@ -15,34 +15,6 @@ $(function() {
         return formattedTime;
     };
 
-    var fetchList = function() {
-
-        console.log(boardId);
-
-        $.ajax({
-            url : "/board/"+boardId+"/reply",
-            type : "post",
-            contentType : "application/json",
-            dataType : "json",
-
-            success: function (data, vo) {
-                console.log("success: " + data);
-
-                $.each(data, function (index, vo) {
-
-                    $("#reply").append(renderHtml(vo));
-
-                })
-
-
-            },
-            error: function (jqXHR, status, err) {
-                console.log(jqXHR.responseText);
-            }
-
-        });
-
-    }
 
     var renderHtml = function( vo ) {
         var html =
@@ -123,6 +95,7 @@ $(function() {
 
 
         var id = $(this).attr('id');
+        var reply = $("#reply"+id);
 
 
         var replyForm = "<form id = 'answer-insert' method='POST' role='form' onsubmit='return false;'>" +
@@ -131,20 +104,20 @@ $(function() {
         console.log(id);
 
 
-        if($("#reply"+id).attr("isopen") == "false") {
+        if(reply.attr("isopen") == "false") {
 
-            $("#reply"+id).append(replyForm);
-            $("#reply"+id).attr("isopen",'true');
+            reply.append(replyForm);
+            reply.attr("isopen",'true');
 
-            if($("#reply"+id).attr("ismodify") == "true") {
-                $("#reply"+id).children("#answer-modify").remove();
-                $("#reply"+id).attr("ismodify",'false');
+            if(reply.attr("ismodify") == "true") {
+                reply.children("#answer-modify").remove();
+                reply.attr("ismodify",'false');
             }
 
         }
         else {
-            $("#reply"+id).children("#answer-insert").remove();
-            $("#reply"+id).attr("isopen",'false');
+            reply.children("#answer-insert").remove();
+            reply.attr("isopen",'false');
         }
 
     });
@@ -157,6 +130,7 @@ $(function() {
 
         var id = $(this).attr('value');
         var content = $("#reply-content-"+id).text();
+        var reply = $("#reply"+id);
 
         var modifyForm = "<form id = 'answer-modify' method='POST' role='form' onsubmit='return false;'>" +
             "<div class='form-group'><textarea id='content-answer-modify"+id+"' name= 'content' class='form-control' rows='2' required>" +
@@ -164,19 +138,19 @@ $(function() {
 
         console.log(content);
 
-        if($("#reply"+id).attr("ismodify") == "false") {
+        if(reply.attr("ismodify") == "false") {
 
-            $("#reply"+id).append(modifyForm);
-            $("#reply"+id).attr("ismodify",'true');
+            reply.append(modifyForm);
+            reply.attr("ismodify",'true');
 
-            if($("#reply"+id).attr("isopen") == "true") {
-                $("#reply"+id).children("#answer-insert").remove();
-                $("#reply"+id).attr("isopen",'false');
+            if(reply.attr("isopen") == "true") {
+                reply.children("#answer-insert").remove();
+                reply.attr("isopen",'false');
             }
         }
         else {
-            $("#reply"+id).children("#answer-modify").remove();
-            $("#reply"+id).attr("ismodify",'false');
+            reply.children("#answer-modify").remove();
+            reply.attr("ismodify",'false');
         }
 
     });
@@ -186,11 +160,9 @@ $(function() {
 
         var parentId = $(this).parent().attr("value");
         var content = $("#content-answer"+parentId).val();
+        var parentReply = $("#reply"+parentId);
 
         this.reset();
-
-        console.log(content);
-        console.log(parentId);
 
         $.ajax({
 
@@ -203,9 +175,9 @@ $(function() {
 
 
             success: function (data) {
-                $("#reply"+parentId).children("#answer-insert").remove();
-                $("#reply"+parentId).attr("isopen",'false');
-                $("#reply"+parentId).after(renderHtml(data));
+                parentReply.children("#answer-insert").remove();
+                parentReply.attr("isopen",'false');
+                parentReply.after(renderHtml(data));
 
             },
             error: function (jqXHR, status, err) {
@@ -223,6 +195,7 @@ $(function() {
         var replyId = $(this).parent().attr("value");
         var content = $("#content-answer-modify"+replyId).val();
         this.reset();
+        var reply = $("#reply"+replyId);
 
         console.log(content);
         console.log(replyId);
@@ -237,9 +210,9 @@ $(function() {
 
             success: function (data) {
 
-                $("#reply"+replyId).children("#answer-modify").remove();
-                $("#reply"+replyId).attr("ismodify",'false');
-                $("#reply"+replyId).replaceWith(renderHtml(data));
+                reply.children("#answer-modify").remove();
+                reply.attr("ismodify",'false');
+                reply.replaceWith(renderHtml(data));
 
             },
 
@@ -256,9 +229,6 @@ $(function() {
 
         event.preventDefault();
         var replyId = $(this).attr("value");
-
-        console.log("삭제");
-        console.log(replyId);
 
         $.ajax({
 
@@ -281,8 +251,5 @@ $(function() {
         });
 
     });
-
-
-    fetchList();
 
 });

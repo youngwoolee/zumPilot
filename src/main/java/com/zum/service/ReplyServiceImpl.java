@@ -31,12 +31,9 @@ public class ReplyServiceImpl implements ReplyService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private BoardRepository boardRepository;
-
     @Override
     public List<Reply> replyListByBoardId(Long boardId) {
-        List<Reply> replyList = replyRepository.findByBoardBoardIdOrderByThreadDesc(boardId);
+        List<Reply> replyList = replyRepository.findByBoardIdOrderByThreadDesc(boardId);
 
         return replyList;
     }
@@ -46,10 +43,8 @@ public class ReplyServiceImpl implements ReplyService {
     public Reply create(Reply reply, Long boardId, String username) {
 
         User user = userRepository.findByUserName(username);
-        Board board = boardRepository.findByBoardId(boardId);
         int thread = replyRepository.getMaxThreadByBoardId(boardId) + LIMIT_REPLY;
-
-        reply.createReply(board,user,thread);
+        reply.createReply(boardId,user,thread);
         replyRepository.save(reply);
 
         return reply;
@@ -59,10 +54,9 @@ public class ReplyServiceImpl implements ReplyService {
     public Reply createAnswer(Reply reply, Long boardId, Long replyId, String username) {
 
         User user = userRepository.findByUserName(username);
-        Board board = boardRepository.findByBoardId(boardId);
         Reply parentReply = getParentReply(replyId);
 
-        reply.createAnswer(user, board, parentReply.getThread()-1, parentReply.getDepth()+1);
+        reply.createAnswer(user, boardId, parentReply.getThread()-1, parentReply.getDepth()+1);
 
         replyRepository.save(reply);
 
@@ -72,7 +66,8 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public int getMaxThreadNext(Board board) {
 
-        return replyRepository.getMaxThread(board) + LIMIT_REPLY;
+//        return replyRepository.getMaxThread(board) + LIMIT_REPLY;
+        return 0;
     }
 
 

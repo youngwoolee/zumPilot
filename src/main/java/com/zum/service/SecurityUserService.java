@@ -3,7 +3,6 @@ package com.zum.service;
 import com.zum.domain.Role;
 import com.zum.domain.SecurityUser;
 import com.zum.domain.User;
-import com.zum.exception.UserLeaveException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +31,6 @@ public class SecurityUserService implements UserDetailsService{
 
 
         User user = userService.getUserByUsername(username);
-
-        if(user.getRole() == Role.ROLE_LEAVE) {
-
-            //탈퇴한 사용자입니다.
-            throw new UserLeaveException(user.getUserName());
-
-        }
 
 
         //만든 유저를 유저디테일로 만든다
