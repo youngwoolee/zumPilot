@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -30,7 +31,8 @@ public class User {
 
     @NotEmpty
     @Column(name = "password", columnDefinition = "varchar(60)", nullable = false)
-    @Size(min=4, max=60)
+    @Pattern(regexp = "^(?=.*[a-zA-Z]+)(?=.*[!@#$%^*+=-]|.*[0-9]+).{8,16}$")
+    @Size(min=8, max=16)
     private String password;
 
 

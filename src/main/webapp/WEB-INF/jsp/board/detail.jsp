@@ -95,27 +95,7 @@
         <script src="/assets/js/jquery-3.2.0.min.js"></script>
         <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
         <script type="text/javascript" src="/assets/js/replyAction.js"></script>
-        <script type="text/javascript">
-
-            $(document).on("click", "#board-delete", function (e) {
-                e.preventDefault();
-
-
-                $.ajax({
-                    url: '/board/delete/${board.boardId}',
-                    dataType: 'json',
-                    type: 'get',
-                    success: function(result){
-                        alert("삭제 성공!!");
-                        window.location.href = result.url;
-                    }
-                });
-
-
-            });
-
-
-        </script>
+        <script src="/assets/js/boardDelete.js"></script>
 
 
 

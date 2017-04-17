@@ -25,7 +25,8 @@
                 <div class="form-group">
                     <label for="userName">사용자 아이디</label>
                     <input class="form-control" id="userName" name="userName"
-                           placeholder="아이디를 입력하세요" required="">
+                           placeholder="아이디는 2~10자 제한입니다" required=""
+                           data-parsley-minlength="2" data-parsley-maxlength="10">
                     <input type="button" id="confirmId" value="중복 체크">
                     <span id="id_signed"></span>
                     <form:errors path="user.userName" cssClass="error" />
@@ -33,8 +34,8 @@
                 <div class="form-group">
                     <label for="password">비밀번호</label>
                     <input type="password" class="form-control" id="password" name="password"
-                           placeholder="비밀번호는 4~15자 제한입니다" required=""
-                           data-parsley-minlength="4" data-parsley-maxlength="15">
+                           placeholder="비밀번호는 8자 ~ 16자 사이 영숫자 혼합입니다" required=""
+                           data-parsley-pattern="^(?=.*[a-zA-Z]+)(?=.*[!@#$%^*+=-]|.*[0-9]+).{8,16}$">
                     <form:errors path="user.password" cssClass="error" />
 
                 </div>

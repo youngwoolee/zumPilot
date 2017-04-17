@@ -10,6 +10,13 @@ $(function() {
             $('#userName').focus();
             return;
         }
+        console.log(userName.length);
+        if (userName.length < 2 || userName.length > 10) {
+
+            alert('2자에서 10자 제한입니다!');
+            $('#userName').focus();
+            return;
+        }
 
 
         $.ajax({

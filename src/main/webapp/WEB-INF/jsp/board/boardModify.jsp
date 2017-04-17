@@ -20,7 +20,7 @@
 
         <div style="padding : 30px;">
 
-            <form data-parsley-validate="" id="board-modify" enctype="multipart/form-data" >
+            <form data-parsley-validate="" id="board-modify" enctype="multipart/form-data">
                 <input type="hidden" name="boardId" value="${board.boardId}">
                 <div class="form-group">
                     <label>제목</label>
@@ -63,30 +63,7 @@
             <script src="/assets/js/jquery-3.2.0.min.js"></script>
             <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
             <script src="/assets/js/parsley.js"></script>
-            <script type="text/javascript">
-
-                $(document).on("submit", "#board-modify", function (e) {
-                    e.preventDefault();
-                    var form = new FormData(document.getElementById('board-modify'));
-
-                    $.ajax({
-                        url: '/board/${board.boardId}',
-                        processData: false,
-                        contentType: false,
-                        dataType: 'json',
-                        data: form,
-                        type: 'post',
-                        success: function(result){
-                            alert("수정 성공!!");
-                            window.location.href = result.url;
-                        }
-                    });
-
-
-                });
-
-
-            </script>
+            <script src="/assets/js/boardModify.js"></script>
 
         </div>
     </div>

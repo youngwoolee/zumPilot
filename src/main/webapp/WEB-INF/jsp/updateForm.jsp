@@ -33,7 +33,7 @@
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email"
                            value="${user.email}" data-parsley-trigger="change" required="">
                 </div>
-                <a type="button" href="/user/${user.userId}">회원 탈퇴</a>
+                <a id="user-leave" value="${user.userId}">회원 탈퇴</a>
                 <button type="submit" class="btn btn-success clearfix pull-right">개인정보 수정</button>
 
             </form>
@@ -44,6 +44,8 @@
 
 <script src="/assets/js/jquery-3.2.0.min.js"></script>
 <script src="/assets/js/parsley.js"></script>
+<script src="/assets/js/userLeave.js"></script>
+
 
 </body>
 </html>
