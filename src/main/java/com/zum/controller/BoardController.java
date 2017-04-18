@@ -4,9 +4,11 @@ import com.zum.domain.Board;
 import com.zum.domain.Image;
 import com.zum.domain.Reply;
 import com.zum.domain.User;
+import com.zum.exception.NotFoundExceptionRest;
 import com.zum.service.BoardService;
 import com.zum.service.ReplyService;
 import com.zum.service.UserService;
+import com.zum.util.PageCustomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -54,7 +57,7 @@ public class BoardController {
 
         Page<Board> boardList = boardService.getBoardList(request);
 
-        HashMap<String, Object> pageInfo = boardService.getPageInfo(boardList, pNo);
+        HashMap<String, Object> pageInfo = PageCustomUtil.getPageInfo(boardList, 3, 4, pNo);
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("pageInfo", pageInfo);

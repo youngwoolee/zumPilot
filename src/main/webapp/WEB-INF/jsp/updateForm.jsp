@@ -26,7 +26,8 @@
                 </div>
                 <div class="form-group">
                     <label for="password">비밀번호</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                           data-parsley-pattern="^(?=.*[a-zA-Z]+)(?=.*[!@#$%^*+=-]|.*[0-9]+).{8,16}$">
                 </div>
                 <div class="form-group">
                     <label for="email">이메일</label>

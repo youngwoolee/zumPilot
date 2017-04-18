@@ -1,6 +1,7 @@
 package com.zum.util;
 
 import com.zum.domain.Board;
+import com.zum.exception.NotFoundExceptionRest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,10 @@ public class PageCustomUtil {
 
         int begin = 1;
         int end = boardList.getTotalPages();
+
+        if(pNo > end) {
+            throw new NotFoundExceptionRest();
+        }
 
         //게시글이 없을때
         if (boardList.getTotalElements() == 0) {
@@ -56,6 +61,7 @@ public class PageCustomUtil {
         pageMap.put("maxPager", maxPager);
         pageMap.put("begin", begin);
         pageMap.put("end", end);
+        pageMap.put("currentBlock", currentBlock);
 
         return pageMap;
     }
