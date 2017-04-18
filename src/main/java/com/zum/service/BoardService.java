@@ -29,8 +29,6 @@ public interface BoardService {
 
     Page<Board> getBoardList(Pageable pageable);
 
-    HashMap<String, Object> getPageInfo(Page<Board> boardList, int pNo);
-
     void delete(Long boardId);
 
     boolean update(Board board);

@@ -79,7 +79,7 @@
                 <div id='reply${reply.replyId}' class='col-sm-10' style = 'padding-left: ${reply.depth*20}px'
                      isopen = 'false' ismodify = 'false' value = ${reply.replyId}>
                     <h4 class='info' value = ${reply.writer.userName}> ${reply.writer.userName}
-                <small> ${reply.regDate}</small>
+                    <small> ${reply.regDate}</small>
                         <a id = '${reply.replyId}' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a>
 
                         <c:if test = "${reply.writer.userName == auth}">

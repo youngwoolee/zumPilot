@@ -54,9 +54,9 @@
                 <a href="/board/?pNo=${pageInfo.first}">&laquo;</a>
             </li>
 
-            <c:if test="${!boardList.first}">
+            <c:if test="${pageInfo.begin >  pageInfo.currentBlock}">
                 <li class="previous">
-                    <a href="/board/?pNo=${pageInfo.pNo-1}">&lsaquo;</a>
+                    <a href="/board/?pNo=${pageInfo.end - pageInfo.maxPager}">&lsaquo;</a>
                 </li>
             </c:if>
             <c:forEach begin="${pageInfo.begin}" end="${pageInfo.end}" var="i" step="1">
@@ -70,9 +70,9 @@
                 </c:choose>
             </c:forEach>
 
-            <c:if test="${!boardList.last}">
+            <c:if test="${pageInfo.end <  pageInfo.totalPage}">
                 <li class="next">
-                    <a href="/board/?pNo=${pageInfo.pNo+1}">&rsaquo;</a>
+                    <a href="/board/?pNo=${pageInfo.begin + pageInfo.maxPager}">&rsaquo;</a>
                 </li>
             </c:if>
 

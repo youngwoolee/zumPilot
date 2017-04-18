@@ -115,12 +115,6 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
-    public HashMap<String, Object> getPageInfo(Page<Board> boardList, int pNo) {
-
-        return PageCustomUtil.getPageInfo(boardList, 3, 4, pNo);
-    }
-
-    @Override
     public boolean update(Board board) {
 
         Board updateBoard = boardRepository.findOne(board.getBoardId());
