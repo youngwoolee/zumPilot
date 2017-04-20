@@ -1,7 +1,8 @@
 $(function() {
 
-    var boardId = $("[name='boardId']").val();
-    var authName = $("[name='auth']").val();
+    var boardId = $("#boardId").val();
+    var isDuplicateReplyForm = false;
+    var selected = null;
 
     var formatTime = function( timestamp ) {
         var date = new Date(timestamp);
@@ -15,240 +16,141 @@ $(function() {
         return formattedTime;
     };
 
-
     var renderHtml = function( vo ) {
-        var html =
-            "<div id='reply" + vo.replyId + "' class='col-sm-10' style = 'padding-left:" +
-            20 * vo.depth + "px' isopen = 'false' ismodify = 'false' value = " + vo.replyId + "><h4 class='info' value = '" + vo.writer.userName +"'>" + vo.writer.userName +
-            "<small> " + formatTime(vo.regDate) +
-            "</small><a id = '" + vo.replyId + "' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a></h4>" +
-            "<p id = 'reply-content-"+ vo.replyId + "'>" +vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
-            "</p></div>";
-
-        var authHtml =
-            "<div id='reply" + vo.replyId + "' class='col-sm-10' style = 'padding-left:" +
-            20 * vo.depth + "px' isopen = 'false' ismodify = 'false' value = " + vo.replyId + "><h4 class='info' value = '" + vo.writer.userName +"'>" + vo.writer.userName +
-            "<small> " + formatTime(vo.regDate) +
-            "</small><a id = '" + vo.replyId + "' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a>" +
-            "<a id = 'modify" + vo.replyId + "' class= 'reply-modify-form' type='button' href='#' value = '"+ vo.replyId +"'><small> 수정</small></a>" +
-            "<a id = 'delete" + vo.replyId + "' class= 'reply-delete' type='button' href='#' value = '"+ vo.replyId +"'><small> 삭제</small></a></h4>" +
-            "<p id = 'reply-content-"+ vo.replyId + "'>" +vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
-            "</p></div>";
-
-        var deleteHtml =
-            "<div id='reply" + vo.replyId + "' class='col-sm-10' style = 'padding-left:" +
-            20 * vo.depth + "px' isopen = 'false' ismodify = 'false' value = " + vo.replyId + "><h4 class='info' value = '" + vo.writer.userName +"'>" + vo.writer.userName +
-            "<small> " + formatTime(vo.regDate) +
-            "<p id = 'reply-content-"+ vo.replyId + "'>삭제된 댓글입니다.</p></div>";
-
 
         if(vo.status == 0) {
 
-            return deleteHtml;
+            return "<div class='col-sm-10 reply' data-replyid='"+ vo.replyId + "' style = 'padding-left:" +
+                20 * vo.depth + "px'><h4 class='info'>" + vo.writer.userName +
+                "<small> " + formatTime(vo.regDate) + "</small></h4>" +
+                "<p>삭제된 댓글입니다.</p></div>";
         }
 
+        return "<div class='col-sm-10 reply' data-replyid='"+ vo.replyId + "' style = 'padding-left:" +
+            20 * vo.depth + "px'><h4 class='info'>" + vo.writer.userName +
+            "<small> " + formatTime(vo.regDate) +
+            "</small><a class= 'replyWriteButton' href='javascript:;'><small> 답글</small></a>" +
+            "<a class= 'replyModifyButton' href='javascript:;'><small> 수정</small></a>" +
+            "<a class= 'replyDelete' href='javascript:;'><small> 삭제</small></a></h4>" +
+            "<p>" +vo.content.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") +
+            "</p></div>";
 
-        if(authName != vo.writer.userName) {
+    };
 
-            return html;
+    var renderForm = function (content) {
+
+        if(content == null) {
+            return "<div class='answerForm replyForm'><textarea name= 'content' " +
+                "class='form-control replyContent' rows='2' required>" +
+                "</textarea><button class='btn btn-success writeButton'>Submit</button></div>";
         }
-        else {
 
-            return authHtml;
-        }
-
+        return "<div class='answerForm replyForm'><textarea name= 'content' " +
+            "class='form-control replyContent' rows='2' required>" + content +
+            "</textarea><button class='btn btn-success modifyButton'>Submit</button></div>";
     }
 
-    
+
     //댓글 쓰기
-    $(document).on("submit", "#reply-insert", function (event) {
+    $(document).on("click", ".writeButton", function() {
+        var t = $(this);
+        var Idx = t.index(".replyWrite");
+        var content = $(".replyContent").eq(Idx).val();
+        var parentId = t.parents(".reply").data("replyid");
 
+        if(Idx != 0) {
 
-        event.preventDefault();
-        var content =$("#content").val();
+            //답글
+            $.post(" /board/"+boardId+"/answer/create", {content: content, parentId: parentId}, function (data) {
+                t.closest(".reply").after(renderHtml(data));
+                $(".answerForm").remove();
+                isDuplicateReplyForm = false;
 
-        this.reset();
-        $.ajax({
-
-            url: "/board/"+ boardId +"/reply/create",
-            type : "post",
-            data : "content=" + content,
-            dataType : "json",
-
-
-            success: function (data) {
-                console.log("success: " + data);
-                $("#reply").prepend(renderHtml(data));
-
-            },
-            error: function (jqXHR, status, err) {
-                console.log(jqXHR.responseText);
-            }
-
-        });
-    });
-
-    //댓글 답글 폼
-    $(document).on("click", ".reply-write-form", function (event) {
-
-        event.preventDefault();
-
-
-        var id = $(this).attr('id');
-        var reply = $("#reply"+id);
-
-
-        var replyForm = "<form id = 'answer-insert' method='POST' role='form' onsubmit='return false;'>" +
-            "<div class='form-group'><textarea id='content-answer"+id+"' name= 'content' class='form-control' rows='2' required>" +
-            "</textarea></div><button type='submit' class='btn btn-success'>Submit</button></form>";
-        console.log(id);
-
-
-        if(reply.attr("isopen") == "false") {
-
-            reply.append(replyForm);
-            reply.attr("isopen",'true');
-
-            if(reply.attr("ismodify") == "true") {
-                reply.children("#answer-modify").remove();
-                reply.attr("ismodify",'false');
-            }
-
-        }
-        else {
-            reply.children("#answer-insert").remove();
-            reply.attr("isopen",'false');
+            });
+            return;
         }
 
-    });
-
-    //댓글 수정 폼
-    $(document).on("click", ".reply-modify-form", function (event) {
-
-        event.preventDefault();
-
-
-        var id = $(this).attr('value');
-        var content = $("#reply-content-"+id).text();
-        var reply = $("#reply"+id);
-
-        var modifyForm = "<form id = 'answer-modify' method='POST' role='form' onsubmit='return false;'>" +
-            "<div class='form-group'><textarea id='content-answer-modify"+id+"' name= 'content' class='form-control' rows='2' required>" +
-            content + "</textarea></div><button type='submit' class='btn btn-success'>수정</button></form>";
-
-        console.log(content);
-
-        if(reply.attr("ismodify") == "false") {
-
-            reply.append(modifyForm);
-            reply.attr("ismodify",'true');
-
-            if(reply.attr("isopen") == "true") {
-                reply.children("#answer-insert").remove();
-                reply.attr("isopen",'false');
-            }
-        }
-        else {
-            reply.children("#answer-modify").remove();
-            reply.attr("ismodify",'false');
-        }
-
-    });
-
-    //답글 작성
-    $(document).on("submit", "#answer-insert", function (event) {
-
-        var parentId = $(this).parent().attr("value");
-        var content = $("#content-answer"+parentId).val();
-        var parentReply = $("#reply"+parentId);
-
-        this.reset();
-
-        $.ajax({
-
-            url: "/board/"+boardId+"/answer/create",
-            type : "post",
-            data : "content=" + content +
-            "&parentId=" + parentId,
-            dataType : "json",
-
-
-
-            success: function (data) {
-                parentReply.children("#answer-insert").remove();
-                parentReply.attr("isopen",'false');
-                parentReply.after(renderHtml(data));
-
-            },
-            error: function (jqXHR, status, err) {
-                console.log(jqXHR.responseText);
-            }
-
+        //댓글
+        $.post("/board/" + boardId + "/reply/create", {content: content}, function (data) {
+            $("#replyDiv").prepend(renderHtml(data));
+            $(".replyContent").eq(Idx).val('');
         });
 
     });
 
     //답글 수정
-    $(document).on("submit", "#answer-modify", function (event) {
+    $(document).on("click", ".modifyButton", function () {
 
-        console.log("수정");
-        var replyId = $(this).parent().attr("value");
-        var content = $("#content-answer-modify"+replyId).val();
-        this.reset();
-        var reply = $("#reply"+replyId);
+        var t = $(this);
+        var Idx = t.index(".replyWrite");
+        var content = $(".replyContent").eq(Idx).val();
+        var parentId = t.parents(".reply").data("replyid");
 
-        console.log(content);
-        console.log(replyId);
 
-        $.ajax({
-
-            url: "/board/"+boardId+"/answerModify",
-            type : "post",
-            data : "content=" + content +
-            "&replyId=" + replyId,
-            dataType : "json",
-
-            success: function (data) {
-
-                reply.children("#answer-modify").remove();
-                reply.attr("ismodify",'false');
-                reply.replaceWith(renderHtml(data));
-
-            },
-
-            error: function (jqXHR, status, err) {
-                console.log(jqXHR.responseText);
-            }
-
+        //수정
+        $.post("/board/" + boardId + "/answerModify", {content: content, replyId: parentId}, function (data) {
+            t.closest(".reply").replaceWith(renderHtml(data));
+            $(".answerForm").remove();
+            isDuplicateReplyForm = false;
         });
 
     });
 
     //댓글 삭제
-    $(document).on("click", ".reply-delete", function (event) {
+    $(document).on("click", ".replyDelete", function () {
 
-        event.preventDefault();
-        var replyId = $(this).attr("value");
+        var Idx = $(this).parents(".reply").prevAll().length;
+        var replyId = $(".reply").eq(Idx).data("replyid");
 
-        $.ajax({
+        $.post("/board/"+boardId+"/answerDelete", {replyId: replyId}, function (data) {
 
-            url: "/board/"+boardId+"/answerDelete",
-            type : "post",
-            data : "replyId=" + replyId,
-            dataType : "json",
-
-            success: function (data) {
-
-                console.log(data);
-                $("#reply"+replyId).replaceWith(renderHtml(data));
-
-            },
-
-            error: function (jqXHR, status, err) {
-                console.log(jqXHR.responseText);
-            }
+            $(".reply").eq(Idx).replaceWith(renderHtml(data));
 
         });
+
+
+    });
+
+    //댓글 답글 폼
+    $(document).on("click", ".replyWriteButton", function () {
+
+        var t = $(this),
+            Idx = t.parents(".reply").index(".reply"),
+            currentReply = $(".reply").eq(Idx);
+
+        if(isDuplicateReplyForm) {
+            $(".answerForm").remove();
+            if(selected == Idx){
+                selected = null;
+                return;
+            }
+        }
+        currentReply.append(renderForm());
+        isDuplicateReplyForm = true;
+        selected = Idx;
+
+    });
+
+    //댓글 수정 폼
+    $(document).on("click", ".replyModifyButton", function () {
+
+        var t = $(this),
+            replyForm = t.parent().siblings(".replyForm"),
+            Idx = t.parents(".reply").index(".reply"),
+            currentReply = $(".reply").eq(Idx),
+            content = currentReply.children("p").text();
+
+
+        if(isDuplicateReplyForm) {
+            $(".answerForm").remove();
+            if(selected == Idx){
+                selected = null;
+                return;
+            }
+        }
+        currentReply.append(renderForm(content));
+        isDuplicateReplyForm = true;
+        selected = Idx;
 
     });
 

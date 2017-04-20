@@ -1,7 +1,6 @@
 $(function() {
 
     var userId = $("#user-leave").attr("value");
-
     $(document).on("click", "#user-leave", function (e) {
         e.preventDefault();
 

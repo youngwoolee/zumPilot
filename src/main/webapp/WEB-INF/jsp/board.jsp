@@ -31,7 +31,7 @@
         <c:forEach items="${boardList.content}" var="board" varStatus="status">
 
             <tr>
-                <td>${pageInfo.totalElement - pageInfo.pageSize * (pageInfo.pNo-1) - status.index}</td>
+                <td>${pageInfo.totalElement - pageInfo.pageSize * (pageInfo.pno-1) - status.index}</td>
                 <td><a href="/board/${board.boardId}" >${board.title } </a></td>
                 <td>${board.userId.userName }</td>
                 <td><fmt:formatDate value="${board.regDate}" pattern="MM/ dd" />
@@ -51,33 +51,33 @@
         <ul class="pagination">
 
             <li class="next">
-                <a href="/board/?pNo=${pageInfo.first}">&laquo;</a>
+                <a href="/board/?pno=${pageInfo.first}">&laquo;</a>
             </li>
 
             <c:if test="${pageInfo.begin >  pageInfo.currentBlock}">
                 <li class="previous">
-                    <a href="/board/?pNo=${pageInfo.end - pageInfo.maxPager}">&lsaquo;</a>
+                    <a href="/board/?pno=${pageInfo.end - pageInfo.maxPager}">&lsaquo;</a>
                 </li>
             </c:if>
             <c:forEach begin="${pageInfo.begin}" end="${pageInfo.end}" var="i" step="1">
                 <c:choose>
-                    <c:when test="${pageInfo.pNo == i}">
-                        <li class="active"><a href="/board/?pNo=${i}">${i}</a></li>
+                    <c:when test="${pageInfo.pno == i}">
+                        <li class="active"><a href="/board/?pno=${i}">${i}</a></li>
                     </c:when>
                     <c:otherwise>
-                        <li><a href="/board/?pNo=${i}">${i}</a></li>
+                        <li><a href="/board/?pno=${i}">${i}</a></li>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
 
             <c:if test="${pageInfo.end <  pageInfo.totalPage}">
                 <li class="next">
-                    <a href="/board/?pNo=${pageInfo.begin + pageInfo.maxPager}">&rsaquo;</a>
+                    <a href="/board/?pno=${pageInfo.begin + pageInfo.maxPager}">&rsaquo;</a>
                 </li>
             </c:if>
 
             <li class="next">
-                <a href="/board/?pNo=${pageInfo.totalPage}">&raquo;</a>
+                <a href="/board/?pno=${pageInfo.totalPage}">&raquo;</a>
             </li>
 
         </ul>

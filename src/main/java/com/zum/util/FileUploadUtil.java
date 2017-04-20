@@ -41,35 +41,33 @@ public class FileUploadUtil {
 
         MultipartFile mpf = multipartRequest.getFile("upload");
 
-        if (!mpf.isEmpty()) {
-
-            String genId = UUID.randomUUID().toString();
-
-            String originalFilename = mpf.getOriginalFilename();
-
-            String exc = getFileExtension(mpf);
-
-            if(exc != "jpg" || exc != "png" || exc != "gif"){
-
-                throw new IOException();
-            }
-
-            String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
-
-            String fileName = ATTACH_PATH  + genId  + "." + exc;
-
-            long fileSize = mpf.getSize();
-
-            mpf.transferTo(new File(fileFullPath)); //파일저장
-
-            Image image = new Image();
-            image.insertImage(originalFilename, fileName, fileSize, board);
-
-            return image;
-
+        if (mpf.isEmpty()) {
+            return null;
         }
 
-        return null;
+        String genId = UUID.randomUUID().toString();
+
+        String originalFilename = mpf.getOriginalFilename();
+
+        String exc = getFileExtension(mpf);
+
+//        if(exc != "jpg" || exc != "png" || exc != "gif"){
+//
+//            throw new IOException();
+//        }
+
+        String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
+
+        String fileName = ATTACH_PATH  + genId  + "." + exc;
+
+        long fileSize = mpf.getSize();
+
+        mpf.transferTo(new File(fileFullPath)); //파일저장
+
+        Image image = new Image();
+        image.insertImage(originalFilename, fileName, fileSize, board);
+
+        return image;
     }
 
 

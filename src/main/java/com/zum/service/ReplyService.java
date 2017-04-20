@@ -14,7 +14,6 @@ public interface ReplyService {
     List<Reply> replyListByBoardId(Long boardId);
     Reply create(Reply reply, Long boardId, String username);
     Reply createAnswer(Reply reply, Long boardId, Long replyId, String username);
-    int getMaxThreadNext(Board board);
 
     Reply getParentReply(Long replyId);
 
