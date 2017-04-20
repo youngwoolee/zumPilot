@@ -38,7 +38,7 @@ public class UserController {
     public String register(@Valid User user, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
-            logger.info(" 유효성 에러 ");
+            logger.debug(" 유효성 에러 ");
             return "registerForm";
         }
         else {

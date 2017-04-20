@@ -31,8 +31,6 @@ public class User {
 
     @NotEmpty
     @Column(name = "password", columnDefinition = "varchar(60)", nullable = false)
-    @Pattern(regexp = "^(?=.*[a-zA-Z]+)(?=.*[!@#$%^*+=-]|.*[0-9]+).{8,16}$")
-    @Size(min=8, max=16)
     private String password;
 
 

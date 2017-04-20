@@ -62,14 +62,7 @@ public class ReplyServiceImpl implements ReplyService {
 
         return reply;
     }
-
-    @Override
-    public int getMaxThreadNext(Board board) {
-
-//        return replyRepository.getMaxThread(board) + LIMIT_REPLY;
-        return 0;
-    }
-
+    
 
     @Override
     public Reply getParentReply(Long replyId) {

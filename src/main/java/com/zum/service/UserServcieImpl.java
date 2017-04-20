@@ -29,14 +29,11 @@ public class UserServcieImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-
         User user = userRepository.findByUserName(username);
         if(user.getRole() == Role.ROLE_LEAVE) {
-
             //탈퇴한 사용자입니다.
             throw new UserLeaveException();
         }
-
         return user;
     }
     

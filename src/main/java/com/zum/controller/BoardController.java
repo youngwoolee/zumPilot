@@ -1,9 +1,8 @@
 package com.zum.controller;
 
-import com.zum.domain.Board;
-import com.zum.domain.Image;
-import com.zum.domain.Reply;
-import com.zum.domain.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.javafx.collections.MappingChange;
+import com.zum.domain.*;
 import com.zum.exception.NotFoundExceptionRest;
 import com.zum.service.BoardService;
 import com.zum.service.ReplyService;
@@ -30,6 +29,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by joeylee on 2017-03-22.
@@ -49,15 +49,20 @@ public class BoardController {
     @Autowired
     private ReplyService replyService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public String board(Model model, @RequestParam(value = "pNo", defaultValue = "1") int pNo) {
+    public String board(Model model, @RequestParam(value = "pno", defaultValue = "1") int pno) {
 
-        PageRequest request = new PageRequest(pNo - 1, 3, Sort.Direction.DESC, "regDate");
+        PageRequest request = new PageRequest(pno - 1, 3, Sort.Direction.DESC, "regDate");
 
         Page<Board> boardList = boardService.getBoardList(request);
 
-        HashMap<String, Object> pageInfo = PageCustomUtil.getPageInfo(boardList, 3, 4, pNo);
+        CustomPage customPage = new CustomPage(boardList, 3, 4, pno);
+
+        Map<String, Object> pageInfo = objectMapper.convertValue(customPage, Map.class);
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("pageInfo", pageInfo);

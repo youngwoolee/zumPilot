@@ -23,7 +23,7 @@
 
         <div style="padding : 30px;">
             <div class="form-group">
-                <input type="hidden" name="boardId" value="${board.boardId}">
+                <input id="boardId" type="hidden" name="boardId" value="${board.boardId}">
                 <input type="hidden" name="auth" value="${auth}">
                 <label> 제목 </label>
                 <span><c:out value = "${board.title}" escapeXml="false"/></span>
@@ -55,39 +55,46 @@
 
             <c:if test = "${board.userId.userName == auth}">
                 <a type="button" href="/board/${board.boardId}/edit">글 수정</a>
-                <a id="board-delete" type="button" href="/board/delete/${board.boardId}">글 삭제</a>
+                <a id="board-delete" type="button" href="javascript:;">글 삭제</a>
             </c:if>
 
 
         </div>
 
         <h4>Leave a Comment:</h4>
-        <form id="reply-insert" method="POST" role="form" onsubmit="return false;">
-            <div class="form-group">
-                <textarea id="content" name= "content" class="form-control" rows="3" required></textarea>
+            <div class="replyForm">
+                <textarea name= "content" class="form-control replyContent" rows="3" required></textarea>
                 <div class=remaining>남은 글자수: <span class="count">140</span></div>
+                <button class="btn btn-success replyWrite">Submit</button>
             </div>
-            <button type="submit" class="btn btn-success">Submit</button>
-        </form>
+
         <br><br>
 
-        <p>Comments:</p><br>
-
-
-        <div id ="reply" class="row">
+        <div id ="replyDiv" class="row">
             <c:forEach items="${replyList}" var="reply" varStatus="status">
-                <div id='reply${reply.replyId}' class='col-sm-10' style = 'padding-left: ${reply.depth*20}px'
-                     isopen = 'false' ismodify = 'false' value = ${reply.replyId}>
-                    <h4 class='info' value = ${reply.writer.userName}> ${reply.writer.userName}
-                    <small> ${reply.regDate}</small>
-                        <a id = '${reply.replyId}' class= 'reply-write-form' type ='button' href='#'><small> 답글</small></a>
+                <div class='col-sm-10 reply' data-replyid="${reply.replyId}" style = 'padding-left: ${reply.depth*20}px'>
+                    <h4 class='info'> ${reply.writer.userName}
+                        <small> ${reply.regDate}</small>
+                        <c:if test="${reply.status == 1}">
 
-                        <c:if test = "${reply.writer.userName == auth}">
-                            <a id = 'modify${reply.replyId}' class= 'reply-modify-form' type='button' href='#' value = ${reply.replyId}><small> 수정</small></a>
-                            <a id = 'delete${reply.replyId}' class= 'reply-delete' type='button' href='#' value = ${reply.replyId}><small> 삭제</small></a>
+                            <a class= 'replyWriteButton' href='javascript:;'><small> 답글</small></a>
+                            <c:if test = "${reply.writer.userName == auth}">
+                                <a class= 'replyModifyButton' href='javascript:;'><small> 수정</small></a>
+                                <a class= 'replyDelete' href='javascript:;'><small> 삭제</small></a>
+                            </c:if>
                         </c:if>
+
                     </h4>
-                <p id = 'reply-content-${reply.replyId}'>${reply.content}</p></div>
+
+                    <c:choose>
+                        <c:when test="${reply.status == 0}">
+                            <p>삭제된 댓글입니다.</p>
+                        </c:when>
+                        <c:otherwise>
+                            <p>${fn:replace(reply.content, cn ,br)}</p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </c:forEach>
 
         </div>
@@ -96,6 +103,10 @@
         <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
         <script type="text/javascript" src="/assets/js/replyAction.js"></script>
         <script src="/assets/js/boardDelete.js"></script>
+
+        <script id="entry-template" type="text/x-handlebars-template">
+
+        </script>
 
 
 

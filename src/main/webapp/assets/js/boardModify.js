@@ -3,7 +3,7 @@ $(function() {
     var boardId = $("[name='boardId']").val();
 
     $(document).on("submit", "#board-modify", function (e) {
-        e.preventDefault();
+
         var form = new FormData(document.getElementById('board-modify'));
 
         $.ajax({
