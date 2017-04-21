@@ -65,7 +65,7 @@
             <div class="replyForm">
                 <textarea name= "content" class="form-control replyContent" rows="3" required></textarea>
                 <div class=remaining>남은 글자수: <span class="count">140</span></div>
-                <button class="btn btn-success replyWrite">Submit</button>
+                <button class="btn btn-success writeButton">Submit</button>
             </div>
 
         <br><br>
@@ -96,7 +96,6 @@
                     </c:choose>
                 </div>
             </c:forEach>
-
         </div>
 
         <script src="/assets/js/jquery-3.2.0.min.js"></script>
@@ -104,9 +103,8 @@
         <script type="text/javascript" src="/assets/js/replyAction.js"></script>
         <script src="/assets/js/boardDelete.js"></script>
 
-        <script id="entry-template" type="text/x-handlebars-template">
-
-        </script>
+        <script type="text/javascript" src="/assets/js/handlebars-v4.0.5.js"></script>
+        <script type="text/javascript" src="/assets/js/boardDetail.js"></script>
 
 
 

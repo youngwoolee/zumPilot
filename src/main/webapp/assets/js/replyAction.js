@@ -54,7 +54,7 @@ $(function() {
     //댓글 쓰기
     $(document).on("click", ".writeButton", function() {
         var t = $(this);
-        var Idx = t.index(".replyWrite");
+        var Idx = t.parents(".replyForm").index(".replyForm");
         var content = $(".replyContent").eq(Idx).val();
         var parentId = t.parents(".reply").data("replyid");
 
@@ -62,6 +62,7 @@ $(function() {
 
             //답글
             $.post(" /board/"+boardId+"/answer/create", {content: content, parentId: parentId}, function (data) {
+
                 t.closest(".reply").after(renderHtml(data));
                 $(".answerForm").remove();
                 isDuplicateReplyForm = false;

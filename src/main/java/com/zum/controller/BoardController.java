@@ -104,6 +104,7 @@ public class BoardController {
         Image image = boardService.getImage(id);
         List<Reply> replyLIst = replyService.replyListByBoardId(id);
 
+
         model.addAttribute("board", board);
         model.addAttribute("image", image);
         model.addAttribute("auth", auth.getName());
