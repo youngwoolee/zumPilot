@@ -67,7 +67,6 @@ public class ReplyController {
     }
 
     @PostMapping("/answerDelete")
-    @ResponseBody
     public Reply answerDelete(@PathVariable("boardId") Long boardId,
                               @RequestParam("replyId") Long replyId,
                               Authentication auth){

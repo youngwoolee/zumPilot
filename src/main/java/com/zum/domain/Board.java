@@ -49,11 +49,11 @@ public class Board {
     private int status;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_board_to_user"))
     private User userId;
 
-    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="board_boardId", foreignKey = @ForeignKey(name = "fk_board_reply"))
     private List<Reply> reply;
 

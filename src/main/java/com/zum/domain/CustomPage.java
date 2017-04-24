@@ -33,11 +33,11 @@ public class CustomPage {
         this.maxPager = maxPager;
         this.pNo= pNo;
 
-        if(pNo > end) {
+        setIfNotExistBoard(boardList);
+
+        if(end !=0 && pNo > end) {
             throw new NotFoundExceptionRest();
         }
-
-        setIfNotExistBoard(boardList);
 
         setIfBlockManyExist(maxPager);
 

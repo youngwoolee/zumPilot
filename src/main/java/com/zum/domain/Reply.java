@@ -23,7 +23,7 @@ public class Reply{
 
     // 객체가 완전히 로드되기 전에 직렬화하려고하기 때문에 방지
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_writer"))
     private User writer;
 

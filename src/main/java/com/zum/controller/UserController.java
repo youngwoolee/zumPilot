@@ -59,13 +59,12 @@ public class UserController {
 
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") Long userId,
-                         @RequestParam String password,
-                         @RequestParam String email,
+                         User user,
                          Authentication auth) {
 
         //진짜 사용자인지 권한 체크
         userService.isAuthenticated(auth.getName(), userId);
-        userService.update(userId, password, email);
+        userService.update(userId, user);
 
         return "redirect:/";
     }
@@ -82,7 +81,6 @@ public class UserController {
 
         return new ResponseEntity<HashMap>(result, HttpStatus.OK);
 
-//        return "redirect:/";
     }
 
     @PostMapping("/isDuplicate")
@@ -92,8 +90,6 @@ public class UserController {
         logger.error("userName  : {} ", userName);
 
         boolean result = userService.isExist(userName);
-
-
 
         return new ResponseEntity(result, HttpStatus.OK);
     }

@@ -1,12 +1,12 @@
 package com.zum.domain;
 
+import com.zum.util.BcryptPasswordUtil;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -17,6 +17,8 @@ import javax.validation.constraints.Size;
 @Table(name = "users")
 @Data
 public class User {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -61,14 +63,14 @@ public class User {
     }
 
     public void passwordEncode(){
-        this.password = new BCryptPasswordEncoder().encode(this.password);
+        this.password = BcryptPasswordUtil.bCryptPasswordEncoder.encode(this.password);
     }
 
-    public void updateUserInfo(String password, String email) {
-        if(!password.equals("")) {
-            this.password = new BCryptPasswordEncoder().encode(password);
+    public void updateUserInfo(User user) {
+        if(!"".equals(user.password)) {
+            this.password = new BCryptPasswordEncoder().encode(user.password);
         }
-        this.email = email;
+        this.email = user.email;
     }
 
     public void leaveUser() {

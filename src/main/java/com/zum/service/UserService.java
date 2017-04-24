@@ -10,7 +10,7 @@ public interface UserService {
 
     User getUserByUsername(String username);
     void create(User user);
-    void update(Long userId, String password, String email);
+    void update(Long userId, User user);
     void leave(Long userId);
     void isAuthenticated(String username, Long userId);
 

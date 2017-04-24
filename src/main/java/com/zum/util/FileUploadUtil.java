@@ -23,15 +23,15 @@ public class FileUploadUtil {
 
     static Logger logger = LoggerFactory.getLogger(FileUploadUtil.class);
 
-    private static final String ATTACH_PATH = "/upload/";
-
+    private static final String ATTACH_PATH = "\\upload\\";
 
     public static Image saveMultipartFile(MultipartHttpServletRequest multipartRequest,
                                          Board board) throws IOException {
 
-        HttpSession session = multipartRequest.getSession();
-        String root = session.getServletContext().getRealPath("/");
-        String filePath = root + ATTACH_PATH;
+//        HttpSession session = multipartRequest.getSession();
+//        String root = session.getServletContext().getRealPath("/");
+        String home = System.getProperty("user.home");
+        String filePath = home + ATTACH_PATH;
 
         File dir = new File(filePath);
         if (!dir.isDirectory()) {
@@ -58,19 +58,15 @@ public class FileUploadUtil {
 
         String fileFullPath = filePath + genId + "." + exc; //파일 전체 경로
 
-        String fileName = ATTACH_PATH  + genId  + "." + exc;
-
         long fileSize = mpf.getSize();
 
         mpf.transferTo(new File(fileFullPath)); //파일저장
 
         Image image = new Image();
-        image.insertImage(originalFilename, fileName, fileSize, board);
+        image.insertImage(originalFilename, fileFullPath, fileSize, board);
 
         return image;
     }
-
-
 
 
     private static String getFileExtension(MultipartFile mpf) {
@@ -82,10 +78,6 @@ public class FileUploadUtil {
 
         return exc;
     }
-
-
-
-
 
 
 }

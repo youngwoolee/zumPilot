@@ -47,10 +47,10 @@ public class UserServcieImpl implements UserService {
     }
 
     @Override
-    public void update(Long userId, String password, String email) {
+    public void update(Long userId, User updateUser) {
 
         User user = userRepository.findByUserId(userId);
-        user.updateUserInfo(password, email);
+        user.updateUserInfo(updateUser);
     }
 
     @Override

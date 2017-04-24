@@ -65,14 +65,14 @@
     <div class="replyForm">
         <textarea name= "content" class="form-control replyContent" rows="3" required></textarea>
         <div class=remaining>남은 글자수: <span class="count">140</span></div>
-        <button class="btn btn-success writeButton">Submit</button>
+        <button class="btn btn-success replyWriteSubmit">Submit</button>
     </div>
 
     <br><br>
 
     <div id ="replyDiv" class="row">
         <c:forEach items="${replyList}" var="reply" varStatus="status">
-            <div class='col-sm-10 reply' data-replyid="${reply.replyId}" style = 'padding-left: ${reply.depth*20}px'>
+            <div id='reply-${reply.replyId}' class='col-sm-10 reply' data-replyid="${reply.replyId}" style = 'padding-left: ${reply.depth*20}px'>
                 <h4 class='info'> ${reply.writer.userName}
                     <small> ${reply.regDate}</small>
                     <c:if test="${reply.status == 1}">
@@ -102,6 +102,7 @@
     <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
     <script type="text/javascript" src="/assets/js/handlebars-v4.0.5.js"></script>
     <script src="/assets/js/templates.js"></script>
+    <script src="/assets/js/handlebar.js"></script>
     <script type="text/javascript" src="/assets/js/replyAction.js"></script>
     <script src="/assets/js/boardAction.js"></script>
 

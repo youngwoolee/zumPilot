@@ -27,9 +27,7 @@ public class AnnotationExceptionHandler {
 
         logger.debug("defaultErrorHandler()");
 
-        model.addAttribute("url", req.getRequestURL());
-        model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message", "잘못된 접근입니다");
+        errorHandlerModelAttribute(req, e, model, "잘못된 접근입니다");
 
         return "exceptionHandler";
     }
@@ -39,9 +37,7 @@ public class AnnotationExceptionHandler {
 
         logger.debug("iOException()");
 
-        model.addAttribute("url", req.getRequestURL());
-        model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message", "잘못된 파일 형식입니다");
+        errorHandlerModelAttribute(req, e, model, "잘못된 파일 형식입니다");
 
         return "exceptionHandler";
     }
@@ -52,9 +48,7 @@ public class AnnotationExceptionHandler {
 
         logger.debug("databaseError()");
 
-        model.addAttribute("url", req.getRequestURL());
-        model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message","디비 문제입니다");
+        errorHandlerModelAttribute(req, e, model, "디비 문제입니다");
 
         return "exceptionHandler";
     }
@@ -67,9 +61,7 @@ public class AnnotationExceptionHandler {
 
         logger.debug("notFoundException()");
 
-        model.addAttribute("url", req.getRequestURL());
-        model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message",e.getDefaultMessage());
+        errorHandlerModelAttribute(req, e, model, e.getDefaultMessage());
 
         return "exceptionHandler";
     }
@@ -81,9 +73,7 @@ public class AnnotationExceptionHandler {
 
         logger.debug("userDuplicationException()");
 
-        model.addAttribute("url", req.getRequestURL());
-        model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message",e.getDefaultMessage());
+        errorHandlerModelAttribute(req, e, model, e.getDefaultMessage());
 
         return "exceptionHandler";
     }
@@ -94,9 +84,7 @@ public class AnnotationExceptionHandler {
 
         logger.debug("authenticationException()");
 
-        model.addAttribute("url", req.getRequestURL());
-        model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message",e.getDefaultMessage());
+        errorHandlerModelAttribute(req, e, model, e.getDefaultMessage());
 
         return "exceptionHandler";
     }
@@ -107,11 +95,15 @@ public class AnnotationExceptionHandler {
 
         logger.debug("userLeaveException()");
 
-        model.addAttribute("url", req.getRequestURL());
-        model.addAttribute("name",e.getClass().getSimpleName());
-        model.addAttribute("message",e.getMessage());
+        errorHandlerModelAttribute(req, e, model, e.getMessage());
 
         return "exceptionHandler";
+    }
+
+    private void errorHandlerModelAttribute(HttpServletRequest req, Exception e, Model model, String attributeValue) {
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("name", e.getClass().getSimpleName());
+        model.addAttribute("message", attributeValue);
     }
 
 }

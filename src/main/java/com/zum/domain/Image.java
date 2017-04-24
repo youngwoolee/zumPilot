@@ -30,7 +30,7 @@ public class Image {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     //즉시로딩 : 엔티티를 조회 할 때 연관된 엔티티도 함께 조회한다.
-    @ManyToOne(targetEntity = Board.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Board.class)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_image_to_board"))
     private Board board;
 

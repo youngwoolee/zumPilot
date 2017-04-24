@@ -153,6 +153,7 @@ public class BoardController {
     }
 
     @PostMapping("/delete/{id}")
+    @ResponseBody
     public ResponseEntity delete(@PathVariable("id") Long id,
                                  Authentication auth) {
 

@@ -49,11 +49,11 @@
 
     <div class="text-center">
         <ul class="pagination">
-
+            <c:if test="${pageInfo.begin < pageInfo.pno}">
             <li class="next">
                 <a href="/board/?pno=${pageInfo.first}">&laquo;</a>
             </li>
-
+            </c:if>
             <c:if test="${pageInfo.begin >  pageInfo.currentBlock}">
                 <li class="previous">
                     <a href="/board/?pno=${pageInfo.end - pageInfo.maxPager}">&lsaquo;</a>
@@ -75,11 +75,11 @@
                     <a href="/board/?pno=${pageInfo.begin + pageInfo.maxPager}">&rsaquo;</a>
                 </li>
             </c:if>
-
+            <c:if test="${pageInfo.end > pageInfo.pno}">
             <li class="next">
                 <a href="/board/?pno=${pageInfo.totalPage}">&raquo;</a>
             </li>
-
+            </c:if>
         </ul>
     </div>
 </div>

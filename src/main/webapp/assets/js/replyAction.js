@@ -4,29 +4,6 @@ $(function() {
     var isDuplicateReplyForm = false;
     var selected = null;
 
-    var templateList = Handlebars.templates.replyList;
-    var templateForm = Handlebars.templates.replyForm;
-
-    Handlebars.registerHelper('multiple', function(context) {
-        return context*20;
-    });
-
-    Handlebars.registerHelper('formatTime', function(context) {
-        return formatTime(context);
-    });
-
-    var formatTime = function( timestamp ) {
-        var date = new Date(timestamp);
-        var year = date.getFullYear();
-        var month = date.getMonth()+1;
-        var day = date.getDay();
-        var hour = date.getHours();
-        var minute = date.getMinutes();
-        var seconds = date.getSeconds();
-        var formattedTime = year+'-'+month+'-'+day+' '+hour + ':' + minute + ':' + seconds;
-        return formattedTime;
-    };
-
     var isDuplicateReplyFormFunc = function (isDuplicateReplyForm, Idx) {
         if(isDuplicateReplyForm) {
             $(".answerForm").remove();
@@ -38,30 +15,33 @@ $(function() {
     }
 
     //댓글 쓰기
-    $(document).on("click", ".writeButton", function() {
-        var t = $(this),
-            Idx = t.parents(".replyForm").index(".replyForm"),
-            content = $(".replyContent").eq(Idx).val(),
-            parentId = t.parents(".reply").data("replyid");
-
-        if(Idx != 0) {
-
-            //답글
-            $.post(" /board/"+boardId+"/answer/create", {content: content, parentId: parentId}, function (data) {
-
-                t.closest(".reply").after(templateList(data));
-                $(".answerForm").remove();
-                isDuplicateReplyForm = false;
-
-            });
-            return;
-        }
+    $(document).on("click", ".replyWriteSubmit", function() {
+        var $this = $(this),
+            replyTextArea = $this.siblings(".replyContent"),
+            content = replyTextArea.val();
 
         //댓글
         $.post("/board/" + boardId + "/reply/create", {content: content}, function (data) {
 
             $("#replyDiv").prepend(templateList(data));
-            $(".replyContent").eq(Idx).val('');
+            replyTextArea.val('');
+        });
+
+    });
+
+    //답글 쓰기
+    $(document).on("click", ".answerWriteSubmit", function() {
+        var $this = $(this),
+            content = $this.siblings(".replyContent").val(),
+            parentId = $this.closest(".reply").data("replyid");
+
+        //답글
+        $.post(" /board/"+boardId+"/answer/create", {content: content, parentId: parentId}, function (data) {
+
+            $this.closest(".reply").after(templateList(data));
+            $(".answerForm").remove();
+            isDuplicateReplyForm = false;
+
         });
 
     });
@@ -69,14 +49,14 @@ $(function() {
     //답글 수정
     $(document).on("click", ".modifyButton", function () {
 
-        var t = $(this),
-            Idx = t.index(".replyWrite"),
-            content = $(".replyContent").eq(Idx).val(),
-            parentId = t.parents(".reply").data("replyid");
+        var $this = $(this),
+            content = $this.siblings(".replyContent").val(),
+            parent = $this.closest(".reply"),
+            parentId = parent.data("replyid");
 
         //수정
         $.post("/board/" + boardId + "/answerModify", {content: content, replyId: parentId}, function (data) {
-            t.closest(".reply").replaceWith(templateList(data));
+            parent.replaceWith(templateList(data));
             $(".answerForm").remove();
             isDuplicateReplyForm = false;
         });
@@ -86,9 +66,9 @@ $(function() {
     //댓글 삭제
     $(document).on("click", ".replyDelete", function () {
 
-        var Idx = $(this).parents(".reply").index(".reply"),
-            currentReply = $(".reply").eq(Idx),
-            replyId = currentReply.data("replyid");
+        var $this = $(this),
+            replyId = $this.closest(".reply").data("replyid"),
+            currentReply = $("#reply-"+replyId);
 
         $.post("/board/"+boardId+"/answerDelete", {replyId: replyId}, function (data) {
 
@@ -96,40 +76,36 @@ $(function() {
 
         });
 
-
     });
 
     //댓글 답글 폼
     $(document).on("click", ".replyWriteButton", function () {
 
-        var t = $(this),
-            Idx = t.parents(".reply").index(".reply"),
-            currentReply = $(".reply").eq(Idx);
+        var $this = $(this),
+            replyId = $this.closest(".reply").data("replyid"),
+            data = {replyId : replyId};
 
-        isDuplicateReplyFormFunc(isDuplicateReplyForm, Idx);
+        isDuplicateReplyFormFunc(isDuplicateReplyForm, replyId);
 
-
-        currentReply.append(templateForm());
+        $("#reply-"+replyId).append(templateForm(data));
         isDuplicateReplyForm = true;
-        selected = Idx;
-
+        selected = replyId;
     });
 
     //댓글 수정 폼
     $(document).on("click", ".replyModifyButton", function () {
 
-        var t = $(this),
-            replyForm = t.parent().siblings(".replyForm"),
-            Idx = t.parents(".reply").index(".reply"),
-            currentReply = $(".reply").eq(Idx),
+        var $this = $(this),
+            replyId = $this.closest(".reply").data("replyid"),
+            currentReply = $("#reply-"+replyId),
             content = currentReply.children("p").text(),
-            data = {content : content};
+            data = {content : content, replyId : replyId};
 
-        isDuplicateReplyFormFunc(isDuplicateReplyForm, Idx);
+        isDuplicateReplyFormFunc(isDuplicateReplyForm, replyId);
 
         currentReply.append(templateForm(data));
         isDuplicateReplyForm = true;
-        selected = Idx;
+        selected = replyId;
 
     });
 
