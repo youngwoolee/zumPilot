@@ -135,8 +135,7 @@ public class BoardController {
     @PostMapping("/{id}")
     @ResponseBody
     public ResponseEntity modify(@PathVariable Long id,
-                                 @RequestParam("title") String title,
-                                 @RequestParam("content") String content,
+                                 Board board,
                                  MultipartHttpServletRequest multipartRequest,
                                  Authentication auth) throws IOException {
 
@@ -144,7 +143,7 @@ public class BoardController {
         Long userId = boardService.getUserId(id);
         userService.isAuthenticated(auth.getName(), userId);
 
-        boardService.modify(id, title, content, multipartRequest);
+        boardService.modify(id, board, multipartRequest);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("url", "/board/");
@@ -153,7 +152,7 @@ public class BoardController {
         return new ResponseEntity<HashMap>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id,
                                  Authentication auth) {
 

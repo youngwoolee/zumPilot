@@ -43,7 +43,7 @@ public interface BoardService {
 
     Long getUserId(Long boardId);
 
-    void modify(Long boardId, String title, String content, MultipartHttpServletRequest multipartRequest) throws IOException;
+    void modify(Long boardId, Board board, MultipartHttpServletRequest multipartRequest) throws IOException;
 
 
 }

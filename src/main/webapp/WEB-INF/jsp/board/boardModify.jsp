@@ -20,8 +20,8 @@
 
         <div style="padding : 30px;">
 
-            <form data-parsley-validate="" id="board-modify" enctype="multipart/form-data">
-                <input type="hidden" name="boardId" value="${board.boardId}">
+            <form data-parsley-validate="" id="boardModifyForm" enctype="multipart/form-data">
+                <input id="boardId" type="hidden" name="boardId" value="${board.boardId}">
                 <div class="form-group">
                     <label>제목</label>
                     <input type="text" name="title" class="form-control" id = "title" value="${board.title}"
@@ -63,7 +63,7 @@
             <script src="/assets/js/jquery-3.2.0.min.js"></script>
             <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
             <script src="/assets/js/parsley.js"></script>
-            <script src="/assets/js/boardModify.js"></script>
+            <script src="/assets/js/boardAction.js"></script>
 
         </div>
     </div>

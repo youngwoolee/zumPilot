@@ -1,0 +1,5 @@
+<div class='answerForm replyForm'>
+    <textarea name= 'content' class='form-control replyContent'
+              rows='2' required>{{#if content}}{{content}}{{/if}}</textarea>
+    <button class='btn btn-success {{#if content}}modifyButton{{else}}writeButton{{/if}}'>Submit</button>
+</div>

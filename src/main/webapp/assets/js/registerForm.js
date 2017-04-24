@@ -10,7 +10,6 @@ $(function() {
             $('#userName').focus();
             return;
         }
-        console.log(userName.length);
         if (userName.length < 2 || userName.length > 10) {
             alert('2자에서 10자 제한입니다!');
             $('#userName').focus();
@@ -34,12 +33,10 @@ $(function() {
                 }
                 else {
                     count=1;
-                    console.log("success: " + data);
                     $('#id_signed').html('사용 가능한 아이디').css('color','black');
                 }
             },
             error: function (jqXHR, status, err) {
-                console.log(jqXHR.responseText);
             }
 
         });

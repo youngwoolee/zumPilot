@@ -66,11 +66,6 @@ public class Board {
         this.content = board.content;
     }
 
-    public void modifyBoard(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
     public void deleteBoard() {
         this.status = 0;
     }

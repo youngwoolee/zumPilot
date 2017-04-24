@@ -50,11 +50,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void modify(Long boardId, String title, String content, MultipartHttpServletRequest multipartRequest) throws IOException{
+    public void modify(Long boardId, Board updateBoard, MultipartHttpServletRequest multipartRequest) throws IOException{
 
 
         Board board = boardRepository.findByBoardId(boardId);
-        board.modifyBoard(title, content);
+        board.update(updateBoard);
 
         Image image = FileUploadUtil.saveMultipartFile(multipartRequest, board);
         if(image != null) {

@@ -70,7 +70,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity leave(@PathVariable("id") Long userId, Authentication auth) {
 
         userService.isAuthenticated(auth.getName(), userId);
