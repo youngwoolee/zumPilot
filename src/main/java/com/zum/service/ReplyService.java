@@ -21,7 +21,7 @@ public interface ReplyService {
 
     Reply modifyAnswer(String content, Long replyId);
 
-    Long getUserId(Long replyId);
+    User getUser(Long replyId);
 
     Reply deleteReply(Long replyId);
 

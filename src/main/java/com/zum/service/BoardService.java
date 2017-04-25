@@ -39,9 +39,7 @@ public interface BoardService {
 
     Image getImage(Long boardId);
 
-//    Long getUserId(String username);
-
-    Long getUserId(Long boardId);
+    User getUser(Long boardId);
 
     void modify(Long boardId, Board board, MultipartHttpServletRequest multipartRequest) throws IOException;
 

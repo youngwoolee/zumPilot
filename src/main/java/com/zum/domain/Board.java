@@ -69,6 +69,4 @@ public class Board {
     public void deleteBoard() {
         this.status = 0;
     }
-
-
 }

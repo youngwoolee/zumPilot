@@ -51,8 +51,7 @@ public class FileUploadUtil {
 
         String exc = getFileExtension(mpf);
 
-//        if(exc != "jpg" || exc != "png" || exc != "gif"){
-//
+//        if(exc != "jpg" && exc != "png" && exc != "gif"){
 //            throw new IOException();
 //        }
 

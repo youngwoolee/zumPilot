@@ -79,17 +79,14 @@ public class ReplyServiceImpl implements ReplyService {
         int prevReplyThread = 0;
         int parentThread = getParentReply(replyId).getThread();
 
-        //이전 reply 의 스레드
         if (reply.getThread() != 0) {
             prevReplyThread = replyRepository.getPrevReplyThread(replyId);
         }
 
-        logger.error("real : {}", parentThread, prevReplyThread);
         List<Reply> updateReplyList = replyRepository.getReplyIdBetweenPrevCurrent(parentThread, prevReplyThread, boardId);
 
-        //updateReplyThread
-        for (Reply anUpdateReplyList : updateReplyList) {
-            replyRepository.updateReplyThread(anUpdateReplyList.getReplyId());
+        for (Reply updateReply : updateReplyList) {
+            replyRepository.updateReplyThread(updateReply.getReplyId());
         }
 
     }
@@ -107,11 +104,11 @@ public class ReplyServiceImpl implements ReplyService {
 }
 
     @Override
-    public Long getUserId(Long replyId) {
+    public User getUser(Long replyId) {
 
         Reply reply = replyRepository.findByReplyId(replyId);
 
-        return reply.getWriter().getUserId();
+        return reply.getWriter();
     }
 
     @Override
@@ -120,8 +117,6 @@ public class ReplyServiceImpl implements ReplyService {
         Reply deleteReply = replyRepository.findByReplyId(replyId);
 
         deleteReply.updateStatus();
-
-        replyRepository.save(deleteReply);
 
         return deleteReply;
     }

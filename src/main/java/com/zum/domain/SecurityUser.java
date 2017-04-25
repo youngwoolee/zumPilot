@@ -1,6 +1,8 @@
 package com.zum.domain;
 
+import com.zum.exception.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.util.ObjectUtils;
 
 /**
  * Created by joeylee on 2017-03-21.
@@ -23,5 +25,14 @@ public class SecurityUser extends org.springframework.security.core.userdetails.
     public Role getRole() {
         return user.getRole();
     }
+
+
+    public void authenticated(User currentUser) {
+        if(!user.equals(currentUser)) {
+            throw new AuthenticationException();
+        }
+
+    }
+
 
 }

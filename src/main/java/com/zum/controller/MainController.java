@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
-    private UserService userService;
-
     @GetMapping("/")
     public String welcomePage(Model model, Authentication auth) {
 

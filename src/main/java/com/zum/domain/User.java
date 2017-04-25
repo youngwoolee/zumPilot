@@ -1,5 +1,6 @@
 package com.zum.domain;
 
+import com.zum.exception.UserLeaveException;
 import com.zum.util.BcryptPasswordUtil;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
@@ -67,8 +68,8 @@ public class User {
     }
 
     public void updateUserInfo(User user) {
-        if(!"".equals(user.password)) {
-            this.password = new BCryptPasswordEncoder().encode(user.password);
+        if( (password != null) || !("".equals(user.password))) {
+            this.password = BcryptPasswordUtil.bCryptPasswordEncoder.encode(user.password);
         }
         this.email = user.email;
     }
@@ -76,4 +77,11 @@ public class User {
     public void leaveUser() {
         this.role = Role.ROLE_LEAVE;
     }
+
+    public void isLeave() {
+        if(this.role == Role.ROLE_LEAVE) {
+            throw new UserLeaveException();
+        }
+    }
+
 }

@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -104,7 +105,6 @@ public class BoardController {
         Image image = boardService.getImage(id);
         List<Reply> replyLIst = replyService.replyListByBoardId(id);
 
-
         model.addAttribute("board", board);
         model.addAttribute("image", image);
         model.addAttribute("auth", auth.getName());
@@ -118,9 +118,8 @@ public class BoardController {
                              Model model,
                              Authentication auth) {
 
-        //권한 체크
-        Long userId = boardService.getUserId(id);
-        userService.isAuthenticated(auth.getName(), userId);
+        User user = boardService.getUser(id);
+        ((SecurityUser) auth.getPrincipal()).authenticated(user);
 
         Board board = boardService.getBoard(id);
         Image image = boardService.getImage(id);
@@ -139,15 +138,13 @@ public class BoardController {
                                  MultipartHttpServletRequest multipartRequest,
                                  Authentication auth) throws IOException {
 
-
-        Long userId = boardService.getUserId(id);
-        userService.isAuthenticated(auth.getName(), userId);
+        User user = boardService.getUser(id);
+        ((SecurityUser) auth.getPrincipal()).authenticated(user);
 
         boardService.modify(id, board, multipartRequest);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("url", "/board/");
-
 
         return new ResponseEntity<HashMap>(result, HttpStatus.OK);
     }
@@ -157,8 +154,8 @@ public class BoardController {
     public ResponseEntity delete(@PathVariable("id") Long id,
                                  Authentication auth) {
 
-        Long userId = boardService.getUserId(id);
-        userService.isAuthenticated(auth.getName(), userId);
+        User user = boardService.getUser(id);
+        ((SecurityUser) auth.getPrincipal()).authenticated(user);
 
         boardService.delete(id);
 
@@ -167,6 +164,4 @@ public class BoardController {
 
         return new ResponseEntity<HashMap>(result, HttpStatus.OK);
     }
-
-
 }

@@ -43,8 +43,8 @@
 
 </div>
 
-<script src="/assets/js/jquery-3.2.0.min.js"></script>
-<script src="/assets/js/parsley.js"></script>
+<script src="/assets/js/lib/jquery.min.js"></script>
+<script src="/assets/js/lib/parsley.js"></script>
 <script src="/assets/js/userLeave.js"></script>
 
 

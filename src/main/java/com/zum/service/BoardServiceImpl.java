@@ -7,7 +7,6 @@ import com.zum.exception.NotFoundExceptionRest;
 import com.zum.repository.BoardRepository;
 import com.zum.repository.ImageRepository;
 import com.zum.util.FileUploadUtil;
-import com.zum.util.PageCustomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Created by joeylee on 2017-03-22.
@@ -44,7 +42,7 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(board);
 
         Image image = FileUploadUtil.saveMultipartFile(multipartRequest, board);
-        if(image != null) {
+        if(!ObjectUtils.isEmpty(image)) {
             fileUpload(image);
         }
     }
@@ -57,7 +55,7 @@ public class BoardServiceImpl implements BoardService {
         board.update(updateBoard);
 
         Image image = FileUploadUtil.saveMultipartFile(multipartRequest, board);
-        if(image != null) {
+        if(!ObjectUtils.isEmpty(image)) {
             fileUpdate(image);
         }
 
@@ -92,7 +90,7 @@ public class BoardServiceImpl implements BoardService {
     public Image getImage(Long boardId) {
 
         Image image = imageRepository.findByBoardBoardId(boardId);
-        if(image == null) {
+        if(ObjectUtils.isEmpty(image)) {
             return null;
         }
 
@@ -100,10 +98,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Long getUserId(Long boardId) {
+    public User getUser(Long boardId) {
         Board board = boardRepository.findByBoardId(boardId);
-
-        return board.getUserId().getUserId();
+        if(ObjectUtils.isEmpty(board)) {
+            return null;
+        }
+        return board.getUserId();
     }
 
 

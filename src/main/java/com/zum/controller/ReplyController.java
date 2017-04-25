@@ -1,6 +1,8 @@
 package com.zum.controller;
 
 import com.zum.domain.Reply;
+import com.zum.domain.SecurityUser;
+import com.zum.domain.User;
 import com.zum.service.ReplyService;
 import com.zum.service.UserService;
 import org.slf4j.Logger;
@@ -23,9 +25,6 @@ public class ReplyController {
 
     @Autowired
     private ReplyService replyService;
-    @Autowired
-    private UserService userService;
-    
 
     @PostMapping("/reply/create")
     public Reply replyWrite(@PathVariable("boardId") Long boardId,
@@ -33,9 +32,6 @@ public class ReplyController {
                             Authentication auth){
 
         Reply newReply = replyService.create(reply, boardId, auth.getName());
-
-        logger.debug("replyWrite : {} ",newReply.toString());
-
 
         return newReply;
     }
@@ -46,9 +42,7 @@ public class ReplyController {
                              @RequestParam("parentId") Long replyId,
                              Authentication auth){
 
-        //자식들 업데이트
         replyService.updateReply(replyId, boardId);
-        //댓글 삽입
         Reply newReply = replyService.createAnswer(reply, boardId, replyId, auth.getName());
 
         return newReply;
@@ -60,8 +54,8 @@ public class ReplyController {
                               @RequestParam("replyId") Long replyId,
                               Authentication auth){
 
-        Long userId = replyService.getUserId(replyId);
-        userService.isAuthenticated(auth.getName(), userId);
+        User user = replyService.getUser(replyId);
+        ((SecurityUser) auth.getPrincipal()).authenticated(user);
 
         return replyService.modifyAnswer(content, replyId);
     }
@@ -71,8 +65,8 @@ public class ReplyController {
                               @RequestParam("replyId") Long replyId,
                               Authentication auth){
 
-        Long userId = replyService.getUserId(replyId);
-        userService.isAuthenticated(auth.getName(), userId);
+        User user = replyService.getUser(replyId);
+        ((SecurityUser) auth.getPrincipal()).authenticated(user);
 
         Reply reply = replyService.deleteReply(replyId);
         return reply;

@@ -1,5 +1,6 @@
 package com.zum.controller;
 
+import com.zum.domain.SecurityUser;
 import com.zum.domain.User;
 import com.zum.service.UserService;
 import org.slf4j.Logger;
@@ -38,13 +39,12 @@ public class UserController {
     public String register(@Valid User user, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
-            logger.debug(" 유효성 에러 ");
             return "registerForm";
         }
-        else {
-            userService.create(user);
-            return "redirect:/";
-        }
+
+        userService.create(user);
+        return "redirect:/";
+
     }
 
     @GetMapping("/edit")
@@ -62,8 +62,7 @@ public class UserController {
                          User user,
                          Authentication auth) {
 
-        //진짜 사용자인지 권한 체크
-        userService.isAuthenticated(auth.getName(), userId);
+        ((SecurityUser) auth.getPrincipal()).authenticated(user);
         userService.update(userId, user);
 
         return "redirect:/";
@@ -72,7 +71,9 @@ public class UserController {
     @PostMapping("/{id}")
     public ResponseEntity leave(@PathVariable("id") Long userId, Authentication auth) {
 
-        userService.isAuthenticated(auth.getName(), userId);
+        User user = userService.getUserByUserId(userId);
+        ((SecurityUser) auth.getPrincipal()).authenticated(user);
+
         userService.leave(userId);
         SecurityContextHolder.clearContext();
 
@@ -87,13 +88,9 @@ public class UserController {
     @ResponseBody
     public ResponseEntity isDuplicate(@RequestParam("userName") String userName) {
 
-        logger.error("userName  : {} ", userName);
-
         boolean result = userService.isExist(userName);
 
         return new ResponseEntity(result, HttpStatus.OK);
     }
-
-
 
 }

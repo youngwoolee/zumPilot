@@ -98,14 +98,13 @@
         </c:forEach>
     </div>
 
-    <script src="/assets/js/jquery-3.2.0.min.js"></script>
-    <script type="text/javascript" src="/assets/js/numberOfFontCheck.js"></script>
-    <script type="text/javascript" src="/assets/js/handlebars-v4.0.5.js"></script>
+    <script src="/assets/js/lib/jquery.min.js"></script>
+    <script src="/assets/js/numberOfFontCheck.js"></script>
+    <script src="/assets/js/lib/handlebars.js"></script>
     <script src="/assets/js/templates.js"></script>
-    <script src="/assets/js/handlebar.js"></script>
-    <script type="text/javascript" src="/assets/js/replyAction.js"></script>
+    <script src="/assets/js/helperHandlebar.js"></script>
+    <script src="/assets/js/replyAction.js"></script>
     <script src="/assets/js/boardAction.js"></script>
-
 
 
 </div>
