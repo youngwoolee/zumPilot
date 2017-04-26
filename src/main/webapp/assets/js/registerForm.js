@@ -1,10 +1,9 @@
 $(function() {
 
-    //아이디 중복 체크 실행 여부(0:중복체크X 1:중복체크O)
-    var count = 0;
+    var isChecked = false;
 
     $('#confirmId').click(function() {
-        var userName = $('#userName').val();
+        var userName = $('#userName').val().trim();
         if (userName == '') {
             alert('아이디를 입력하세요!');
             $('#userName').focus();
@@ -27,12 +26,12 @@ $(function() {
             success: function (data) {
 
                 if(data == true) {
-                    count = 0;
+                    isChecked = false;
                     $('#id_signed').html('이미 등록된 아이디').css('color','red');
                     $('#userName').val('').focus();
                 }
                 else {
-                    count=1;
+                    isChecked=true;
                     $('#id_signed').html('사용 가능한 아이디').css('color','black');
                 }
             },
@@ -44,12 +43,12 @@ $(function() {
     });
 
     $('#userName').keyup(function(){
-        count = 0;
+        isChecked = false;
         $('#id_signed').html('');
     });
 
     $("[name='userInfo']").submit(function(){
-        if(count == 0){
+        if(isChecked == false){
             alert('아이디 중복체크 필수');
             if($('#userName').val() == '') {
                 $('#userName').focus();

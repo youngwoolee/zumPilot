@@ -2,9 +2,9 @@ $(function() {
     $('.remaining').each(function() {
         var $count = $('.count', this);
         var $input = $(this).prev();
-        var maximumCount = $count.text() * 1;
+        var maximumCount = Number($count.text());
         var update = function() {
-            var before = $count.text() * 1;
+            var before = Number($count.text());
             var now = maximumCount - $input.val().length;
             if (now < 0) {
                 var str = $input.val();

@@ -15,7 +15,7 @@ $(function() {
     }
 
     //댓글 쓰기
-    $(document).on("click", ".replyWriteSubmit", function() {
+    $("#replyForm").on("click", ".replyWriteSubmit", function() {
         var $this = $(this),
             replyTextArea = $this.siblings(".replyContent"),
             content = replyTextArea.val();
@@ -30,7 +30,7 @@ $(function() {
     });
 
     //답글 쓰기
-    $(document).on("click", ".answerWriteSubmit", function() {
+    $("#replyDiv").on("click", ".answerWriteSubmit", function() {
         var $this = $(this),
             content = $this.siblings(".replyContent").val(),
             parentId = $this.closest(".reply").data("replyid");
@@ -47,7 +47,7 @@ $(function() {
     });
 
     //답글 수정
-    $(document).on("click", ".modifyButton", function () {
+    $("#replyDiv").on("click", ".modifyButton", function () {
 
         var $this = $(this),
             content = $this.siblings(".replyContent").val(),
@@ -64,7 +64,7 @@ $(function() {
     });
 
     //댓글 삭제
-    $(document).on("click", ".replyDelete", function () {
+    $("#replyDiv").on("click", ".replyDelete", function () {
 
         var $this = $(this),
             replyId = $this.closest(".reply").data("replyid"),
@@ -79,7 +79,7 @@ $(function() {
     });
 
     //댓글 답글 폼
-    $(document).on("click", ".replyWriteButton", function () {
+    $("#replyDiv").on("click", ".replyWriteButton", function () {
 
         var $this = $(this),
             replyId = $this.closest(".reply").data("replyid"),
@@ -93,7 +93,7 @@ $(function() {
     });
 
     //댓글 수정 폼
-    $(document).on("click", ".replyModifyButton", function () {
+    $("#replyDiv").on("click", ".replyModifyButton", function () {
 
         var $this = $(this),
             replyId = $this.closest(".reply").data("replyid"),

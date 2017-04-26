@@ -62,7 +62,7 @@
     </div>
 
     <h4>Leave a Comment:</h4>
-    <div class="replyForm">
+    <div id="replyForm" class="replyForm">
         <textarea name= "content" class="form-control replyContent" rows="3" required></textarea>
         <div class=remaining>남은 글자수: <span class="count">140</span></div>
         <button class="btn btn-success replyWriteSubmit">Submit</button>

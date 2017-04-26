@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.validation.Valid;
@@ -39,6 +42,7 @@ import java.util.Map;
 @RequestMapping("/board")
 public class BoardController {
 
+    private static final int maxPager = 4;
     Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     @Autowired
@@ -70,7 +74,7 @@ public class BoardController {
 
         return "board";
     }
-
+    
 
     @GetMapping("/new")
     public String boardWriteForm(Model model, Authentication auth) {

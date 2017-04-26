@@ -19,12 +19,8 @@ public class SecurityUserService implements UserDetailsService{
 
     Logger logger = LoggerFactory.getLogger(SecurityUserService.class);
 
-    private final UserService userService;
-
     @Autowired
-    public SecurityUserService(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
